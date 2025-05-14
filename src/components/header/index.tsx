@@ -27,7 +27,7 @@ const Header = ({ title, leftChildren, rigthChildren }: Props) => {
     }
 
     return (
-        <header className="px-4 md:px-6 py-4 gap-4  flex items-center justify-between bg-card max-w-full box-border">
+        <header className="px-4 md:px-6 py-4 gap-4 border-l dark:border-b  flex items-center justify-between bg-card max-w-full box-border">
             <div className="flex gap-2 items-center min-w-14 max-w-full overflow-x-auto custom-scrollbar">
                 <SidebarTrigger />
                 {title ? <p>{title}</p> : null}
