@@ -12,6 +12,7 @@
     },
     "devDependencies": {
         "@tanstack/router-plugin": "^1.58.12",
+        "@types/google-libphonenumber": "^7.4.30",
         "@types/node": "^22.7.4",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
@@ -54,6 +55,7 @@
         "date-fns": "^4.1.0",
         "embla-carousel-autoplay": "^8.3.1",
         "embla-carousel-react": "^8.3.1",
+        "google-libphonenumber": "^3.2.40",
         "input-otp": "^1.4.2",
         "lucide-react": "^0.446.0",
         "next-themes": "^0.3.0",
@@ -64,6 +66,7 @@
         "react-draggable": "^4.4.6",
         "react-dropzone": "^14.3.8",
         "react-hook-form": "^7.53.0",
+        "react-international-phone": "^4.5.0",
         "react-number-format": "^5.4.2",
         "record.esm.js": "link:wavesurfer.js/dist/plugins/record.esm.js",
         "sonner": "^1.5.0",

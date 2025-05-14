@@ -15,7 +15,7 @@ type Props = {
     description?: ReactNode
     children?: ReactNode
     className?: string
-    size?: string
+    size?: "max-w-lg" | "max-w-xl" | "max-w-2xl"
     onClose?: () => void
 }
 
@@ -26,7 +26,7 @@ const Modal = ({
     children,
     modalKey = "default",
     className = "",
-    size = "lg",
+    size = "max-w-lg",
     onClose,
 }: Props) => {
     const { isOpen, closeModal } = useModal(modalKey)
@@ -41,10 +41,7 @@ const Modal = ({
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
             {isOpen && (
-                <DialogContent
-                    className={`max-w-${size} ` + className}
-                    aria-describedby=""
-                >
+                <DialogContent className={size + className}>
                     {title && <DialogTitle>{title}</DialogTitle>}
                     {!title && (
                         <VisuallyHidden>

@@ -46,7 +46,7 @@ export function FormInput<IForm extends FieldValues>({
             message: methods.formState.errors[name]?.message as any,
         },
         ...(uppercase && {
-            setValueAs: (value: string) => value?.toUpperCase()
+            setValueAs: (value: string) => value?.toUpperCase(),
         }), // Transform value to uppercase if uppercase is true
         ...registerOptions,
     })
@@ -64,15 +64,15 @@ export function FormInput<IForm extends FieldValues>({
             )}
             <Input
                 type={type}
-                placeholder={label}
+                placeholder={props.placeholder || label}
                 {...reg}
                 {...props}
                 id={name}
                 fullWidth
                 className={cn(
-                    !!errors?.[name] && !label ?
-                        "border-destructive focus:border-border !ring-destructive"
-                    :   "",
+                    !!errors?.[name] && !label
+                        ? "border-destructive focus:border-border !ring-destructive"
+                        : "",
                     uppercase && "uppercase placeholder:capitalize", // Add uppercase class for visual feedback
                     className,
                 )}

@@ -1,127 +1,122 @@
 import { useOrderColumns } from "./columns"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import ParamDateRange from "@/components/as-params/date-picker-range"
 import { DataTable } from "@/components/ui/datatable"
+import ParamTabs from "@/components/as-params/tabs"
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
 
 export const orderData: OrderType[] = [
     {
         id: "1",
-        customer_info: {
-            name: "Sardor Karimov",
-            email_or_phone: "sardor.k@gmail.com",
-        },
-        seller_info: {
-            id: "s1",
-            name: "Azizbek Rahimov",
-            email_or_phone: "azizbek.r@gmail.com",
-        },
-        document: {
-            slug: "ilmiy-ish-1",
-            title: "Ilmiy ish: Sun’iy intellekt va ta’lim",
-        },
-        price: 150000,
-        provider: "click",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
         created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
     },
     {
         id: "2",
-        customer_info: {
-            name: "Dilshod Qodirov",
-            email_or_phone: "+998901112233",
-        },
-        seller_info: {
-            id: "s2",
-            name: "Murodillo Tursunov",
-            email_or_phone: "murod.t@gmail.com",
-        },
-        document: {
-            slug: "diplom-ish-2024",
-            title: "Diplom ishi: Kriptografiya asoslari",
-        },
-        price: 200000,
-        provider: "payme",
-        created_at: "2024-09-27T09:15:00Z",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
+        created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
     },
     {
         id: "3",
-        customer_info: {
-            name: "Zarnigor Xasanova",
-            email_or_phone: "zarnigor.x@example.com",
-        },
-        seller_info: {
-            id: "s3",
-            name: "Olimbek Rasulov",
-            email_or_phone: "+998907654321",
-        },
-        document: {
-            slug: "python-dasturlash",
-            title: "Python dasturlash asoslari",
-        },
-        price: 180000,
-        provider: "card_data",
-        created_at: "2024-09-20T16:50:00Z",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
+        created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
     },
     {
         id: "4",
-        customer_info: {
-            name: "Shahzoda Abdullayeva",
-            email_or_phone: "shahzoda@mail.uz",
-        },
-        seller_info: {
-            id: "s4",
-            name: "Bekzod Karimov",
-            email_or_phone: "bekzod.karimov@mail.uz",
-        },
-        document: {
-            slug: "mobil-ilova-loyihasi",
-            title: "Mobil ilova loyihalash tamoyillari",
-        },
-        price: 225000,
-        provider: "click",
-        created_at: "2024-09-10T10:00:00Z",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
+        created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
     },
     {
         id: "5",
-        customer_info: {
-            name: "Jasur Yuldashev",
-            email_or_phone: "+998935551234",
-        },
-        seller_info: {
-            id: "s5",
-            name: "Gulnoza Tadjibaeva",
-            email_or_phone: "gulnoza@gmail.com",
-        },
-        document: {
-            slug: "web-frontend-dasturlash",
-            title: "Frontend dasturlash: React va Next.js",
-        },
-        price: 175000,
-        provider: "payme",
-        created_at: "2024-09-15T18:45:00Z",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
+        created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
+    },
+    {
+        id: "6",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
+        created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
+    },
+    {
+        id: "7",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
+        created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
+    },
+    {
+        id: "8",
+        name: "Ozodbek Abdisamatov",
+        deliver_at: "2024-09-25T14:30:00Z",
+        logist: "Ahmadboy Abdurahimov",
+        created_at: "2024-09-25T14:30:00Z",
+        status: "Yaratildi",
+    },
+]
+
+const tab = [
+    {
+        value: "1",
+        label: "Barchasi",
+    },
+    {
+        value: "2",
+        label: "Yaratildi",
+    },
+    {
+        value: "3",
+        label: "Logist topildi",
+    },
+    {
+        value: "4",
+        label: "Jarayonda",
+    },
+    {
+        value: "5",
+        label: "Yuk omborda",
+    },
+    {
+        value: "6",
+        label: "Favqulotda",
+    },
+    {
+        value: "7",
+        label: "Yakunlandi",
     },
 ]
 
 export const OrdersPages = () => {
     return (
         <div className="w-full">
-            <Card className="mb-5 rounded-md ">
-                <CardContent className="flex justify-between items-start">
-                    <div className="flex flex-col gap-3 w-1/2">
-                        <h1 className="text-2xl font-bold">Buyurtmalar</h1>
-                        <Input
-                            fullWidth
-                            placeholder="Qidiruv..."
-                        />
-                    </div>
-                    <ParamDateRange />
-                </CardContent>
-            </Card>
+            <div className="mb-5 flex justify-between items-center gap-4">
+                <ParamTabs options={tab} />
+                <Button icon={<Plus size={18} />}>Buyurtma qo'shish</Button>
+            </div>
             <DataTable
                 columns={useOrderColumns()}
                 data={orderData}
                 paginationProps={{ totalPages: 1 }}
                 // loading={isLoading}
+                onDelete={() => {}}
+                onEdit={() => {}}
+                onView={() => {}}
             />
         </div>
     )

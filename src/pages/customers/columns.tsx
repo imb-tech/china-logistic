@@ -7,25 +7,23 @@ export const useCustomersColumns = (): ColumnDef<CustomersType>[] => {
             cell: ({ row }) => row.index + 1,
         },
         {
-            header: "Ism",
+            header: "Ismi",
             accessorKey: "full_name",
         },
         {
-            header: "Email  yoki Telefon",
-            accessorKey: "email_or_phone",
+            header: "Login",
+            accessorKey: "username",
         },
         {
-            header: "Sotib olgan mahsulotlar soni",
-            accessorKey: "purchased_count",
+            header: "Telefon raqami",
+            accessorKey: "phone_number",
+            cell: ({row}) => {
+                return <span>{row.original.phone_code} {row.original.phone_number}</span>
+            },
         },
         {
-            header: "Ro'yxatdan o'tgan sanasi",
-            accessorKey: "full_name",
-            cell: ({ row }) => <span>{row.original.created_at}</span>,
-        },
-        {
-            header: "Holati",
-            accessorKey: "auth_status",
+            header: "Manzili",
+            accessorKey: "address",
         },
     ]
 }

@@ -1,4 +1,6 @@
 import Header from "@/components/header"
+import CustomerCreate from "@/pages/customers/customer-create"
+import LogisticsCreate from "@/pages/logistics/logis-create"
 import { ReactNode } from "@tanstack/react-router"
 
 type Props = {
@@ -25,6 +27,8 @@ const PageLayout = ({
             </div>
             <main className="flex xl:gap-2 px-4 md:px-6 pt-4  relative ">
                 {children}
+                <CustomerCreate/>
+                <LogisticsCreate/>
             </main>
         </div>
     )

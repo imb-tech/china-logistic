@@ -49,9 +49,9 @@ const ParamTabs: React.FC<ParamTabsProps> = ({
             onAdd?.()
         } else {
             if (disabled || tab === currentTab) return
-            dontCleanOthers ?
-                navigate({ search: { ...search, [paramName]: tab } as any })
-            :   navigate({ search: { [paramName]: tab } as any })
+            dontCleanOthers
+                ? navigate({ search: { ...search, [paramName]: tab } as any })
+                : navigate({ search: { [paramName]: tab } as any })
         }
     }
     if (!is_visible) return null
@@ -59,21 +59,21 @@ const ParamTabs: React.FC<ParamTabsProps> = ({
         <Tabs
             value={currentTab}
             onValueChange={handleTabChange}
-            className={options?.[0]?.content ? "space-y-4 w-full" : ""}
+            className={options?.[0]?.content ? "space-y-4 w-full " : ""}
         >
-            <div className="max-w-full overflow-x-auto flex flex-wrap items-center justify-between gap-4">
-                <TabsList className="h-10">
+            <div className="max-w-full overflow-x-auto  flex flex-wrap items-center justify-between gap-4">
+                <TabsList className="h-10 flex gap-3 bg-background">
                     {options.map(
                         (option) =>
                             !option.disabled && (
                                 <TabsTrigger
                                     key={option.value}
                                     value={option.value?.toString()}
-                                    className={`cursor-pointer relative ${option.className}`}
+                                    className={`cursor-pointer   relative px-4 ${option.className}`}
                                     aria-current={
-                                        option.value === currentTab ?
-                                            "page"
-                                        :   undefined
+                                        option.value === currentTab
+                                            ? "page"
+                                            : undefined
                                     }
                                     disabled={disabled}
                                 >
@@ -108,7 +108,8 @@ const ParamTabs: React.FC<ParamTabsProps> = ({
             </div>
             {options.map(
                 (option) =>
-                    !option.disabled && (
+                    !option.disabled &&
+                    option.content && (
                         <TabsContent
                             key={option.value}
                             value={option.value?.toString()}

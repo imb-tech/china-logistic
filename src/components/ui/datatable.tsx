@@ -125,7 +125,7 @@ export function DataTable<TData>({
                 {
                     header: " ",
                     accessorKey: "action",
-                    enableSorting: true,
+                    enableSorting: false,
                     cell: ({ row }) => (
                         <TableActions
                             menuMode={actionMenuMode}
