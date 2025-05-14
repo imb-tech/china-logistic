@@ -62,23 +62,16 @@ export default function DeleteModal({
     }
 
     return (
-        <Modal modalKey={modalKey}>
+        <Modal size="max-w-md" modalKey={modalKey}>
             <DialogHeader>
-                <DialogTitle className="font-normal">
+                <DialogTitle className="font-normal max-w-sm">
                     Siz haqiqatdan ham {name} o'chirishni xohlaysizmi ?
                 </DialogTitle>
                 <DialogDescription>
                     Bu qaytarib bo'lmas jarayon!!!
                 </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="grid grid-cols-2 gap-2">
-                <Button
-                    variant={"outline"}
-                    disabled={isPending}
-                    onClick={closeModal}
-                >
-                    Orqaga
-                </Button>
+            <DialogFooter>
                 <Button
                     variant={"destructive"}
                     onClick={handleDelete}

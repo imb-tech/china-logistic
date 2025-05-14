@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useLogisticsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
+import DeleteModal from "@/components/custom/delete-modal"
 
 const logistic: LogisticsType[] = [
     {
@@ -142,7 +143,8 @@ const logistic: LogisticsType[] = [
 ]
 
 export const LogisticsPages = () => {
-    const { openModal } = useModal("logis-modal")
+    const { openModal:openModalLogistic } = useModal("logis-modal")
+    const { openModal:openModalDelete } = useModal("logis-delete")
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
@@ -155,7 +157,7 @@ export const LogisticsPages = () => {
                                 placeholder="Logist qidirish"
                                 className=""
                             />
-                            <Button onClick={openModal}>
+                            <Button onClick={openModalLogistic}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -165,13 +167,14 @@ export const LogisticsPages = () => {
                         columns={useLogisticsColumns()}
                         data={logistic}
                         paginationProps={{ totalPages: 1 }}
-                        onDelete={() => {}}
+                        onDelete={() => openModalDelete()}
                         onEdit={() => {}}
                         onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
+            <DeleteModal modalKey="logis-delete" id={1} path="logistic" />
         </div>
     )
 }

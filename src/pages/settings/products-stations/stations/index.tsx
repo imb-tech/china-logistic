@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useStationsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
+import DeleteModal from "@/components/custom/delete-modal"
 
 const data: StationsType[] = [
     { id: 1, name: "Station Alpha" },
@@ -22,7 +23,8 @@ const data: StationsType[] = [
 ]
 
 export const StationsPages = () => {
-    const { openModal } = useModal("stations-modal")
+    const { openModal: openModalAdd } = useModal("stations-modal")
+    const { openModal: openModalDelete } = useModal("stations-delete")
     const columns = useStationsColumns()
     return (
         <div className="w-full">
@@ -36,7 +38,7 @@ export const StationsPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModal}>
+                            <Button onClick={openModalAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -46,13 +48,14 @@ export const StationsPages = () => {
                         columns={columns}
                         data={data}
                         paginationProps={{ totalPages: 1 }}
-                        onDelete={() => {}}
+                        onDelete={() => openModalDelete()}
                         onEdit={() => {}}
 
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
+            <DeleteModal modalKey="stations-delete" id={1} path="stations" />
         </div>
     )
 }

@@ -3,6 +3,8 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamTabs from "@/components/as-params/tabs"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
+import DeleteModal from "@/components/custom/delete-modal"
+import { useModal } from "@/hooks/useModal"
 
 export const orderData: OrderType[] = [
     {
@@ -103,6 +105,7 @@ const tab = [
 ]
 
 export const OrdersPages = () => {
+    const { openModal } = useModal("delete-order")
     return (
         <div className="w-full">
             <div className="mb-5 flex justify-between items-center gap-4">
@@ -114,10 +117,11 @@ export const OrdersPages = () => {
                 data={orderData}
                 paginationProps={{ totalPages: 1 }}
                 // loading={isLoading}
-                onDelete={() => {}}
+                onDelete={() => openModal()}
                 onEdit={() => {}}
                 onView={() => {}}
             />
+            <DeleteModal modalKey="delete-order" id={1} path="order" />
         </div>
     )
 }

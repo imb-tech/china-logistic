@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useContainerColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
+import DeleteModal from "@/components/custom/delete-modal"
 
 const data: ContainerType[] = [
   { id: 1, name: "Container Alpha" },
@@ -23,7 +24,8 @@ const data: ContainerType[] = [
 
 
 export const ContainerPages = () => {
-    const { openModal } = useModal("container-modal")
+    const { openModal:openModalAdd } = useModal("container-modal")
+    const { openModal:openModalDelete} = useModal("container-delete")
     const columns = useContainerColumns()
     return (
         <div className="w-full">
@@ -37,7 +39,7 @@ export const ContainerPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModal}>
+                            <Button onClick={openModalAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -47,12 +49,13 @@ export const ContainerPages = () => {
                         columns={columns}
                         data={data}
                         paginationProps={{ totalPages: 1 }}
-                        onDelete={() => {}}
+                        onDelete={() => openModalDelete()}
                         onEdit={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
+             <DeleteModal modalKey="container-delete" id={1} path="container" />
         </div>
     )
 }

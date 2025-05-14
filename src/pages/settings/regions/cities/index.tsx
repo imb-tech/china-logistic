@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useCitiesColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
+import DeleteModal from "@/components/custom/delete-modal"
 
 const data: CitiesType[] =[
   { id: 1, name: "City Alpha" },
@@ -23,7 +24,8 @@ const data: CitiesType[] =[
 
 
 export const CitiesPages = () => {
-    const { openModal } = useModal("cities-modal")
+    const { openModal:openModalAdd } = useModal("cities-modal")
+    const { openModal:openModalDelete } = useModal("cities-delete")
     const columns= useCitiesColumns()
     return (
         <div className="w-full">
@@ -37,7 +39,7 @@ export const CitiesPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModal}>
+                            <Button onClick={openModalAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -47,12 +49,13 @@ export const CitiesPages = () => {
                         columns={columns}
                         data={data}
                         paginationProps={{ totalPages: 1 }}
-                        onDelete={() => {}}
+                        onDelete={() => openModalDelete()}
                         onEdit={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
+            <DeleteModal modalKey="cities-delete" id={1} path="cities" />
         </div>
     )
 }

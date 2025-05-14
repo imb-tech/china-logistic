@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useProductsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
+import DeleteModal from "@/components/custom/delete-modal"
 
 const data: ProductsType[] = [
     { id: 1, name: "Product Alpha", code: "PR-100" },
@@ -22,7 +23,8 @@ const data: ProductsType[] = [
 ]
 
 export const ProductsPages = () => {
-    const { openModal } = useModal("product-modal")
+    const { openModal:openModalAdd } = useModal("product-modal")
+    const { openModal:openModalDelete} = useModal("product-delete")
 
     const columns = useProductsColumns()
     return (
@@ -37,7 +39,7 @@ export const ProductsPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModal}>
+                            <Button onClick={openModalAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -47,12 +49,13 @@ export const ProductsPages = () => {
                         columns={columns}
                         data={data}
                         paginationProps={{ totalPages: 1 }}
-                        onDelete={() => {}}
+                        onDelete={() => openModalDelete()}
                         onEdit={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
+            <DeleteModal modalKey="product-delete" id={1} path="product" />
         </div>
     )
 }

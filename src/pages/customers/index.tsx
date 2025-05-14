@@ -5,6 +5,7 @@ import { useCustomersColumns } from "./columns"
 import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useModal } from "@/hooks/useModal"
+import DeleteModal from "@/components/custom/delete-modal"
 
 const customers: CustomersType[] = [
     {
@@ -141,7 +142,8 @@ const customers: CustomersType[] = [
 ]
 
 export const CustomersPages = () => {
-    const { openModal } = useModal("customer-modal")
+    const { openModal: openCustomerAdd } = useModal("customer-modal")
+    const { openModal: openModalDelete } = useModal("customer-delete")
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
@@ -154,7 +156,7 @@ export const CustomersPages = () => {
                                 placeholder="Mijozlarni qidirish"
                                 className=""
                             />
-                            <Button onClick={openModal}>
+                            <Button onClick={openCustomerAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -164,13 +166,14 @@ export const CustomersPages = () => {
                         columns={useCustomersColumns()}
                         data={customers}
                         paginationProps={{ totalPages: 1 }}
-                        onDelete={() => {}}
+                        onDelete={() => openModalDelete()}
                         onEdit={() => {}}
                         onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
+            <DeleteModal modalKey="customer-delete" id={1} path="customer" />
         </div>
     )
 }

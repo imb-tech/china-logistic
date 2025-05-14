@@ -15,7 +15,7 @@ type Props = {
     description?: ReactNode
     children?: ReactNode
     className?: string
-    size?: "max-w-lg" | "max-w-xl" | "max-w-2xl"
+    size?: "max-w-lg" | "max-w-xl" | "max-w-2xl" | "max-w-sm" | "max-w-md"
     onClose?: () => void
 }
 

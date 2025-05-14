@@ -9,7 +9,6 @@ import { ClassNameValue } from "tailwind-merge"
 import { Input } from "../ui/input"
 import FieldError from "./form-error"
 import FieldLabel from "./form-label"
-import { useEffect } from "react"
 
 interface IProps<IForm extends FieldValues> {
     methods: UseFormReturn<IForm>
@@ -32,7 +31,7 @@ export function FormInput<IForm extends FieldValues>({
     wrapperClassName,
     className,
     type = "text",
-    hideError = false,
+    hideError = true,
     uppercase = false, // Default value false
     ...props
 }: IProps<IForm> & React.InputHTMLAttributes<HTMLInputElement>) {
@@ -44,13 +43,13 @@ export function FormInput<IForm extends FieldValues>({
     const reg = register(name, {
         required: {
             value: required,
-            message: `${label}ni kiriting`,
+            message: methods.formState.errors[name]?.message as any,
         },
+        ...(uppercase && {
+            setValueAs: (value: string) => value?.toUpperCase(),
+        }), // Transform value to uppercase if uppercase is true
+        ...registerOptions,
     })
-
-    useEffect(() => {
-        register(name)
-    }, [name, register])
 
     return (
         <fieldset className={cn("flex flex-col w-full", wrapperClassName)}>
@@ -71,16 +70,15 @@ export function FormInput<IForm extends FieldValues>({
                 id={name}
                 fullWidth
                 className={cn(
-                    !!errors?.[name] && label 
+                    !!errors?.[name] && label
                         ? "border-destructive focus:border-border !ring-destructive"
                         : "",
-                    uppercase && "uppercase placeholder:capitalize",
+                    uppercase && "uppercase placeholder:capitalize", // Add uppercase class for visual feedback
                     className,
                 )}
             />
             {!hideError && errors[name] && (
-                <FieldError> {(errors[name]?.message as string) ||
-                        errors.root?.[name]?.message}</FieldError>
+                <FieldError>{errors[name]?.message as string}</FieldError>
             )}
         </fieldset>
     )

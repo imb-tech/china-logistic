@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useRegionsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
+import DeleteModal from "@/components/custom/delete-modal"
 
 const data: CountriesType[] = [
     { id: 1, name: "Country Alpha" },
@@ -22,7 +23,8 @@ const data: CountriesType[] = [
 ]
 
 export const CountriesPages = () => {
-    const { openModal } = useModal("countries-modal")
+    const { openModal:openModalAdd } = useModal("countries-modal")
+    const { openModal:openModalDelete } = useModal("countries-delete")
     const columns = useRegionsColumns()
     return (
         <div className="w-full">
@@ -36,7 +38,7 @@ export const CountriesPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModal}>
+                            <Button onClick={openModalAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -46,12 +48,13 @@ export const CountriesPages = () => {
                         columns={columns}
                         data={data}
                         paginationProps={{ totalPages: 1 }}
-                        onDelete={() => {}}
+                        onDelete={() => openModalDelete()}
                         onEdit={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
+            <DeleteModal modalKey="countries-delete" id={1} path="countries" />
         </div>
     )
 }
