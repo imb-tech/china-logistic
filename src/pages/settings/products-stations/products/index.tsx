@@ -22,7 +22,7 @@ const data: ProductsType[] = [
 ]
 
 export const ProductsPages = () => {
-    const { openModal } = useModal("logis-modal")
+    const { openModal } = useModal("product-modal")
 
     const columns = useProductsColumns()
     return (
@@ -49,7 +49,6 @@ export const ProductsPages = () => {
                         paginationProps={{ totalPages: 1 }}
                         onDelete={() => {}}
                         onEdit={() => {}}
-                        onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>

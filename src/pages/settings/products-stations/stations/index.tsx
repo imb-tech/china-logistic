@@ -22,7 +22,7 @@ const data: StationsType[] = [
 ]
 
 export const StationsPages = () => {
-    const { openModal } = useModal("logis-modal")
+    const { openModal } = useModal("stations-modal")
     const columns = useStationsColumns()
     return (
         <div className="w-full">
@@ -48,7 +48,7 @@ export const StationsPages = () => {
                         paginationProps={{ totalPages: 1 }}
                         onDelete={() => {}}
                         onEdit={() => {}}
-                        onView={() => {}}
+
                         // loading={isLoading}
                     />
                 </CardContent>

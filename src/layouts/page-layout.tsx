@@ -1,6 +1,12 @@
 import Header from "@/components/header"
 import CustomerCreate from "@/pages/customers/customer-create"
 import LogisticsCreate from "@/pages/logistics/logis-create"
+import ProductsCreate from "@/pages/settings/products-stations/products/products-create"
+import StationsCreate from "@/pages/settings/products-stations/stations/stations-create"
+import CitiesCreate from "@/pages/settings/regions/cities/cities-create"
+import CountriesCreate from "@/pages/settings/regions/countries/countries-create"
+import ContainerCreate from "@/pages/settings/transport-container/container/container-create"
+import TransportCreate from "@/pages/settings/transport-container/transport/transport-create"
 import { ReactNode } from "@tanstack/react-router"
 
 type Props = {
@@ -29,6 +35,12 @@ const PageLayout = ({
                 {children}
                 <CustomerCreate/>
                 <LogisticsCreate/>
+                <ProductsCreate/>
+                <StationsCreate/>
+                <ContainerCreate/>
+                <TransportCreate/>
+                <CountriesCreate/>
+                <CitiesCreate/>
             </main>
         </div>
     )

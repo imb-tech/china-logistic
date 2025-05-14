@@ -23,7 +23,7 @@ const data: ContainerType[] = [
 
 
 export const ContainerPages = () => {
-    const { openModal } = useModal("logis-modal")
+    const { openModal } = useModal("container-modal")
     const columns = useContainerColumns()
     return (
         <div className="w-full">
@@ -49,7 +49,6 @@ export const ContainerPages = () => {
                         paginationProps={{ totalPages: 1 }}
                         onDelete={() => {}}
                         onEdit={() => {}}
-                        onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>

@@ -23,7 +23,7 @@ const data: CitiesType[] =[
 
 
 export const CitiesPages = () => {
-    const { openModal } = useModal("logis-modal")
+    const { openModal } = useModal("cities-modal")
     const columns= useCitiesColumns()
     return (
         <div className="w-full">
@@ -49,7 +49,6 @@ export const CitiesPages = () => {
                         paginationProps={{ totalPages: 1 }}
                         onDelete={() => {}}
                         onEdit={() => {}}
-                        onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>

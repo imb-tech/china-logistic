@@ -22,7 +22,7 @@ const data: CountriesType[] = [
 ]
 
 export const CountriesPages = () => {
-    const { openModal } = useModal("logis-modal")
+    const { openModal } = useModal("countries-modal")
     const columns = useRegionsColumns()
     return (
         <div className="w-full">
@@ -48,7 +48,6 @@ export const CountriesPages = () => {
                         paginationProps={{ totalPages: 1 }}
                         onDelete={() => {}}
                         onEdit={() => {}}
-                        onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>

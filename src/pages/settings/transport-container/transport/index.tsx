@@ -22,7 +22,7 @@ const data: TransportType[] = [
 ]
 
 export const TransportPages = () => {
-    const { openModal } = useModal("logis-modal")
+    const { openModal } = useModal("transport-modal")
     const columns = useTransportColumns()
     return (
         <div className="w-full">
@@ -48,7 +48,6 @@ export const TransportPages = () => {
                         paginationProps={{ totalPages: 1 }}
                         onDelete={() => {}}
                         onEdit={() => {}}
-                        onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
