@@ -176,7 +176,7 @@ export function DataTable<TData>({
 
     return (
         <main
-            className={cn("w-full bg-card  rounded-md pb-4", wrapperClassName)}
+            className={cn("w-full   pb-4", wrapperClassName)}
         >
             {!!head && <div>{head}</div>}
             {selecteds_count && (
@@ -197,7 +197,7 @@ export function DataTable<TData>({
 
             <div
                 className={cn(
-                    "rounded-md border relative overflow-x-auto overflow-y-auto",
+                    "relative overflow-x-auto overflow-y-auto rounded-md",
                     tableWrapperClassName,
                 )}
             >
@@ -207,17 +207,17 @@ export function DataTable<TData>({
                     </div>
                 )}
                 {data?.length ? (
-                    <Table className={`${className} select-text bg-card`}>
+                    <Table className={`${className} select-text bg-card rounded-md`}>
                         <TableHeader>
                             {table
                                 .getHeaderGroups()
                                 .map((headerGroup, index) => (
-                                    <TableRow key={index} className="border">
+                                    <TableRow key={index}>
                                         {numeration && (
                                             <TableHead
                                                 key={index}
                                                 className={cn(
-                                                    "border border-b-2 px-2 cursor-pointer",
+                                                    " px-2 cursor-pointer",
                                                     rowSelection &&
                                                         index === 0 &&
                                                         "w-8",
@@ -233,7 +233,7 @@ export function DataTable<TData>({
                                                     <TableHead
                                                         key={index}
                                                         className={cn(
-                                                            "border border-b-2 px-2 cursor-pointer",
+                                                            "border border-input px-2 cursor-pointer",
                                                             rowSelection &&
                                                                 index === 0 &&
                                                                 "w-8",
@@ -248,7 +248,7 @@ export function DataTable<TData>({
                                                                 header.getContext(),
                                                             )}
 
-                                                            {!header.column
+                                                            {header.column
                                                                 .columnDef
                                                                 .enableSorting
                                                                 ? {
@@ -298,7 +298,7 @@ export function DataTable<TData>({
                                             onRightClick?.(row.original)
                                         }}
                                         className={cn(
-                                            "hover:bg-border/50",
+                                            "hover:bg-border/50 ",
                                             rowColor?.(row.original),
                                         )}
                                     >
@@ -327,7 +327,7 @@ export function DataTable<TData>({
                                                             cell.row.original,
                                                         )
                                                     }
-                                                    className={`cursor-pointer border ${
+                                                    className={`cursor-pointer  border border-input ${
                                                         notClick(
                                                             cell.column.id,
                                                         ) && "cursor-default"

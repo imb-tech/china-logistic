@@ -38,7 +38,7 @@ export function DatePickerWithRange({
                         )}
                         disabled={disabled}
                     >
-                        <CalendarIcon className={cn("mr-2 h-4 w-4")} />
+                        <CalendarIcon className={cn("mr-1 h-4 w-4 text-gray-400")} />
                         {date?.from ? (
                             date.to ? (
                                 <>
@@ -49,7 +49,7 @@ export function DatePickerWithRange({
                                 format(date.from, "yyy-MM-dd")
                             )
                         ) : (
-                            <span>Kunlarni tanlang</span>
+                            <span className="text-gray-400">Kunlarni tanlang</span>
                         )}
                     </Button>
                 </PopoverTrigger>

@@ -1,13 +1,10 @@
 import {
-    LayoutDashboard,
-    ListTodo,
-    Logs,
-    Package,
-    ScrollText,
+    File,
+    House,
+    LayoutGrid,
     Settings,
-    Store,
-    Users,
-    UsersRound,
+    Truck,
+    UserRound,
 } from "lucide-react"
 import { ReactNode } from "react"
 
@@ -19,47 +16,32 @@ export interface MenuItem {
 
 export const items: MenuItem[] = [
     {
-        label: "Menu1",
-        icon: <LayoutDashboard width={20} />,
-        path: "/dashboard",
-    },
-    {
-        label: "Menu2",
-        icon: <Package width={20} />,
-        path: "/products",
-    },
-    {
-        label: "Menu3",
-        icon: <Users width={20} />,
-        path: "/sellers",
-    },
-    {
-        label: "Menu4",
-        icon: <UsersRound width={20} />,
-        path: "/customers",
-    },
-    {
-        label: "Menu5",
-        icon: <ListTodo width={20} />,
-        path: "/categories",
-    },
-    {
-        label: "Menu6",
-        icon: <Store width={20} />,
-        path: "/my-products",
-    },
-    {
-        label: "Menu7",
-        icon: <Logs width={20} />,
+        label: "Buyurtmalar",
+        icon: <LayoutGrid width={20} />,
         path: "/orders",
     },
     {
-        label: "Menu8",
-        icon: <ScrollText width={20} />,
-        path: "/applications",
+        label: "Mijozlar",
+        icon: <UserRound width={20} />,
+        path: "/customers",
     },
     {
-        label: "Menu9",
+        label: "Logistlar",
+        icon: <Truck width={20} />,
+        path: "/logistics",
+    },
+    {
+        label: "Ombor",
+        icon: <House width={20} />,
+        path: "/warehouse",
+    },
+    {
+        label: "Hujjatlar",
+        icon: <File width={20} />,
+        path: "/documents",
+    },
+    {
+        label: "Sozlamalar",
         icon: <Settings width={20} />,
         path: "/settings",
     },

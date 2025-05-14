@@ -39,10 +39,10 @@ export function DatePicker({
                     )}
                     disabled={disabled}
                 >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    <CalendarIcon className="mr-1 text-gray-400 h-4 w-4" />
                     {date ?
                         format(date, "dd/MM/yyyy")
-                    :   <span>{placeholder || "Kunni tanlang"}</span>}
+                    :   <span className="text-gray-400">{placeholder || "Kunni tanlang"}</span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">

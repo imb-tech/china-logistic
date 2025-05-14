@@ -105,14 +105,13 @@ export const orderData: OrderType[] = [
 export const OrdersPages = () => {
     return (
         <div className="w-full">
-            <Card className="mb-5 rounded-md border">
+            <Card className="mb-5 rounded-md ">
                 <CardContent className="flex justify-between items-start">
                     <div className="flex flex-col gap-3 w-1/2">
                         <h1 className="text-2xl font-bold">Buyurtmalar</h1>
                         <Input
                             fullWidth
                             placeholder="Qidiruv..."
-                            className=""
                         />
                     </div>
                     <ParamDateRange />

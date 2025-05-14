@@ -2,57 +2,38 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { Edit, Trash } from "lucide-react"
 
-export const useSellerColumns = ({
+export const useCategoriesColumns = ({
     onDelete,
     onEdit,
 }: {
     onDelete: (val: string | number) => void
-    onEdit: (val: SellerType) => void
-}): ColumnDef<SellerType>[] => {
+    onEdit: (val: DocumentsType) => void
+}): ColumnDef<DocumentsType>[] => {
     return [
         {
             header: "№",
             cell: ({ row }) => row.index + 1,
         },
         {
-            header: "Rasm",
+            header: "Icon",
             accessorKey: "icon",
             cell: ({ row }) => (
-                <img
-                    src={row.original.photo}
-                    alt={row.original.full_name}
-                    className="w-12 h-12 rounded-md"
-                />
+                <span className="text-2xl">{row.original.icon}</span>
             ),
         },
         {
             header: "Nomi",
-            accessorKey: "full_name",
+            accessorKey: "title",
         },
         {
-            header: "Email  yoki Telefon",
-            accessorKey: "email_or_phone",
-        },
-        {
-            header: "Hamyon",
-            accessorKey: "wallet",
-        },
-        {
-            header: "Mahsulotlari soni",
-            accessorKey: "total_product",
-        },
-        {
-            header: "Taklif qilgan",
-            accessorKey: "referral_count",
-        },
-        {
-            header: "Ro'yxatdan o'tgan sanasi",
-            accessorKey: "full_name",
-            cell: ({ row }) => <span>{row.original.created_at}</span>,
-        },
-        {
-            header: "Holati",
-            accessorKey: "auth_status",
+            header: "Top",
+            accessorKey: "top",
+            cell: ({ row }) =>
+                row.original.top ? (
+                    <span className="text-primary">Top</span>
+                ) : (
+                    <span className="text-destructive">Top Emas</span>
+                ),
         },
         {
             header: "Amallar",

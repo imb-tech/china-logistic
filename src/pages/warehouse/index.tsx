@@ -177,13 +177,13 @@ export const fileColors: { [key: string]: string } = {
     pdf: "bg-red-500",
   };
 
-export const ProductsPages = () => {
+export const WarehousePages = () => {
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-md border">
                 <CardContent className="flex justify-between items-start">
                     <div className="flex flex-col gap-3 w-1/2">
-                        <h1 className="text-2xl font-bold">Mahsulotlar</h1>
+                        <h1 className="text-2xl font-bold">Ombor</h1>
                         <Input
                             fullWidth
                             placeholder="Qidiruv..."

@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { DataTable } from "@/components/ui/datatable"
 
-const data: CategoriesType[] = [
+const data: DocumentsType[] = [
     { id: 1, title: "Diplom ishi", icon: "🎓", top: true },
     { id: 2, title: "Referat", icon: "📄" },
     { id: 3, title: "Kurs ishi", icon: "📚" },
@@ -23,13 +23,13 @@ const data: CategoriesType[] = [
     { id: 15, title: "Tarixiy hujjat", icon: "🏺" },
 ]
 
-export const CategoriesPages = () => {
+export const DocumentsPages = () => {
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-md border">
                 <CardContent className="flex justify-between items-start">
                     <div className="flex flex-col gap-3 w-1/2">
-                        <h1 className="text-2xl font-bold">Kategoriyalar</h1>
+                        <h1 className="text-2xl font-bold">Hujjatlar</h1>
                         <Input
                             fullWidth
                             placeholder="Qidiruv..."

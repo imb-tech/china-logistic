@@ -6,11 +6,17 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { Link, useNavigate } from "@tanstack/react-router"
-import {  LogOut, User } from "lucide-react"
+import { LogOut, User } from "lucide-react"
 import { ThemeColorToggle } from "./color-toggle"
 import { SidebarTrigger } from "../ui/sidebar"
+import { ReactNode } from "react"
 
-const Header = () => {
+type Props = {
+    title?: string
+    rigthChildren?: ReactNode
+    leftChildren?: ReactNode
+}
+const Header = ({ title, leftChildren, rigthChildren }: Props) => {
     const navigate = useNavigate()
 
     const handleLogOut = () => {
@@ -21,14 +27,14 @@ const Header = () => {
     }
 
     return (
-        <header className="px-4 md:px-6 py-4 gap-4 border-b flex items-center justify-between bg-card max-w-full box-border">
-            <div className="flex items-center md:gap-8 min-w-14 max-w-full overflow-x-auto custom-scrollbar">
+        <header className="px-4 md:px-6 py-4 gap-4  flex items-center justify-between bg-card max-w-full box-border">
+            <div className="flex gap-2 items-center min-w-14 max-w-full overflow-x-auto custom-scrollbar">
                 <SidebarTrigger />
-                <Link to="/" className="hidden xl:block font-bold">
-                    Logo
-                </Link>
+                {title ? <p>{title}</p> : null}
+                {leftChildren ? leftChildren : null}
             </div>
             <hgroup className="flex items-center gap-4">
+                {rigthChildren ? rigthChildren : null}
                 <ThemeColorToggle />
                 <DropdownMenu>
                     <div className="relative h-10">

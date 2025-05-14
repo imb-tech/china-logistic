@@ -15,7 +15,6 @@ export function NavMain({ items }: { items: MenuItem[] }) {
     return (
         <SidebarGroup>
             <SidebarGroupContent className="flex flex-col gap-2 ">
-                <SidebarMenu></SidebarMenu>
                 <SidebarMenu>
                     {items.map((item) => (
                         <SidebarMenuItem key={item.label}>
@@ -23,10 +22,10 @@ export function NavMain({ items }: { items: MenuItem[] }) {
                                 onClick={() => navigate({ to: item.path })}
                                 tooltip={item.label}
                                 isActive={pathname === item.path}
-                                className={"cursor-pointer"}
+                                className={"cursor-pointer "}
                             >
                                 {item.icon}
-                                <span>{item.label}</span>
+                                <span >{item.label}</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     ))}

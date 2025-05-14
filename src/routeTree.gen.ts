@@ -16,17 +16,12 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as MainImport } from './routes/_main'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as MainIndexImport } from './routes/_main/index'
+import { Route as MainWarehouseImport } from './routes/_main/warehouse'
 import { Route as MainSettingsImport } from './routes/_main/settings'
-import { Route as MainSellersImport } from './routes/_main/sellers'
-import { Route as MainProductsImport } from './routes/_main/products'
 import { Route as MainOrdersImport } from './routes/_main/orders'
-import { Route as MainMyProductsImport } from './routes/_main/my-products'
-import { Route as MainDashboardImport } from './routes/_main/dashboard'
+import { Route as MainLogisticsImport } from './routes/_main/logistics'
+import { Route as MainDocumentsImport } from './routes/_main/documents'
 import { Route as MainCustomersImport } from './routes/_main/customers'
-import { Route as MainCategoriesImport } from './routes/_main/categories'
-import { Route as MainApplicationsImport } from './routes/_main/applications'
-import { Route as MainSellerIdImport } from './routes/_main/_seller/$id'
-import { Route as MainProductsProductCreateImport } from './routes/_main/_products/product-create'
 
 // Create Virtual Routes
 
@@ -56,21 +51,15 @@ const AuthAuthLazyRoute = AuthAuthLazyImport.update({
   getParentRoute: () => AuthRoute,
 } as any).lazy(() => import('./routes/_auth/auth.lazy').then((d) => d.Route))
 
+const MainWarehouseRoute = MainWarehouseImport.update({
+  id: '/warehouse',
+  path: '/warehouse',
+  getParentRoute: () => MainRoute,
+} as any)
+
 const MainSettingsRoute = MainSettingsImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => MainRoute,
-} as any)
-
-const MainSellersRoute = MainSellersImport.update({
-  id: '/sellers',
-  path: '/sellers',
-  getParentRoute: () => MainRoute,
-} as any)
-
-const MainProductsRoute = MainProductsImport.update({
-  id: '/products',
-  path: '/products',
   getParentRoute: () => MainRoute,
 } as any)
 
@@ -80,45 +69,21 @@ const MainOrdersRoute = MainOrdersImport.update({
   getParentRoute: () => MainRoute,
 } as any)
 
-const MainMyProductsRoute = MainMyProductsImport.update({
-  id: '/my-products',
-  path: '/my-products',
+const MainLogisticsRoute = MainLogisticsImport.update({
+  id: '/logistics',
+  path: '/logistics',
   getParentRoute: () => MainRoute,
 } as any)
 
-const MainDashboardRoute = MainDashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const MainDocumentsRoute = MainDocumentsImport.update({
+  id: '/documents',
+  path: '/documents',
   getParentRoute: () => MainRoute,
 } as any)
 
 const MainCustomersRoute = MainCustomersImport.update({
   id: '/customers',
   path: '/customers',
-  getParentRoute: () => MainRoute,
-} as any)
-
-const MainCategoriesRoute = MainCategoriesImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => MainRoute,
-} as any)
-
-const MainApplicationsRoute = MainApplicationsImport.update({
-  id: '/applications',
-  path: '/applications',
-  getParentRoute: () => MainRoute,
-} as any)
-
-const MainSellerIdRoute = MainSellerIdImport.update({
-  id: '/_seller/$id',
-  path: '/$id',
-  getParentRoute: () => MainRoute,
-} as any)
-
-const MainProductsProductCreateRoute = MainProductsProductCreateImport.update({
-  id: '/_products/product-create',
-  path: '/product-create',
   getParentRoute: () => MainRoute,
 } as any)
 
@@ -140,20 +105,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainImport
       parentRoute: typeof rootRoute
     }
-    '/_main/applications': {
-      id: '/_main/applications'
-      path: '/applications'
-      fullPath: '/applications'
-      preLoaderRoute: typeof MainApplicationsImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/categories': {
-      id: '/_main/categories'
-      path: '/categories'
-      fullPath: '/categories'
-      preLoaderRoute: typeof MainCategoriesImport
-      parentRoute: typeof MainImport
-    }
     '/_main/customers': {
       id: '/_main/customers'
       path: '/customers'
@@ -161,18 +112,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainCustomersImport
       parentRoute: typeof MainImport
     }
-    '/_main/dashboard': {
-      id: '/_main/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof MainDashboardImport
+    '/_main/documents': {
+      id: '/_main/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof MainDocumentsImport
       parentRoute: typeof MainImport
     }
-    '/_main/my-products': {
-      id: '/_main/my-products'
-      path: '/my-products'
-      fullPath: '/my-products'
-      preLoaderRoute: typeof MainMyProductsImport
+    '/_main/logistics': {
+      id: '/_main/logistics'
+      path: '/logistics'
+      fullPath: '/logistics'
+      preLoaderRoute: typeof MainLogisticsImport
       parentRoute: typeof MainImport
     }
     '/_main/orders': {
@@ -182,25 +133,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainOrdersImport
       parentRoute: typeof MainImport
     }
-    '/_main/products': {
-      id: '/_main/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof MainProductsImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/sellers': {
-      id: '/_main/sellers'
-      path: '/sellers'
-      fullPath: '/sellers'
-      preLoaderRoute: typeof MainSellersImport
-      parentRoute: typeof MainImport
-    }
     '/_main/settings': {
       id: '/_main/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof MainSettingsImport
+      parentRoute: typeof MainImport
+    }
+    '/_main/warehouse': {
+      id: '/_main/warehouse'
+      path: '/warehouse'
+      fullPath: '/warehouse'
+      preLoaderRoute: typeof MainWarehouseImport
       parentRoute: typeof MainImport
     }
     '/_auth/auth': {
@@ -215,20 +159,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MainIndexImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/_products/product-create': {
-      id: '/_main/_products/product-create'
-      path: '/product-create'
-      fullPath: '/product-create'
-      preLoaderRoute: typeof MainProductsProductCreateImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/_seller/$id': {
-      id: '/_main/_seller/$id'
-      path: '/$id'
-      fullPath: '/$id'
-      preLoaderRoute: typeof MainSellerIdImport
       parentRoute: typeof MainImport
     }
   }
@@ -247,140 +177,100 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface MainRouteChildren {
-  MainApplicationsRoute: typeof MainApplicationsRoute
-  MainCategoriesRoute: typeof MainCategoriesRoute
   MainCustomersRoute: typeof MainCustomersRoute
-  MainDashboardRoute: typeof MainDashboardRoute
-  MainMyProductsRoute: typeof MainMyProductsRoute
+  MainDocumentsRoute: typeof MainDocumentsRoute
+  MainLogisticsRoute: typeof MainLogisticsRoute
   MainOrdersRoute: typeof MainOrdersRoute
-  MainProductsRoute: typeof MainProductsRoute
-  MainSellersRoute: typeof MainSellersRoute
   MainSettingsRoute: typeof MainSettingsRoute
+  MainWarehouseRoute: typeof MainWarehouseRoute
   MainIndexRoute: typeof MainIndexRoute
-  MainProductsProductCreateRoute: typeof MainProductsProductCreateRoute
-  MainSellerIdRoute: typeof MainSellerIdRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
-  MainApplicationsRoute: MainApplicationsRoute,
-  MainCategoriesRoute: MainCategoriesRoute,
   MainCustomersRoute: MainCustomersRoute,
-  MainDashboardRoute: MainDashboardRoute,
-  MainMyProductsRoute: MainMyProductsRoute,
+  MainDocumentsRoute: MainDocumentsRoute,
+  MainLogisticsRoute: MainLogisticsRoute,
   MainOrdersRoute: MainOrdersRoute,
-  MainProductsRoute: MainProductsRoute,
-  MainSellersRoute: MainSellersRoute,
   MainSettingsRoute: MainSettingsRoute,
+  MainWarehouseRoute: MainWarehouseRoute,
   MainIndexRoute: MainIndexRoute,
-  MainProductsProductCreateRoute: MainProductsProductCreateRoute,
-  MainSellerIdRoute: MainSellerIdRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof MainRouteWithChildren
-  '/applications': typeof MainApplicationsRoute
-  '/categories': typeof MainCategoriesRoute
   '/customers': typeof MainCustomersRoute
-  '/dashboard': typeof MainDashboardRoute
-  '/my-products': typeof MainMyProductsRoute
+  '/documents': typeof MainDocumentsRoute
+  '/logistics': typeof MainLogisticsRoute
   '/orders': typeof MainOrdersRoute
-  '/products': typeof MainProductsRoute
-  '/sellers': typeof MainSellersRoute
   '/settings': typeof MainSettingsRoute
+  '/warehouse': typeof MainWarehouseRoute
   '/auth': typeof AuthAuthLazyRoute
   '/': typeof MainIndexRoute
-  '/product-create': typeof MainProductsProductCreateRoute
-  '/$id': typeof MainSellerIdRoute
 }
 
 export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
-  '/applications': typeof MainApplicationsRoute
-  '/categories': typeof MainCategoriesRoute
   '/customers': typeof MainCustomersRoute
-  '/dashboard': typeof MainDashboardRoute
-  '/my-products': typeof MainMyProductsRoute
+  '/documents': typeof MainDocumentsRoute
+  '/logistics': typeof MainLogisticsRoute
   '/orders': typeof MainOrdersRoute
-  '/products': typeof MainProductsRoute
-  '/sellers': typeof MainSellersRoute
   '/settings': typeof MainSettingsRoute
+  '/warehouse': typeof MainWarehouseRoute
   '/auth': typeof AuthAuthLazyRoute
   '/': typeof MainIndexRoute
-  '/product-create': typeof MainProductsProductCreateRoute
-  '/$id': typeof MainSellerIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_main': typeof MainRouteWithChildren
-  '/_main/applications': typeof MainApplicationsRoute
-  '/_main/categories': typeof MainCategoriesRoute
   '/_main/customers': typeof MainCustomersRoute
-  '/_main/dashboard': typeof MainDashboardRoute
-  '/_main/my-products': typeof MainMyProductsRoute
+  '/_main/documents': typeof MainDocumentsRoute
+  '/_main/logistics': typeof MainLogisticsRoute
   '/_main/orders': typeof MainOrdersRoute
-  '/_main/products': typeof MainProductsRoute
-  '/_main/sellers': typeof MainSellersRoute
   '/_main/settings': typeof MainSettingsRoute
+  '/_main/warehouse': typeof MainWarehouseRoute
   '/_auth/auth': typeof AuthAuthLazyRoute
   '/_main/': typeof MainIndexRoute
-  '/_main/_products/product-create': typeof MainProductsProductCreateRoute
-  '/_main/_seller/$id': typeof MainSellerIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
-    | '/applications'
-    | '/categories'
     | '/customers'
-    | '/dashboard'
-    | '/my-products'
+    | '/documents'
+    | '/logistics'
     | '/orders'
-    | '/products'
-    | '/sellers'
     | '/settings'
+    | '/warehouse'
     | '/auth'
     | '/'
-    | '/product-create'
-    | '/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
-    | '/applications'
-    | '/categories'
     | '/customers'
-    | '/dashboard'
-    | '/my-products'
+    | '/documents'
+    | '/logistics'
     | '/orders'
-    | '/products'
-    | '/sellers'
     | '/settings'
+    | '/warehouse'
     | '/auth'
     | '/'
-    | '/product-create'
-    | '/$id'
   id:
     | '__root__'
     | '/_auth'
     | '/_main'
-    | '/_main/applications'
-    | '/_main/categories'
     | '/_main/customers'
-    | '/_main/dashboard'
-    | '/_main/my-products'
+    | '/_main/documents'
+    | '/_main/logistics'
     | '/_main/orders'
-    | '/_main/products'
-    | '/_main/sellers'
     | '/_main/settings'
+    | '/_main/warehouse'
     | '/_auth/auth'
     | '/_main/'
-    | '/_main/_products/product-create'
-    | '/_main/_seller/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -419,54 +309,37 @@ export const routeTree = rootRoute
     "/_main": {
       "filePath": "_main.tsx",
       "children": [
-        "/_main/applications",
-        "/_main/categories",
         "/_main/customers",
-        "/_main/dashboard",
-        "/_main/my-products",
+        "/_main/documents",
+        "/_main/logistics",
         "/_main/orders",
-        "/_main/products",
-        "/_main/sellers",
         "/_main/settings",
-        "/_main/",
-        "/_main/_products/product-create",
-        "/_main/_seller/$id"
+        "/_main/warehouse",
+        "/_main/"
       ]
-    },
-    "/_main/applications": {
-      "filePath": "_main/applications.tsx",
-      "parent": "/_main"
-    },
-    "/_main/categories": {
-      "filePath": "_main/categories.tsx",
-      "parent": "/_main"
     },
     "/_main/customers": {
       "filePath": "_main/customers.tsx",
       "parent": "/_main"
     },
-    "/_main/dashboard": {
-      "filePath": "_main/dashboard.tsx",
+    "/_main/documents": {
+      "filePath": "_main/documents.tsx",
       "parent": "/_main"
     },
-    "/_main/my-products": {
-      "filePath": "_main/my-products.tsx",
+    "/_main/logistics": {
+      "filePath": "_main/logistics.tsx",
       "parent": "/_main"
     },
     "/_main/orders": {
       "filePath": "_main/orders.tsx",
       "parent": "/_main"
     },
-    "/_main/products": {
-      "filePath": "_main/products.tsx",
-      "parent": "/_main"
-    },
-    "/_main/sellers": {
-      "filePath": "_main/sellers.tsx",
-      "parent": "/_main"
-    },
     "/_main/settings": {
       "filePath": "_main/settings.tsx",
+      "parent": "/_main"
+    },
+    "/_main/warehouse": {
+      "filePath": "_main/warehouse.tsx",
       "parent": "/_main"
     },
     "/_auth/auth": {
@@ -475,14 +348,6 @@ export const routeTree = rootRoute
     },
     "/_main/": {
       "filePath": "_main/index.tsx",
-      "parent": "/_main"
-    },
-    "/_main/_products/product-create": {
-      "filePath": "_main/_products/product-create.tsx",
-      "parent": "/_main"
-    },
-    "/_main/_seller/$id": {
-      "filePath": "_main/_seller/$id.tsx",
       "parent": "/_main"
     }
   }
