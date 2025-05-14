@@ -1,18 +1,24 @@
-import { FieldValues, Path, RegisterOptions, UseFormReturn } from "react-hook-form";
-import { cn } from "@/lib/utils";
-import FieldLabel from "./form-label";
-import FieldError from "./form-error";
-import { ClassNameValue } from "tailwind-merge";
-import { Textarea } from "../ui/textarea";
+import {
+    FieldValues,
+    Path,
+    RegisterOptions,
+    UseFormReturn,
+} from "react-hook-form"
+import { cn } from "@/lib/utils"
+import FieldLabel from "./form-label"
+import FieldError from "./form-error"
+import { ClassNameValue } from "tailwind-merge"
+import { Textarea } from "../ui/textarea"
+import { useEffect } from "react"
 
 interface IProps<IForm extends FieldValues> {
-    methods: UseFormReturn<IForm>;
-    name: Path<IForm>;
-    label?: string;
-    required?: boolean;
-    registerOptions?: RegisterOptions<IForm>;
-    wrapperClassName?: ClassNameValue;
-    hideError?: boolean;
+    methods: UseFormReturn<IForm>
+    name: Path<IForm>
+    label?: string
+    required?: boolean
+    registerOptions?: RegisterOptions<IForm>
+    wrapperClassName?: ClassNameValue
+    hideError?: boolean
 }
 
 export function FormTextarea<IForm extends FieldValues>({
@@ -34,11 +40,13 @@ export function FormTextarea<IForm extends FieldValues>({
     const reg = register(name, {
         required: {
             value: required,
-            message: methods.formState.errors[name]?.message as any,
+            message: `${label}ni kiriting`,
         },
-        ...registerOptions,
-        disabled: props.disabled,
     })
+
+    useEffect(() => {
+        register(name)
+    }, [name, register])
 
     const { disabled, ...otherProps } = props
 
@@ -60,13 +68,16 @@ export function FormTextarea<IForm extends FieldValues>({
                 placeholder={props.placeholder || label}
                 id={name}
                 className={
-                    !!errors?.[name] && !label ?
-                        "border-destructive focus:border-border !ring-destructive"
+                    !!errors?.[name] && label
+                        ? "border-destructive focus:border-border !ring-destructive"
                         : ""
                 }
             />
             {!hideError && errors[name] && (
-                <FieldError>{errors[name]?.message as string}</FieldError>
+                <FieldError>
+                    {(errors[name]?.message as string) ||
+                        errors.root?.[name]?.message}
+                </FieldError>
             )}
         </fieldset>
     )
