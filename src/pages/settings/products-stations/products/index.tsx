@@ -14,23 +14,26 @@ import { useStoreData } from "@/store/global-store"
 export const ProductsPages = () => {
     const { openModal: openModalAdd } = useModal("product-modal")
     const { openModal: openModalDelete } = useModal("product-delete")
-   const { storeData, setStoreData } = useStoreData()
+   const { storeData, setStoreData, clearUserData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ProductResults>(PRODUCT, {
         params: search,
     })
 
     const handleDelete = (item: ProductsType) => {
+        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: ProductsType) => {
+        clearUserData()
         setStoreData(item)
         openModalAdd()
     }
 
        const handleAdd = () => {
+        clearUserData()
         openModalAdd()
     }
 

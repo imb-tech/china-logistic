@@ -1,3 +1,4 @@
+import Modal from "@/components/custom/modal"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import { STATION } from "@/constants/api-endpoints"
