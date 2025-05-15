@@ -15,9 +15,13 @@ export const StationsPages = () => {
     const { openModal: openModalAdd } = useModal("stations-modal")
     const { openModal: openModalDelete } = useModal("stations-delete")
     const { storeData, setStoreData, clearUserData } = useStoreData()
-    const search = useSearch({ from: "/_main/settings" })
+    const search: SearchParamsStation = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<StationsResults>(STATION, {
-        params: search,
+        params: {
+            search: search.station_search,
+            page_size: search.station_page_size,
+            page: search.station_page,
+        },
     })
 
     const handleDelete = (item: StationsType) => {
@@ -31,11 +35,10 @@ export const StationsPages = () => {
         setStoreData(item)
         openModalAdd()
     }
-       const handleAdd = () => {
+    const handleAdd = () => {
         clearUserData()
         openModalAdd()
     }
-
 
     const columns = useStationsColumns()
     return (
@@ -48,7 +51,8 @@ export const StationsPages = () => {
                             <ParamInput
                                 fullWidth
                                 placeholder="Qidirish"
-                                className=""
+                                searchKey="station_search"
+                                pageKey="station_page"
                             />
                             <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
@@ -62,6 +66,10 @@ export const StationsPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        paginationProps={{
+                            pageSizeParamName: "station_page_size",
+                            paramName: "station_page",
+                        }}
                     />
                 </CardContent>
             </Card>

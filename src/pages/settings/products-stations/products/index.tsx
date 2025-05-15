@@ -14,10 +14,14 @@ import { useStoreData } from "@/store/global-store"
 export const ProductsPages = () => {
     const { openModal: openModalAdd } = useModal("product-modal")
     const { openModal: openModalDelete } = useModal("product-delete")
-   const { storeData, setStoreData, clearUserData } = useStoreData()
-    const search = useSearch({ from: "/_main/settings" })
+    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const search:SearchParamsProduct = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ProductResults>(PRODUCT, {
-        params: search,
+        params: {
+            search: search.product_search,
+            page_size: search.product_page_size,
+            page: search.product_page,
+        },
     })
 
     const handleDelete = (item: ProductsType) => {
@@ -32,11 +36,10 @@ export const ProductsPages = () => {
         openModalAdd()
     }
 
-       const handleAdd = () => {
+    const handleAdd = () => {
         clearUserData()
         openModalAdd()
     }
-
 
     const columns = useProductsColumns()
     return (
@@ -49,7 +52,8 @@ export const ProductsPages = () => {
                             <ParamInput
                                 fullWidth
                                 placeholder="Qidirish"
-                                className=""
+                                searchKey="product_search"
+                                pageKey="product_page"
                             />
                             <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
@@ -60,9 +64,13 @@ export const ProductsPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                         onDelete={(item) => handleDelete(item.original)}
+                        onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        paginationProps={{
+                            pageSizeParamName: "product_page_size",
+                            paramName: "product_page",
+                        }}
                     />
                 </CardContent>
             </Card>

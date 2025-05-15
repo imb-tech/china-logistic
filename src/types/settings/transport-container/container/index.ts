@@ -8,3 +8,9 @@ type ContainerResults = {
     previous: string
     results: ContainerType[]
 }
+
+type SearchParamsContainer = {
+  container_search?: string
+  container_page_size?: number
+  container_page?: number
+}

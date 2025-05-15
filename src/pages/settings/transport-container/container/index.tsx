@@ -15,9 +15,13 @@ export const ContainerPages = () => {
     const { openModal: openModalAdd } = useModal("container-modal")
     const { openModal: openModalDelete } = useModal("container-delete")
     const { storeData, setStoreData, clearUserData } = useStoreData()
-    const search = useSearch({ from: "/_main/settings" })
+    const search:SearchParamsContainer = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ContainerResults>(CONTAINER_TYPE, {
-        params: search,
+        params: {
+            search: search.container_search,
+            page_size: search.container_page_size,
+            page: search.container_page,
+        },
     })
 
     const handleDelete = (item: ContainerType) => {
@@ -48,7 +52,8 @@ export const ContainerPages = () => {
                             <ParamInput
                                 fullWidth
                                 placeholder="Qidirish"
-                                className=""
+                                searchKey="container_search"
+                                pageKey="container_page"
                             />
                             <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
@@ -62,6 +67,10 @@ export const ContainerPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        paginationProps={{
+                            pageSizeParamName: "container_page_size",
+                            paramName: "container_page",
+                        }}
                     />
                 </CardContent>
             </Card>

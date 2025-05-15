@@ -15,9 +15,13 @@ export const TransportPages = () => {
     const { openModal: openModalAdd } = useModal("transport-modal")
     const { openModal: openModalDelete } = useModal("transport-delete")
     const { storeData, setStoreData, clearUserData } = useStoreData()
-    const search = useSearch({ from: "/_main/settings" })
+    const search: SearchParamsTransport = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<TransportResults>(TRANSPORT, {
-        params: search,
+        params: {
+            search: search.transport_search,
+            page_size: search.transport_page_size,
+            page: search.transport_page,
+        },
     })
 
     const handleDelete = (item: TransportType) => {
@@ -48,7 +52,8 @@ export const TransportPages = () => {
                             <ParamInput
                                 fullWidth
                                 placeholder="Qidirish"
-                                className=""
+                                searchKey="transport_search"
+                                pageKey="transport_page"
                             />
                             <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
@@ -62,6 +67,10 @@ export const TransportPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        paginationProps={{
+                            pageSizeParamName: "transport_page_size",
+                            paramName: "transport_page",
+                        }}
                     />
                 </CardContent>
             </Card>

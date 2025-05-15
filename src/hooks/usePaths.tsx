@@ -18,7 +18,7 @@ export const items: MenuItem[] = [
     {
         label: "Buyurtmalar",
         icon: <LayoutGrid width={20} />,
-        path: "/orders",
+        path: "/",
     },
     {
         label: "Mijozlar",

@@ -17,9 +17,13 @@ export const CountriesPages = () => {
     const { storeData, setStoreData, clearUserData } = useStoreData()
     const columns = useRegionsColumns()
 
-    const search = useSearch({ from: "/_main/settings" })
+    const search:SearchParamsCountries = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<CountriesResults>(COUNTRY, {
-        params: search,
+        params: {
+            search: search.countries_search,
+            page_size: search.countries_page_size,
+            page: search.countries_page,
+        },
     })
 
     const handleDelete = (item: CountriesType) => {
@@ -34,7 +38,7 @@ export const CountriesPages = () => {
         openModalAdd()
     }
 
-         const handleAdd = () => {
+    const handleAdd = () => {
         clearUserData()
         openModalAdd()
     }
@@ -49,7 +53,8 @@ export const CountriesPages = () => {
                             <ParamInput
                                 fullWidth
                                 placeholder="Qidirish"
-                                className=""
+                                searchKey="countries_search"
+                                pageKey="countries_page"
                             />
                             <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
@@ -63,10 +68,18 @@ export const CountriesPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        paginationProps={{
+                            pageSizeParamName: "countries_page_size",
+                            paramName: "countries_page",
+                        }}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="countries-delete" id={storeData?.id} path={COUNTRY} />
+            <DeleteModal
+                modalKey="countries-delete"
+                id={storeData?.id}
+                path={COUNTRY}
+            />
         </div>
     )
 }

@@ -9,3 +9,9 @@ type ProductResults = {
     previous: string
     results: ProductsType[]
 }
+
+type SearchParamsProduct = {
+  product_search?: string
+  product_page_size?: number
+  product_page?: number
+}

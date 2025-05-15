@@ -8,3 +8,9 @@ type CountriesResults = {
     previous: string
     results: CountriesType[]
 }
+
+type SearchParamsCountries = {
+  countries_search?: string
+  countries_page_size?: number
+  countries_page?: number
+}

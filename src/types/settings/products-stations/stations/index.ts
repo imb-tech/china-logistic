@@ -8,3 +8,9 @@ type StationsResults = {
     previous: string
     results: StationsType[]
 }
+
+type SearchParamsStation = {
+  station_search?: string
+  station_page_size?: number
+  station_page?: number
+}

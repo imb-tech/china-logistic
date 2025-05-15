@@ -9,3 +9,9 @@ type TransportResults = {
     previous: string
     results: TransportType[]
 }
+
+type SearchParamsTransport = {
+  transport_search?: string
+  transport_page_size?: number
+  transport_page?: number
+}

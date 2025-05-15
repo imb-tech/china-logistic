@@ -4,14 +4,12 @@ import { Input, InputProps } from "../ui/input"
 
 type ParamInputProps = {
     searchKey?: string
-    searchWithEnterKey?: string
     pageKey?: string
 } & InputProps
 
 export default function ParamInput({
     searchKey = "search",
-    searchWithEnterKey = "Enter",
-    pageKey = "search_page",
+    pageKey = "page",
     ...props
 }: ParamInputProps) {
     const navigate = useNavigate()
@@ -26,7 +24,6 @@ export default function ParamInput({
             navigate({
                 search: {
                     ...params,
-                    [searchWithEnterKey]: searchVal || undefined,
                     [pageKey]: undefined,
                 },
             })

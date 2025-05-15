@@ -16,9 +16,13 @@ export const CitiesPages = () => {
     const { openModal: openModalDelete } = useModal("cities-delete")
     const { storeData, setStoreData, clearUserData } = useStoreData()
 
-    const search = useSearch({ from: "/_main/settings" })
+    const search:SearchParamsCities = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<CitiesResults>(REGION, {
-        params: search,
+          params: {
+            search: search.cities_search,
+            page_size: search.cities_page_size,
+            page: search.cities_page,
+        },
     })
 
     const handleDelete = (item: CitiesType) => {
@@ -50,7 +54,8 @@ export const CitiesPages = () => {
                             <ParamInput
                                 fullWidth
                                 placeholder="Qidirish"
-                                className=""
+                                searchKey="cities_search"
+                                pageKey="cities_page"
                             />
                             <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
@@ -64,6 +69,10 @@ export const CitiesPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        paginationProps={{
+                            pageSizeParamName: "cities_page_size",
+                            paramName: "cities_page",
+                        }}
                     />
                 </CardContent>
             </Card>
