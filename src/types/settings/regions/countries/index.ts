@@ -1,6 +1,7 @@
 type CountriesType = {
     id: number
     name: string
+    region: string | number
 }
 
 type CountriesResults = {

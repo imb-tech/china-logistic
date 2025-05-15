@@ -14,7 +14,6 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { CheckIcon, ChevronsUpDown, Plus, X } from "lucide-react"
-import { useState } from "react"
 import { ClassNameValue } from "tailwind-merge"
 
 export function Combobox({
@@ -23,7 +22,7 @@ export function Combobox({
     setValue,
     label,
     disabled,
-    addNew,
+    onAdd,
     isError,
     returnVal = "value",
     className,
@@ -31,45 +30,56 @@ export function Combobox({
     options: Item[] | undefined
     value: string | number | null
     setValue: (val: any) => void
+    onAdd?: () => void
     label: string
     disabled?: boolean
-    addNew?: boolean
     isError?: boolean
     returnVal?: "value" | "label"
     className?: ClassNameValue
 }) {
-    const [open, setOpen] = useState(false)
-
     const handleSelect = (option: Item) => {
         const returnValue = returnVal === "label" ? option.label : option.value
         setValue(returnValue)
-        setOpen(false)
+    }
+
+    const handleClickAdd = () => {
+        onAdd ? onAdd?.() : undefined
     }
 
     return (
-        <Popover modal open={open} onOpenChange={setOpen}>
+        <Popover>
             <PopoverTrigger asChild>
                 <Button
                     variant="outline"
                     role="combobox"
-                    aria-expanded={open}
                     className={cn(
-                        "w-full justify-between bg-background font-normal text-muted-foreground",
+                        "w-full justify-between bg-background px-2 hover:bg-background font-normal text-gray-400 hover:text-gray-400",
                         value && "font-medium text-foreground",
-                        isError && "!text-destructive",
+                        isError && " border-destructive",
                         className,
                     )}
                     disabled={disabled}
                 >
-                    {value ?
-                        options
-                            ?.find((d) => d.value == value)
-                            ?.label?.toString() || value
-                    :   label}
-                    <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                    <div className="flex items-center gap-2">
+                        <ChevronsUpDown className=" h-4 w-4  text-primary opacity-50 " />
+                        {value
+                            ? options
+                                  ?.find((d) => d.value == value)
+                                  ?.label?.toString() || value
+                            : label}
+                    </div>
+                    <span
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            handleClickAdd()
+                        }}
+                        className="bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
+                    >
+                        <Plus className=" h-4 w-4 shrink-0  text-primary" />
+                    </span>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
+            <PopoverContent className="p-0">
                 <Command>
                     <CommandInput placeholder={label} />
                     {!!value && (
@@ -93,24 +103,13 @@ export function Combobox({
                                     <CheckIcon
                                         className={cn(
                                             "ml-auto h-4 w-4",
-                                            value == d[returnVal] ?
-                                                "opacity-100"
-                                            :   "opacity-0",
+                                            value == d[returnVal]
+                                                ? "opacity-100"
+                                                : "opacity-0",
                                         )}
                                     />
                                 </CommandItem>
                             ))}
-                            {addNew && (
-                                <CommandItem
-                                    onSelect={() => {
-                                        setValue(-1)
-                                        setOpen(false)
-                                    }}
-                                >
-                                    <Plus width={20} className="pr-1" /> Yangi
-                                    qo'shish
-                                </CommandItem>
-                            )}
                         </CommandGroup>
                     </CommandList>
                 </Command>

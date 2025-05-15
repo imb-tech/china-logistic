@@ -22,6 +22,7 @@ import { Route as MainOrdersImport } from './routes/_main/orders'
 import { Route as MainLogisticsImport } from './routes/_main/logistics'
 import { Route as MainDocumentsImport } from './routes/_main/documents'
 import { Route as MainCustomersImport } from './routes/_main/customers'
+import { Route as MainOrdersOrderCreateImport } from './routes/_main/_orders/order-create'
 
 // Create Virtual Routes
 
@@ -84,6 +85,12 @@ const MainDocumentsRoute = MainDocumentsImport.update({
 const MainCustomersRoute = MainCustomersImport.update({
   id: '/customers',
   path: '/customers',
+  getParentRoute: () => MainRoute,
+} as any)
+
+const MainOrdersOrderCreateRoute = MainOrdersOrderCreateImport.update({
+  id: '/_orders/order-create',
+  path: '/order-create',
   getParentRoute: () => MainRoute,
 } as any)
 
@@ -161,6 +168,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainIndexImport
       parentRoute: typeof MainImport
     }
+    '/_main/_orders/order-create': {
+      id: '/_main/_orders/order-create'
+      path: '/order-create'
+      fullPath: '/order-create'
+      preLoaderRoute: typeof MainOrdersOrderCreateImport
+      parentRoute: typeof MainImport
+    }
   }
 }
 
@@ -184,6 +198,7 @@ interface MainRouteChildren {
   MainSettingsRoute: typeof MainSettingsRoute
   MainWarehouseRoute: typeof MainWarehouseRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainOrdersOrderCreateRoute: typeof MainOrdersOrderCreateRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
@@ -194,6 +209,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainSettingsRoute: MainSettingsRoute,
   MainWarehouseRoute: MainWarehouseRoute,
   MainIndexRoute: MainIndexRoute,
+  MainOrdersOrderCreateRoute: MainOrdersOrderCreateRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
@@ -208,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/warehouse': typeof MainWarehouseRoute
   '/auth': typeof AuthAuthLazyRoute
   '/': typeof MainIndexRoute
+  '/order-create': typeof MainOrdersOrderCreateRoute
 }
 
 export interface FileRoutesByTo {
@@ -220,6 +237,7 @@ export interface FileRoutesByTo {
   '/warehouse': typeof MainWarehouseRoute
   '/auth': typeof AuthAuthLazyRoute
   '/': typeof MainIndexRoute
+  '/order-create': typeof MainOrdersOrderCreateRoute
 }
 
 export interface FileRoutesById {
@@ -234,6 +252,7 @@ export interface FileRoutesById {
   '/_main/warehouse': typeof MainWarehouseRoute
   '/_auth/auth': typeof AuthAuthLazyRoute
   '/_main/': typeof MainIndexRoute
+  '/_main/_orders/order-create': typeof MainOrdersOrderCreateRoute
 }
 
 export interface FileRouteTypes {
@@ -248,6 +267,7 @@ export interface FileRouteTypes {
     | '/warehouse'
     | '/auth'
     | '/'
+    | '/order-create'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
@@ -259,6 +279,7 @@ export interface FileRouteTypes {
     | '/warehouse'
     | '/auth'
     | '/'
+    | '/order-create'
   id:
     | '__root__'
     | '/_auth'
@@ -271,6 +292,7 @@ export interface FileRouteTypes {
     | '/_main/warehouse'
     | '/_auth/auth'
     | '/_main/'
+    | '/_main/_orders/order-create'
   fileRoutesById: FileRoutesById
 }
 
@@ -315,7 +337,8 @@ export const routeTree = rootRoute
         "/_main/orders",
         "/_main/settings",
         "/_main/warehouse",
-        "/_main/"
+        "/_main/",
+        "/_main/_orders/order-create"
       ]
     },
     "/_main/customers": {
@@ -348,6 +371,10 @@ export const routeTree = rootRoute
     },
     "/_main/": {
       "filePath": "_main/index.tsx",
+      "parent": "/_main"
+    },
+    "/_main/_orders/order-create": {
+      "filePath": "_main/_orders/order-create.tsx",
       "parent": "/_main"
     }
   }

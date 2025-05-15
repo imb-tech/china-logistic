@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import DeleteModal from "@/components/custom/delete-modal"
 import { useModal } from "@/hooks/useModal"
+import { useNavigate } from "@tanstack/react-router"
 
 export const orderData: OrderType[] = [
     {
@@ -105,12 +106,18 @@ const tab = [
 ]
 
 export const OrdersPages = () => {
+    const navigate = useNavigate()
     const { openModal } = useModal("delete-order")
     return (
         <div className="w-full">
             <div className="mb-5 flex justify-between items-center gap-4">
                 <ParamTabs options={tab} />
-                <Button icon={<Plus size={18} />}>Buyurtma qo'shish</Button>
+                <Button
+                    onClick={() => navigate({ to: "/order-create" })}
+                    icon={<Plus size={18} />}
+                >
+                    Buyurtma qo'shish
+                </Button>
             </div>
             <DataTable
                 columns={useOrderColumns()}

@@ -1,7 +1,7 @@
-import { Controller, Control } from "react-hook-form";
-import FieldLabel from "./form-label";
-import FieldError from "./form-error";
-import { Combobox as ShadcnCombobox } from "@/components/ui/combobox";
+import { Controller, Control } from "react-hook-form"
+import FieldLabel from "./form-label"
+import FieldError from "./form-error"
+import { Combobox as ShadcnCombobox } from "@/components/ui/combobox"
 
 export function FormCombobox({
     name,
@@ -14,7 +14,7 @@ export function FormCombobox({
     setValue,
     hideError = true,
     returnVal = "label",
-    addNew = false,
+    onAdd,
 }: thisProps) {
     return (
         <div>
@@ -30,8 +30,13 @@ export function FormCombobox({
             <Controller
                 name={name}
                 control={control}
+                rules={
+                    required
+                        ? { required: `${label || name} to‘ldirilishi shart` }
+                        : {}
+                }
                 render={({ field }) => (
-                    <div className={label ? "pt-1" : ""}>
+                    <div className={label ? "pt-0.5" : ""}>
                         <ShadcnCombobox
                             options={options}
                             value={field.value || ""}
@@ -42,18 +47,16 @@ export function FormCombobox({
                                         ? "Yangi qo'shish"
                                         : "other")
                                 ) {
-                                    setValue?.();
+                                    setValue?.()
                                 } else {
-                                    field.onChange(val);
+                                    field.onChange(val)
                                 }
                             }}
                             label={placeholder || label || "Tanlang"}
                             disabled={control._formState.disabled || disabled}
-                            isError={
-                                !label && !!control._formState.errors?.[name]
-                            }
+                            isError={!!control._formState.errors?.[name]}
                             returnVal={returnVal}
-                            addNew={addNew}
+                            onAdd={onAdd}
                         />
                     </div>
                 )}
@@ -64,19 +67,19 @@ export function FormCombobox({
                 </FieldError>
             )}
         </div>
-    );
+    )
 }
 
 interface thisProps {
-    name: string;
-    label?: string;
-    placeholder?: string;
-    options: { label: string | number; value: string | number }[] | undefined;
-    disabled?: boolean;
-    required?: boolean;
-    setValue?: () => void;
-    control: Control<any>;
-    hideError?: boolean;
-    returnVal?: "value" | "label";
-    addNew?: boolean;
+    name: string
+    label?: string
+    placeholder?: string
+    options: { label: string | number; value: string | number }[] | undefined
+    disabled?: boolean
+    required?: boolean
+    setValue?: () => void
+    control: Control<any>
+    hideError?: boolean
+    returnVal?: "value" | "label"
+    onAdd?: () => void
 }
