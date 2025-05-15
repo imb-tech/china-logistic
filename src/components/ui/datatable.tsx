@@ -31,7 +31,7 @@ import LimitOffsetPagination from "../as-params/limit-offset-pagination"
 import ParamPagination from "../as-params/pagination"
 import EmptyBox from "../custom/empty-box"
 import TableActions from "../custom/table-actions"
-import Spinner from "./spinner"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface DataTableProps<TData> {
     data: TData[] | undefined
@@ -75,6 +75,7 @@ interface DataTableProps<TData> {
     onUndo?: (data: Row<TData>) => void
     onView?: (data: Row<TData>) => void
     tableWrapperClassName?: string
+    skeletonRowCount?: number
 }
 
 export function DataTable<TData>({
@@ -104,6 +105,7 @@ export function DataTable<TData>({
     onUndo,
     onView,
     tableWrapperClassName,
+    skeletonRowCount = 14,
 }: DataTableProps<TData>) {
     const {
         paramName = PAGE_KEY,
@@ -200,9 +202,45 @@ export function DataTable<TData>({
                 )}
             >
                 {loading && (
-                    <div className="absolute top-0 w-full h-full grid place-items-center bg-black/80 z-20">
-                        <Spinner size="responsive" color="secondary" />
-                    </div>
+                    <Table className="flex flex-col gap-1">
+                        {Array.from({ length: skeletonRowCount })?.map(
+                            (_, index) => (
+                                <TableBody key={index}>
+                                    {table
+                                        .getHeaderGroups()
+                                        .map((headerGroup, index) => (
+                                            <TableRow
+                                                key={index}
+                                                className={`grid gap-1`}
+                                                style={{
+                                                    gridTemplateColumns: `repeat(${
+                                                        headerGroup?.headers
+                                                            ?.length || 0
+                                                    }, minmax(0, 1fr))`,
+                                                }}
+                                            >
+                                                {headerGroup.headers.map(
+                                                    (_, index) => {
+                                                        return (
+                                                            <TableCell
+                                                                key={index}
+                                                                className="px-0 py-0"
+                                                            >
+                                                                <Skeleton
+                                                                    className={
+                                                                        "h-full"
+                                                                    }
+                                                                />
+                                                            </TableCell>
+                                                        )
+                                                    },
+                                                )}
+                                            </TableRow>
+                                        ))}
+                                </TableBody>
+                            ),
+                        )}
+                    </Table>
                 )}
                 {data?.length ? (
                     <Table
