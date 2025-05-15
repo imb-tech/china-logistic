@@ -50,7 +50,7 @@ const CitiesCreate = () => {
                 <FormCombobox
                     options={[]}
                     control={form.control}
-                    name="region"
+                    name="country"
                     label="Davlat"
                     required
                     onAdd={openModalAdd}

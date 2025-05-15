@@ -27,7 +27,7 @@ function MainLayout() {
 
     return (
         <SidebarProvider>
-            <AppSidebar />
+            <AppSidebar /> 
             <SidebarInset>
                 <Outlet />
             </SidebarInset>

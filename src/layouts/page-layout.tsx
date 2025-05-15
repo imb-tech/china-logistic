@@ -1,5 +1,7 @@
 import Modal from "@/components/custom/modal"
 import Header from "@/components/header"
+import { useSidebar } from "@/components/ui/sidebar"
+import { cn } from "@/lib/utils"
 import CustomerCreate from "@/pages/customers/customer-create"
 import LogisticsCreate from "@/pages/logistics/logis-create"
 import ProductsCreate from "@/pages/settings/products-stations/products/products-create"
@@ -23,21 +25,31 @@ const PageLayout = ({
     leftChildren,
     rigthChildren,
 }: Props) => {
+    const { open } = useSidebar()
     return (
         <div className="w-full">
-            <div className="sticky top-0 right-0 w-full z-50 ">
+            <div
+                className={cn(
+                    "fixed top-0 right-0  z-10 transition-[width,height,padding] ",
+                    open
+                        ? "lg:w-[calc(100%-238px)] duration-300 w-full"
+                        : "lg:w-[calc(100%-47px)] duration-200 w-full",
+                )}
+            >
                 <Header
                     title={title}
                     leftChildren={leftChildren}
                     rigthChildren={rigthChildren}
                 />
             </div>
-            <main className="flex xl:gap-2 px-4 md:px-6 pt-4  relative ">
+            <main className="flex xl:gap-2 px-4 md:px-6 pt-24  relative ">
                 {children}
             </main>
-            <Modal size="max-w-2xl"
-            title="Yangi mijoz qo'shish"
-            modalKey="customer-modal">
+            <Modal
+                size="max-w-2xl"
+                title="Yangi mijoz qo'shish"
+                modalKey="customer-modal"
+            >
                 <CustomerCreate />
             </Modal>
             <Modal

@@ -1,7 +1,7 @@
 type CitiesType = {
     id: number
     name: string
-    region: string | number
+    country: string | number
 }
 
 type CitiesResults = {
