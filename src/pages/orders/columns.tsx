@@ -9,14 +9,17 @@ export const useOrderColumns = (): ColumnDef<OrderType>[] => {
         {
             header: "Mijoz",
             accessorKey: "name",
+            enableSorting: true,
         },
         {
             header: "Status",
             accessorKey: "status",
+            enableSorting: true,
         },
         {
             header: "Logist",
             accessorKey: "logist",
+            enableSorting: true,
         },
         {
             header: "Yaratilgan sana",

@@ -9,6 +9,7 @@ export const useContainerColumns = (): ColumnDef<ContainerType>[] => {
         {
             header: "Nomi",
             accessorKey: "name",
+            enableSorting: true,
         },
     ]
 }

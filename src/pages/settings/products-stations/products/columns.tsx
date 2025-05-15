@@ -9,10 +9,12 @@ export const useProductsColumns = (): ColumnDef<ProductsType>[] => {
         {
             header: "Nomi",
             accessorKey: "name",
+            enableSorting: true,
         },
         {
-            header: "kodi",
+            header: "Kodi",
             accessorKey: "code",
+            enableSorting: true,
         },
     ]
 }

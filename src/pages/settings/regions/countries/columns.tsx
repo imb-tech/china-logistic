@@ -9,6 +9,7 @@ export const useRegionsColumns = (): ColumnDef<CountriesType>[] => {
         {
             header: "Nomi",
             accessorKey: "name",
+            enableSorting: true,
         },
     ]
 }

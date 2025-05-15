@@ -9,14 +9,17 @@ export const useLogisticsColumns = (): ColumnDef<LogisticsType>[] => {
         {
             header: "Ismi",
             accessorKey: "full_name",
+            enableSorting: true,
         },
         {
             header: "Login",
             accessorKey: "username",
+            enableSorting: true,
         },
         {
             header: "Telefon raqami",
             accessorKey: "phone_number",
+            enableSorting: true,
             cell: ({ row }) => {
                 return (
                     <span>
@@ -41,6 +44,7 @@ export const useLogisticsColumns = (): ColumnDef<LogisticsType>[] => {
                     </span>
                 )
             },
+            enableSorting: true,
         },
         {
             header: "Tugatmagan yuklari",
@@ -58,6 +62,7 @@ export const useLogisticsColumns = (): ColumnDef<LogisticsType>[] => {
                     </span>
                 )
             },
+            enableSorting: true,
         },
     ]
 }

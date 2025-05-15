@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 export const useTransportColumns = (): ColumnDef<TransportType>[] => {
-       return [
+    return [
         {
             header: "№",
             cell: ({ row }) => row.index + 1,
@@ -9,6 +9,7 @@ export const useTransportColumns = (): ColumnDef<TransportType>[] => {
         {
             header: "Nomi",
             accessorKey: "name",
+            enableSorting: true,
         },
     ]
 }

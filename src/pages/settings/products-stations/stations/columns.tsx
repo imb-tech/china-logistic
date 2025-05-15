@@ -9,6 +9,7 @@ export const useStationsColumns = (): ColumnDef<StationsType>[] => {
         {
             header: "Nomi",
             accessorKey: "name",
+            enableSorting: true,
         },
     ]
 }

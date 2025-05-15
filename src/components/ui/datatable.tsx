@@ -175,9 +175,7 @@ export function DataTable<TData>({
     })
 
     return (
-        <main
-            className={cn("w-full   pb-4", wrapperClassName)}
-        >
+        <main className={cn("w-full   pb-4", wrapperClassName)}>
             {!!head && <div>{head}</div>}
             {selecteds_count && (
                 <div className="flex flex-col gap-2 sm:flex-row items-end sm:items-center sm:justify-between pb-2">
@@ -207,7 +205,9 @@ export function DataTable<TData>({
                     </div>
                 )}
                 {data?.length ? (
-                    <Table className={`${className} select-text bg-card rounded-md`}>
+                    <Table
+                        className={`${className} select-text bg-card rounded-md`}
+                    >
                         <TableHeader>
                             {table
                                 .getHeaderGroups()
@@ -238,7 +238,13 @@ export function DataTable<TData>({
                                                                 index === 0 &&
                                                                 "w-8",
                                                         )}
-                                                        onClick={header.column.getToggleSortingHandler()}
+                                                        onClick={
+                                                            header.column
+                                                                .columnDef
+                                                                .enableSorting
+                                                                ? header.column.getToggleSortingHandler()
+                                                                : undefined
+                                                        }
                                                     >
                                                         <div className="cursor-pointer flex items-center gap-1 select-none w-max">
                                                             {flexRender(

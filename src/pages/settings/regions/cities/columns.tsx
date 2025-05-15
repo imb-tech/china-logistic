@@ -9,6 +9,7 @@ export const useCitiesColumns = (): ColumnDef<CitiesType>[] => {
         {
             header: "Nomi",
             accessorKey: "name",
+            enableSorting: true,
         },
     ]
 }
