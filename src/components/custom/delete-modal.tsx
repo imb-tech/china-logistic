@@ -58,7 +58,7 @@ export default function DeleteModal({
     })
 
     const handleDelete = () => {
-        mutate(path + `${id}/`)
+        mutate(path + `/${id}`)
     }
 
     return (
