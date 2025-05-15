@@ -6,27 +6,21 @@ import ParamInput from "@/components/as-params/input"
 import { useCitiesColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
-
-const data: CitiesType[] =[
-  { id: 1, name: "City Alpha" },
-  { id: 2, name: "City Beta" },
-  { id: 3, name: "City Gamma" },
-  { id: 4, name: "City Delta" },
-  { id: 5, name: "City Epsilon" },
-  { id: 6, name: "City Zeta" },
-  { id: 7, name: "City Eta" },
-  { id: 8, name: "City Theta" },
-  { id: 9, name: "City Iota" },
-  { id: 10, name: "City Kappa" },
-  { id: 11, name: "City Lambda" },
-  { id: 12, name: "City Mu" }
-]
-
+import { useSearch } from "@tanstack/react-router"
+import { useGet } from "@/hooks/useGet"
+import { REGION } from "@/constants/api-endpoints"
 
 export const CitiesPages = () => {
-    const { openModal:openModalAdd } = useModal("cities-modal")
-    const { openModal:openModalDelete } = useModal("cities-delete")
-    const columns= useCitiesColumns()
+    const { openModal: openModalAdd } = useModal("cities-modal")
+    const { openModal: openModalDelete } = useModal("cities-delete")
+
+    const search = useSearch({ from: "/_main/settings" })
+    const { data, isLoading } = useGet<CitiesResults>(REGION, {
+        params: search,
+    })
+
+    const columns = useCitiesColumns()
+
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
@@ -47,15 +41,14 @@ export const CitiesPages = () => {
                     </div>
                     <DataTable
                         columns={columns}
-                        data={data}
-                        paginationProps={{ totalPages: 1 }}
+                        data={data?.results}
                         onDelete={() => openModalDelete()}
                         onEdit={() => {}}
-                        // loading={isLoading}
+                        loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="cities-delete" id={1} path="cities" />
+            <DeleteModal modalKey="cities-delete" id={1} path={REGION} />
         </div>
     )
 }

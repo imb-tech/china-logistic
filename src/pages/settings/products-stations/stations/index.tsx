@@ -6,25 +6,18 @@ import ParamInput from "@/components/as-params/input"
 import { useStationsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
-
-const data: StationsType[] = [
-    { id: 1, name: "Station Alpha" },
-    { id: 2, name: "Station Beta" },
-    { id: 3, name: "Station Gamma" },
-    { id: 4, name: "Station Delta" },
-    { id: 5, name: "Station Epsilon" },
-    { id: 6, name: "Station Zeta" },
-    { id: 7, name: "Station Eta" },
-    { id: 8, name: "Station Theta" },
-    { id: 9, name: "Station Iota" },
-    { id: 10, name: "Station Kappa" },
-    { id: 11, name: "Station Lambda" },
-    { id: 12, name: "Station Mu" },
-]
+import { useSearch } from "@tanstack/react-router"
+import { STATION } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 
 export const StationsPages = () => {
     const { openModal: openModalAdd } = useModal("stations-modal")
     const { openModal: openModalDelete } = useModal("stations-delete")
+    const search = useSearch({ from: "/_main/settings" })
+    const { data, isLoading } = useGet<StationsResults>(STATION, {
+        params: search,
+    })
+
     const columns = useStationsColumns()
     return (
         <div className="w-full">
@@ -46,16 +39,14 @@ export const StationsPages = () => {
                     </div>
                     <DataTable
                         columns={columns}
-                        data={data}
-                        paginationProps={{ totalPages: 1 }}
+                        data={data?.results}
                         onDelete={() => openModalDelete()}
                         onEdit={() => {}}
-
-                        // loading={isLoading}
+                        loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="stations-delete" id={1} path="stations" />
+            <DeleteModal modalKey="stations-delete" id={1} path={STATION} />
         </div>
     )
 }

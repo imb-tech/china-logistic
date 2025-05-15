@@ -6,26 +6,18 @@ import ParamInput from "@/components/as-params/input"
 import { useContainerColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
-
-const data: ContainerType[] = [
-  { id: 1, name: "Container Alpha" },
-  { id: 2, name: "Container Beta" },
-  { id: 3, name: "Container Gamma" },
-  { id: 4, name: "Container Delta" },
-  { id: 5, name: "Container Epsilon" },
-  { id: 6, name: "Container Zeta" },
-  { id: 7, name: "Container Eta" },
-  { id: 8, name: "Container Theta" },
-  { id: 9, name: "Container Iota" },
-  { id: 10, name: "Container Kappa" },
-  { id: 11, name: "Container Lambda" },
-  { id: 12, name: "Container Mu" }
-]
-
+import { useSearch } from "@tanstack/react-router"
+import { useGet } from "@/hooks/useGet"
+import { CONTAINERS } from "@/constants/api-endpoints"
 
 export const ContainerPages = () => {
-    const { openModal:openModalAdd } = useModal("container-modal")
-    const { openModal:openModalDelete} = useModal("container-delete")
+    const { openModal: openModalAdd } = useModal("container-modal")
+    const { openModal: openModalDelete } = useModal("container-delete")
+    const search = useSearch({ from: "/_main/settings" })
+    const { data, isLoading } = useGet<ContainerResults>(CONTAINERS, {
+        params: search,
+    })
+
     const columns = useContainerColumns()
     return (
         <div className="w-full">
@@ -47,15 +39,14 @@ export const ContainerPages = () => {
                     </div>
                     <DataTable
                         columns={columns}
-                        data={data}
-                        paginationProps={{ totalPages: 1 }}
+                        data={data?.results}
                         onDelete={() => openModalDelete()}
                         onEdit={() => {}}
-                        // loading={isLoading}
+                        loading={isLoading}
                     />
                 </CardContent>
             </Card>
-             <DeleteModal modalKey="container-delete" id={1} path="container" />
+            <DeleteModal modalKey="container-delete" id={1} path={CONTAINERS}/>
         </div>
     )
 }

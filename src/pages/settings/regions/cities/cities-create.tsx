@@ -13,7 +13,7 @@ import { toast } from "sonner"
 const CitiesCreate = () => {
     const { closeModal } = useModal("cities-modal")
     const { openModal: openModalAdd } = useModal("countries-modal")
-    const form = useForm<CountriesType>()
+    const form = useForm<CitiesType>()
     const queryClient = useQueryClient()
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {
@@ -30,7 +30,7 @@ const CitiesCreate = () => {
         },
     })
 
-    const onSubmit = (data: CountriesType) => {
+    const onSubmit = (data: CitiesType) => {
         cretaeMutate(REGION, data)
     }
 

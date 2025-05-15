@@ -6,26 +6,22 @@ import ParamInput from "@/components/as-params/input"
 import { useRegionsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
+import { useGet } from "@/hooks/useGet"
+import { useSearch } from "@tanstack/react-router"
+import { COUNTRY } from "@/constants/api-endpoints"
 
-const data: CountriesType[] = [
-    { id: 1, name: "Country Alpha" },
-    { id: 2, name: "Country Beta" },
-    { id: 3, name: "Country Gamma" },
-    { id: 4, name: "Country Delta" },
-    { id: 5, name: "Country Epsilon" },
-    { id: 6, name: "Country Zeta" },
-    { id: 7, name: "Country Eta" },
-    { id: 8, name: "Country Theta" },
-    { id: 9, name: "Country Iota" },
-    { id: 10, name: "Country Kappa" },
-    { id: 11, name: "Country Lambda" },
-    { id: 12, name: "Country Mu" },
-]
+
 
 export const CountriesPages = () => {
     const { openModal:openModalAdd } = useModal("countries-modal")
     const { openModal:openModalDelete } = useModal("countries-delete")
     const columns = useRegionsColumns()
+
+     const search = useSearch({ from: "/_main/settings" })
+        const { data, isLoading } = useGet<CountriesResults>(COUNTRY, {
+            params: search,
+        })
+
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
@@ -46,15 +42,14 @@ export const CountriesPages = () => {
                     </div>
                     <DataTable
                         columns={columns}
-                        data={data}
-                        paginationProps={{ totalPages: 1 }}
+                        data={data?.results}
                         onDelete={() => openModalDelete()}
                         onEdit={() => {}}
-                        // loading={isLoading}
+                        loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="countries-delete" id={1} path="countries" />
+            <DeleteModal modalKey="countries-delete" id={1} path={COUNTRY} />
         </div>
     )
 }

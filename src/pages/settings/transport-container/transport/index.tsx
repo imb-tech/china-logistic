@@ -6,25 +6,18 @@ import ParamInput from "@/components/as-params/input"
 import { useTransportColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
-
-const data: TransportType[] = [
-    { id: 1, name: "Transport Alpha", is_station_required: false },
-    { id: 2, name: "Transport Beta", is_station_required: true },
-    { id: 3, name: "Transport Gamma", is_station_required: false },
-    { id: 4, name: "Transport Delta", is_station_required: true },
-    { id: 5, name: "Transport Epsilon", is_station_required: false },
-    { id: 6, name: "Transport Zeta", is_station_required: true },
-    { id: 7, name: "Transport Eta", is_station_required: false },
-    { id: 8, name: "Transport Theta", is_station_required: true },
-    { id: 9, name: "Transport Iota", is_station_required: false },
-    { id: 10, name: "Transport Kappa", is_station_required: true },
-    { id: 11, name: "Transport Lambda", is_station_required: false },
-    { id: 12, name: "Transport Mu", is_station_required: true },
-]
+import { TRANSPORT } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
+import { useSearch } from "@tanstack/react-router"
 
 export const TransportPages = () => {
     const { openModal: openModalAdd } = useModal("transport-modal")
     const { openModal: openModalDelete } = useModal("transport-delete")
+    const search = useSearch({ from: "/_main/settings" })
+    const { data, isLoading } = useGet<TransportResults>(TRANSPORT, {
+        params: search,
+    })
+
     const columns = useTransportColumns()
     return (
         <div className="w-full">
@@ -46,15 +39,14 @@ export const TransportPages = () => {
                     </div>
                     <DataTable
                         columns={columns}
-                        data={data}
-                        paginationProps={{ totalPages: 1 }}
+                        data={data?.results}
                         onDelete={() => openModalDelete()}
                         onEdit={() => {}}
-                        // loading={isLoading}
+                        loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="transport-delete" id={1} path="transport" />
+            <DeleteModal modalKey="transport-delete" id={1} path={TRANSPORT} />
         </div>
     )
 }
