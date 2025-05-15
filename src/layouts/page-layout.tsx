@@ -1,3 +1,4 @@
+import Modal from "@/components/custom/modal"
 import Header from "@/components/header"
 import CustomerCreate from "@/pages/customers/customer-create"
 import LogisticsCreate from "@/pages/logistics/logis-create"
@@ -33,17 +34,39 @@ const PageLayout = ({
             </div>
             <main className="flex xl:gap-2 px-4 md:px-6 pt-4  relative ">
                 {children}
-                <CustomerCreate />
-                <LogisticsCreate />
-                <ProductsCreate />
-                <StationsCreate />
-                <ContainerCreate />
-                <TransportCreate />
-                <CountriesCreate />
-                <CitiesCreate />
             </main>
+            <Modal size="max-w-2xl"
+            title="Yangi mijoz qo'shish"
+            modalKey="customer-modal">
+                <CustomerCreate />
+            </Modal>
+            <Modal
+                size="max-w-2xl"
+                title="Yangi logist qo'shish"
+                modalKey="logis-modal"
+            >
+                <LogisticsCreate />
+            </Modal>
+            <Modal title="Mahsulot qo'shish" modalKey="product-modal">
+                <ProductsCreate />
+            </Modal>
+            <Modal title="Stansiya qo'shish" modalKey="stations-modal">
+                <StationsCreate />
+            </Modal>
+            <Modal title="Konteyner turini qo'shish" modalKey="container-modal">
+                <ContainerCreate />
+            </Modal>
+            <Modal title="Transport qo'shish" modalKey="transport-modal">
+                <TransportCreate />
+            </Modal>
+            <Modal title="Davlat qo'shish" modalKey="countries-modal">
+                <CountriesCreate />
+            </Modal>{" "}
+            <Modal title="Shahar qo'shish" modalKey="cities-modal">
+                <CitiesCreate />
+            </Modal>
         </div>
     )
-} 
+}
 
 export default PageLayout

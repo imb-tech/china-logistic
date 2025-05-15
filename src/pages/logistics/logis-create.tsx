@@ -1,4 +1,3 @@
-import Modal from "@/components/custom/modal"
 import FormInput from "@/components/form/input"
 import PhoneField from "@/components/form/phone-field"
 import { Button } from "@/components/ui/button"
@@ -8,7 +7,6 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -22,7 +20,9 @@ type Form = {
 const LogisticsCreate = () => {
     const { closeModal } = useModal("logis-modal")
     const { storeData } = useStoreData()
-    const form = useForm<Form>()
+    const form = useForm<Form>({
+        defaultValues: storeData ?? {},
+    })
 
     const queryClient = useQueryClient()
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
@@ -50,18 +50,9 @@ const LogisticsCreate = () => {
         }
     }
 
-    useEffect(() => {
-        if (storeData?.id) {
-            form.reset(storeData)
-        }
-    }, [storeData, form])
 
     return (
-        <Modal
-            size="max-w-2xl"
-            title="Yangi logist qo'shish"
-            modalKey="logis-modal"
-        >
+     
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="gap-3 grid md:grid-cols-2 grid-cols-1"
@@ -104,7 +95,6 @@ const LogisticsCreate = () => {
                     </Button>
                 </div>
             </form>
-        </Modal>
     )
 }
 

@@ -14,26 +14,23 @@ import { useStoreData } from "@/store/global-store"
 export const ContainerPages = () => {
     const { openModal: openModalAdd } = useModal("container-modal")
     const { openModal: openModalDelete } = useModal("container-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ContainerResults>(CONTAINER_TYPE, {
         params: search,
     })
 
     const handleDelete = (item: ContainerType) => {
-        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: ContainerType) => {
-        clearUserData()
         setStoreData(item)
         openModalAdd()
     }
 
     const handleAdd = () => {
-        clearUserData()
         openModalAdd()
     }
 

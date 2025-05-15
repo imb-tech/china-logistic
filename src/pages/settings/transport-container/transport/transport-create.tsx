@@ -1,4 +1,3 @@
-import Modal from "@/components/custom/modal"
 import { FormCheckbox } from "@/components/form/checkbox"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
@@ -8,14 +7,15 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const TransportCreate = () => {
     const { closeModal } = useModal("transport-modal")
     const { storeData } = useStoreData()
-    const form = useForm<TransportType>()
+    const form = useForm<TransportType>({
+        defaultValues: storeData ?? {},
+    })
 
     const queryClient = useQueryClient()
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
@@ -42,14 +42,9 @@ const TransportCreate = () => {
             cretaeMutate(TRANSPORT, data)
         }
     }
-    useEffect(() => {
-        if (storeData?.id) {
-            form.reset(storeData)
-        }
-    }, [storeData, form])
+
 
     return (
-        <Modal title="Transport qo'shish" modalKey="transport-modal">
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                 <FormInput
                     required
@@ -73,7 +68,6 @@ const TransportCreate = () => {
                     </Button>
                 </div>
             </form>
-        </Modal>
     )
 }
 

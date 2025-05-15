@@ -147,21 +147,18 @@ export const LogisticsPages = () => {
     const { openModal: openCustomerAdd } = useModal("logis-modal")
     const { openModal: openModalDelete } = useModal("logis-delete")
 
-   const { storeData, setStoreData, clearUserData } = useStoreData()
+   const { storeData, setStoreData } = useStoreData()
 
     const handleDelete = (item: LogisticsType) => {
-        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: LogisticsType) => {
-        clearUserData()
         setStoreData(item)
         openCustomerAdd()
     }
      const handleAdd = () => {
-        clearUserData()
         openCustomerAdd()
     }
 

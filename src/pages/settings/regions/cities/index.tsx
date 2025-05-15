@@ -14,7 +14,7 @@ import { useStoreData } from "@/store/global-store"
 export const CitiesPages = () => {
     const { openModal: openModalAdd } = useModal("cities-modal")
     const { openModal: openModalDelete } = useModal("cities-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData } = useStoreData()
 
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<CitiesResults>(REGION, {
@@ -22,19 +22,16 @@ export const CitiesPages = () => {
     })
 
     const handleDelete = (item: CitiesType) => {
-        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: CitiesType) => {
-        clearUserData()
         setStoreData(item)
         openModalAdd()
     }
 
     const handleAdd = () => {
-        clearUserData()
         openModalAdd()
     }
 

@@ -14,26 +14,23 @@ import { useStoreData } from "@/store/global-store"
 export const TransportPages = () => {
     const { openModal: openModalAdd } = useModal("transport-modal")
     const { openModal: openModalDelete } = useModal("transport-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<TransportResults>(TRANSPORT, {
         params: search,
     })
 
     const handleDelete = (item: TransportType) => {
-        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: TransportType) => {
-        clearUserData()
         setStoreData(item)
         openModalAdd()
     }
 
     const handleAdd = () => {
-        clearUserData()
         openModalAdd()
     }
 

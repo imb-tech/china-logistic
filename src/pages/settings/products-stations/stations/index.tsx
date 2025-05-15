@@ -14,28 +14,24 @@ import { useStoreData } from "@/store/global-store"
 export const StationsPages = () => {
     const { openModal: openModalAdd } = useModal("stations-modal")
     const { openModal: openModalDelete } = useModal("stations-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<StationsResults>(STATION, {
         params: search,
     })
 
     const handleDelete = (item: StationsType) => {
-        clearUserData()
-        openModalDelete()
         setStoreData(item)
+        openModalDelete()
     }
 
     const handleUpdate = (item: StationsType) => {
-        clearUserData()
         setStoreData(item)
         openModalAdd()
     }
-       const handleAdd = () => {
-        clearUserData()
+    const handleAdd = () => {
         openModalAdd()
     }
-
 
     const columns = useStationsColumns()
     return (

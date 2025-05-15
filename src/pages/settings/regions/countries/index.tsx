@@ -14,7 +14,7 @@ import { useStoreData } from "@/store/global-store"
 export const CountriesPages = () => {
     const { openModal: openModalAdd } = useModal("countries-modal")
     const { openModal: openModalDelete } = useModal("countries-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData } = useStoreData()
     const columns = useRegionsColumns()
 
     const search = useSearch({ from: "/_main/settings" })
@@ -23,19 +23,16 @@ export const CountriesPages = () => {
     })
 
     const handleDelete = (item: CountriesType) => {
-        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: CountriesType) => {
-        clearUserData()
         setStoreData(item)
         openModalAdd()
     }
 
          const handleAdd = () => {
-        clearUserData()
         openModalAdd()
     }
 

@@ -1,4 +1,3 @@
-import Modal from "@/components/custom/modal"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import { PRODUCT } from "@/constants/api-endpoints"
@@ -7,7 +6,6 @@ import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
-import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -31,7 +29,9 @@ const ProductsCreate = () => {
             form.reset()
         },
     })
-    const form = useForm<ProductsType>()
+    const form = useForm<ProductsType>({
+        defaultValues: storeData ?? {},
+    })
 
     const onSubmit = (data: ProductsType) => {
         if (storeData?.id) {
@@ -41,14 +41,9 @@ const ProductsCreate = () => {
         }
     }
 
-    useEffect(() => {
-        if (storeData?.id) {
-            form.reset(storeData)
-        }
-    }, [storeData, form])
+
 
     return (
-        <Modal title="Mahsulot qo'shish" modalKey="product-modal">
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                 <FormInput required methods={form} name="name" label="Nomi" />
                 <FormInput required methods={form} name="code" label="Kodi" />
@@ -63,7 +58,6 @@ const ProductsCreate = () => {
                     </Button>
                 </div>
             </form>
-        </Modal>
     )
 }
 
