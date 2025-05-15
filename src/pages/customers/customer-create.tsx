@@ -2,8 +2,13 @@ import Modal from "@/components/custom/modal"
 import FormInput from "@/components/form/input"
 import PhoneField from "@/components/form/phone-field"
 import { Button } from "@/components/ui/button"
+import { USERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
+import { usePatch } from "@/hooks/usePatch"
+import { usePost } from "@/hooks/usePost"
+import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 type Form = {
     full_name: string
@@ -18,13 +23,36 @@ const CustomerCreate = () => {
     const { closeModal } = useModal("customer-modal")
     const form = useForm<Form>()
 
+    const queryClient = useQueryClient()
+    const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
+        onSuccess: () => {
+            toast.success("Muvaffaqiyatli qo'shildi")
+            closeModal()
+            queryClient.invalidateQueries({ queryKey: [USERS] })
+        },
+    })
+    const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
+        onSuccess: () => {
+            toast.success("Muvaffaqiyatli yangilandi")
+            closeModal()
+            queryClient.invalidateQueries({ queryKey: [USERS] })
+        },
+    })
+
     const onSubmit = (data: Form) => {
-        console.log(data)
+        cretaeMutate(USERS, data)
     }
 
     return (
-        <Modal size="max-w-2xl"  title="Yangi mijoz qo'shish" modalKey="customer-modal">
-            <form onSubmit={form.handleSubmit(onSubmit)} className="gap-3 grid md:grid-cols-2 grid-cols-1">
+        <Modal
+            size="max-w-2xl"
+            title="Yangi mijoz qo'shish"
+            modalKey="customer-modal"
+        >
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="gap-3 grid md:grid-cols-2 grid-cols-1"
+            >
                 <FormInput
                     required
                     methods={form}
@@ -32,7 +60,12 @@ const CustomerCreate = () => {
                     label="F.I.O"
                     wrapperClassName={"md:col-span-2"}
                 />
-                <PhoneField required methods={form} name="phone_number" wrapperClassName="md:col-span-2" />
+                <PhoneField
+                    required
+                    methods={form}
+                    name="phone_number"
+                    wrapperClassName="md:col-span-2"
+                />
                 <FormInput
                     required
                     methods={form}
@@ -62,7 +95,13 @@ const CustomerCreate = () => {
                     placeholder="******"
                 />
                 <div className="flex justify-end md:col-span-2">
-                    <Button type="submit">Saqlash</Button>
+                    <Button
+                        disabled={isPendingCreate || isPendingUpdate}
+                        loading={isPendingCreate || isPendingUpdate}
+                        type="submit"
+                    >
+                        Saqlash
+                    </Button>
                 </div>
             </form>
         </Modal>

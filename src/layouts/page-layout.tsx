@@ -33,14 +33,14 @@ const PageLayout = ({
             </div>
             <main className="flex xl:gap-2 px-4 md:px-6 pt-4  relative ">
                 {children}
-                <CustomerCreate/>
-                <LogisticsCreate/>
-                <ProductsCreate/>
-                <StationsCreate/>
-                <ContainerCreate/>
-                <TransportCreate/>
-                <CountriesCreate/>
-                <CitiesCreate/>
+                <CustomerCreate />
+                <LogisticsCreate />
+                <ProductsCreate />
+                <StationsCreate />
+                <ContainerCreate />
+                <TransportCreate />
+                <CountriesCreate />
+                <CitiesCreate />
             </main>
         </div>
     )

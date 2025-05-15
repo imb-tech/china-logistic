@@ -2,15 +2,36 @@ import Modal from "@/components/custom/modal"
 import { FormCheckbox } from "@/components/form/checkbox"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
+import { TRANSPORT } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
+import { usePatch } from "@/hooks/usePatch"
+import { usePost } from "@/hooks/usePost"
+import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 const TransportCreate = () => {
     const { closeModal } = useModal("transport-modal")
     const form = useForm<TransportType>()
 
+    const queryClient = useQueryClient()
+    const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
+        onSuccess: () => {
+            toast.success("Muvaffaqiyatli qo'shildi")
+            closeModal()
+            queryClient.invalidateQueries({ queryKey: [TRANSPORT] })
+        },
+    })
+    const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
+        onSuccess: () => {
+            toast.success("Muvaffaqiyatli yangilandi")
+            closeModal()
+            queryClient.invalidateQueries({ queryKey: [TRANSPORT] })
+        },
+    })
+
     const onSubmit = (data: TransportType) => {
-        console.log(data)
+        cretaeMutate(TRANSPORT, data)
     }
 
     return (
@@ -29,7 +50,13 @@ const TransportCreate = () => {
                     label="Bu transport uchun stansiya bo'lishi majburiy"
                 />
                 <div className="flex justify-end ">
-                    <Button type="submit">Saqlash</Button>
+                    <Button
+                        disabled={isPendingCreate || isPendingUpdate}
+                        loading={isPendingCreate || isPendingUpdate}
+                        type="submit"
+                    >
+                        Saqlash
+                    </Button>
                 </div>
             </form>
         </Modal>
