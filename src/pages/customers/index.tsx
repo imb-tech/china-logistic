@@ -6,6 +6,7 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
+import { useStoreData } from "@/store/global-store"
 
 const customers: CustomersType[] = [
     {
@@ -144,6 +145,18 @@ const customers: CustomersType[] = [
 export const CustomersPages = () => {
     const { openModal: openCustomerAdd } = useModal("customer-modal")
     const { openModal: openModalDelete } = useModal("customer-delete")
+    const { storeData, setStoreData } = useStoreData()
+
+    const handleDelete = (item: CustomersType) => {
+        openModalDelete()
+        setStoreData(item)
+    }
+
+    const handleUpdate = (item: CustomersType) => {
+        setStoreData(item)
+        openCustomerAdd()
+    }
+
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
@@ -165,15 +178,18 @@ export const CustomersPages = () => {
                     <DataTable
                         columns={useCustomersColumns()}
                         data={customers}
-                        paginationProps={{ totalPages: 1 }}
-                        onDelete={() => openModalDelete()}
-                        onEdit={() => {}}
+                        onDelete={(item) => handleDelete(item.original)}
+                        onEdit={(item) => handleUpdate(item.original)}
                         onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="customer-delete" id={1} path="customer" />
+            <DeleteModal
+                modalKey="customer-delete"
+                id={storeData?.id}
+                path="customer"
+            />
         </div>
     )
 }

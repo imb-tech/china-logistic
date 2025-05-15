@@ -5,12 +5,15 @@ import { COUNTRY } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const CountriesCreate = () => {
     const { closeModal } = useModal("countries-modal")
+    const { storeData } = useStoreData()
     const form = useForm<CountriesType>()
 
     const queryClient = useQueryClient()
@@ -30,8 +33,18 @@ const CountriesCreate = () => {
     })
 
     const onSubmit = (data: CountriesType) => {
-        cretaeMutate(COUNTRY, data)
+        if (storeData?.id) {
+            updateMutate(`${COUNTRY}/${storeData?.id}`, data)
+        } else {
+            cretaeMutate(COUNTRY, data)
+        }
     }
+
+    useEffect(() => {
+        if (storeData?.id) {
+            form.reset(storeData)
+        }
+    }, [storeData, form])
 
     return (
         <Modal title="Davlat qo'shish" modalKey="countries-modal">

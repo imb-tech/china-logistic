@@ -9,15 +9,27 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useSearch } from "@tanstack/react-router"
 import { useGet } from "@/hooks/useGet"
 import { REGION } from "@/constants/api-endpoints"
+import { useStoreData } from "@/store/global-store"
 
 export const CitiesPages = () => {
     const { openModal: openModalAdd } = useModal("cities-modal")
     const { openModal: openModalDelete } = useModal("cities-delete")
+    const { storeData, setStoreData } = useStoreData()
 
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<CitiesResults>(REGION, {
         params: search,
     })
+
+        const handleDelete = (item: CitiesType) => {
+        openModalDelete()
+        setStoreData(item)
+    }
+
+    const handleUpdate = (item: CitiesType) => {
+        setStoreData(item)
+        openModalAdd()
+    }
 
     const columns = useCitiesColumns()
 
@@ -42,13 +54,13 @@ export const CitiesPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                        onDelete={() => openModalDelete()}
-                        onEdit={() => {}}
+                         onDelete={(item) => handleDelete(item.original)}
+                        onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="cities-delete" id={1} path={REGION} />
+            <DeleteModal modalKey="cities-delete" id={storeData?.id} path={REGION} />
         </div>
     )
 }

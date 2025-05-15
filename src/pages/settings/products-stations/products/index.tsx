@@ -9,14 +9,26 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useGet } from "@/hooks/useGet"
 import { PRODUCT } from "@/constants/api-endpoints"
 import { useSearch } from "@tanstack/react-router"
+import { useStoreData } from "@/store/global-store"
 
 export const ProductsPages = () => {
     const { openModal: openModalAdd } = useModal("product-modal")
     const { openModal: openModalDelete } = useModal("product-delete")
+    const { storeData, setStoreData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ProductResults>(PRODUCT, {
         params: search,
     })
+
+    const handleDelete = (item: ProductsType) => {
+        openModalDelete()
+        setStoreData(item)
+    }
+
+    const handleUpdate = (item: ProductsType) => {
+        setStoreData(item)
+        openModalAdd()
+    }
 
     const columns = useProductsColumns()
     return (
@@ -40,13 +52,17 @@ export const ProductsPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                        onDelete={() => openModalDelete()}
-                        onEdit={() => {}}
+                         onDelete={(item) => handleDelete(item.original)}
+                        onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="product-delete" id={1} path={PRODUCT} />
+            <DeleteModal
+                modalKey="product-delete"
+                id={storeData?.id}
+                path={PRODUCT}
+            />
         </div>
     )
 }

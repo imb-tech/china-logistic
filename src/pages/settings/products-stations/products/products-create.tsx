@@ -5,12 +5,15 @@ import { PRODUCT } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const ProductsCreate = () => {
     const { closeModal } = useModal("product-modal")
+    const { storeData } = useStoreData()
     const queryClient = useQueryClient()
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {
@@ -18,7 +21,7 @@ const ProductsCreate = () => {
             closeModal()
             queryClient.invalidateQueries({ queryKey: [PRODUCT] })
         },
-    }) 
+    })
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
         onSuccess: () => {
             toast.success("Muvaffaqiyatli yangilandi")
@@ -29,8 +32,18 @@ const ProductsCreate = () => {
     const form = useForm<ProductsType>()
 
     const onSubmit = (data: ProductsType) => {
-        cretaeMutate(PRODUCT, data)
+        if (storeData?.id) {
+            updateMutate(`${PRODUCT}/${storeData?.id}`, data)
+        } else {
+            cretaeMutate(PRODUCT, data)
+        }
     }
+
+    useEffect(() => {
+        if (storeData?.id) {
+            form.reset(storeData)
+        }
+    }, [storeData, form])
 
     return (
         <Modal title="Mahsulot qo'shish" modalKey="product-modal">

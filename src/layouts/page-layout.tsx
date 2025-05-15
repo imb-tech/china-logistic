@@ -44,6 +44,6 @@ const PageLayout = ({
             </main>
         </div>
     )
-}
+} 
 
 export default PageLayout

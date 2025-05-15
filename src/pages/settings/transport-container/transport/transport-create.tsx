@@ -6,12 +6,15 @@ import { TRANSPORT } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const TransportCreate = () => {
     const { closeModal } = useModal("transport-modal")
+    const { storeData } = useStoreData()
     const form = useForm<TransportType>()
 
     const queryClient = useQueryClient()
@@ -31,8 +34,17 @@ const TransportCreate = () => {
     })
 
     const onSubmit = (data: TransportType) => {
-        cretaeMutate(TRANSPORT, data)
+        if (storeData?.id) {
+            updateMutate(`${TRANSPORT}/${storeData?.id}`, data)
+        } else {
+            cretaeMutate(TRANSPORT, data)
+        }
     }
+    useEffect(() => {
+        if (storeData?.id) {
+            form.reset(storeData)
+        }
+    }, [storeData, form])
 
     return (
         <Modal title="Transport qo'shish" modalKey="transport-modal">

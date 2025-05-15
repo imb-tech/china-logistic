@@ -9,14 +9,26 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { TRANSPORT } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useSearch } from "@tanstack/react-router"
+import { useStoreData } from "@/store/global-store"
 
 export const TransportPages = () => {
     const { openModal: openModalAdd } = useModal("transport-modal")
     const { openModal: openModalDelete } = useModal("transport-delete")
+    const { storeData, setStoreData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<TransportResults>(TRANSPORT, {
         params: search,
     })
+
+    const handleDelete = (item: TransportType) => {
+        openModalDelete()
+        setStoreData(item)
+    }
+
+    const handleUpdate = (item: TransportType) => {
+        setStoreData(item)
+        openModalAdd()
+    }
 
     const columns = useTransportColumns()
     return (
@@ -40,13 +52,13 @@ export const TransportPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                        onDelete={() => openModalDelete()}
-                        onEdit={() => {}}
+                        onDelete={(item) => handleDelete(item.original)}
+                        onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="transport-delete" id={1} path={TRANSPORT} />
+            <DeleteModal modalKey="transport-delete" id={storeData?.id} path={TRANSPORT} />
         </div>
     )
 }

@@ -8,15 +8,27 @@ import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
 import { useSearch } from "@tanstack/react-router"
 import { useGet } from "@/hooks/useGet"
-import { CONTAINERS } from "@/constants/api-endpoints"
+import { CONTAINER_TYPE } from "@/constants/api-endpoints"
+import { useStoreData } from "@/store/global-store"
 
 export const ContainerPages = () => {
     const { openModal: openModalAdd } = useModal("container-modal")
     const { openModal: openModalDelete } = useModal("container-delete")
+    const { storeData, setStoreData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
-    const { data, isLoading } = useGet<ContainerResults>(CONTAINERS, {
+    const { data, isLoading } = useGet<ContainerResults>(CONTAINER_TYPE, {
         params: search,
     })
+
+        const handleDelete = (item: ContainerType) => {
+        openModalDelete()
+        setStoreData(item)
+    }
+
+    const handleUpdate = (item: ContainerType) => {
+        setStoreData(item)
+        openModalAdd()
+    }
 
     const columns = useContainerColumns()
     return (
@@ -40,13 +52,13 @@ export const ContainerPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                        onDelete={() => openModalDelete()}
-                        onEdit={() => {}}
+                         onDelete={(item) => handleDelete(item.original)}
+                        onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="container-delete" id={1} path={CONTAINERS}/>
+            <DeleteModal modalKey="container-delete" id={storeData?.id} path={CONTAINER_TYPE}/>
         </div>
     )
 }

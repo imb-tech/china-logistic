@@ -6,6 +6,7 @@ import ParamInput from "@/components/as-params/input"
 import { useLogisticsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
+import { useStoreData } from "@/store/global-store"
 
 const logistic: LogisticsType[] = [
     {
@@ -93,7 +94,7 @@ const logistic: LogisticsType[] = [
         phone_code: "+998",
         phone_number: "931122334",
         address: "Qashqadaryo, Qarshi",
-         completed_orders: 2,
+        completed_orders: 2,
         in_completed_orders: 0,
     },
     {
@@ -143,8 +144,21 @@ const logistic: LogisticsType[] = [
 ]
 
 export const LogisticsPages = () => {
-    const { openModal:openModalLogistic } = useModal("logis-modal")
-    const { openModal:openModalDelete } = useModal("logis-delete")
+    const { openModal: openCustomerAdd } = useModal("logis-modal")
+    const { openModal: openModalDelete } = useModal("logis-delete")
+
+    const { storeData, setStoreData } = useStoreData()
+
+    const handleDelete = (item: LogisticsType) => {
+        openModalDelete()
+        setStoreData(item)
+    }
+
+    const handleUpdate = (item: LogisticsType) => {
+        setStoreData(item)
+        openCustomerAdd()
+    }
+
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
@@ -157,7 +171,7 @@ export const LogisticsPages = () => {
                                 placeholder="Logist qidirish"
                                 className=""
                             />
-                            <Button onClick={openModalLogistic}>
+                            <Button onClick={openCustomerAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -166,15 +180,18 @@ export const LogisticsPages = () => {
                     <DataTable
                         columns={useLogisticsColumns()}
                         data={logistic}
-                        paginationProps={{ totalPages: 1 }}
-                        onDelete={() => openModalDelete()}
-                        onEdit={() => {}}
+                        onDelete={(item) => handleDelete(item.original)}
+                        onEdit={(item) => handleUpdate(item.original)}
                         onView={() => {}}
                         // loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="logis-delete" id={1} path="logistic" />
+            <DeleteModal
+                modalKey="logis-delete"
+                id={storeData?.id}
+                path="logistic"
+            />
         </div>
     )
 }

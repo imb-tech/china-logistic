@@ -6,12 +6,15 @@ import { REGION } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const CitiesCreate = () => {
     const { closeModal } = useModal("cities-modal")
+    const { storeData } = useStoreData()
     const { openModal: openModalAdd } = useModal("countries-modal")
     const form = useForm<CitiesType>()
     const queryClient = useQueryClient()
@@ -31,8 +34,18 @@ const CitiesCreate = () => {
     })
 
     const onSubmit = (data: CitiesType) => {
-        cretaeMutate(REGION, data)
+        if (storeData?.id) {
+            updateMutate(`${REGION}/${storeData?.id}`, data)
+        } else {
+            cretaeMutate(REGION, data)
+        }
     }
+
+    useEffect(() => {
+        if (storeData?.id) {
+            form.reset(storeData)
+        }
+    }, [storeData, form])
 
     return (
         <Modal title="Shahar qo'shish" modalKey="cities-modal">

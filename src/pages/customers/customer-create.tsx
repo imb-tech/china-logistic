@@ -6,7 +6,9 @@ import { USERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -21,6 +23,7 @@ type Form = {
 
 const CustomerCreate = () => {
     const { closeModal } = useModal("customer-modal")
+    const { storeData } = useStoreData()
     const form = useForm<Form>()
 
     const queryClient = useQueryClient()
@@ -40,8 +43,18 @@ const CustomerCreate = () => {
     })
 
     const onSubmit = (data: Form) => {
-        cretaeMutate(USERS, data)
+        if (storeData?.id) {
+            updateMutate(`${USERS}/${storeData?.id}`, data)
+        } else {
+            cretaeMutate(USERS, data)
+        }
     }
+
+    useEffect(() => {
+        if (storeData?.id) {
+            form.reset(storeData)
+        }
+    }, [storeData, form])
 
     return (
         <Modal

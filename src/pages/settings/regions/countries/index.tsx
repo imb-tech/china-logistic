@@ -9,18 +9,28 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useGet } from "@/hooks/useGet"
 import { useSearch } from "@tanstack/react-router"
 import { COUNTRY } from "@/constants/api-endpoints"
-
-
+import { useStoreData } from "@/store/global-store"
 
 export const CountriesPages = () => {
-    const { openModal:openModalAdd } = useModal("countries-modal")
-    const { openModal:openModalDelete } = useModal("countries-delete")
+    const { openModal: openModalAdd } = useModal("countries-modal")
+    const { openModal: openModalDelete } = useModal("countries-delete")
+    const { storeData, setStoreData } = useStoreData()
     const columns = useRegionsColumns()
 
-     const search = useSearch({ from: "/_main/settings" })
-        const { data, isLoading } = useGet<CountriesResults>(COUNTRY, {
-            params: search,
-        })
+    const search = useSearch({ from: "/_main/settings" })
+    const { data, isLoading } = useGet<CountriesResults>(COUNTRY, {
+        params: search,
+    })
+
+    const handleDelete = (item: CountriesType) => {
+        openModalDelete()
+        setStoreData(item)
+    }
+
+    const handleUpdate = (item: CountriesType) => {
+        setStoreData(item)
+        openModalAdd()
+    }
 
     return (
         <div className="w-full">
@@ -43,13 +53,13 @@ export const CountriesPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                        onDelete={() => openModalDelete()}
-                        onEdit={() => {}}
+                        onDelete={(item) => handleDelete(item.original)}
+                        onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="countries-delete" id={1} path={COUNTRY} />
+            <DeleteModal modalKey="countries-delete" id={storeData?.id} path={COUNTRY} />
         </div>
     )
 }
