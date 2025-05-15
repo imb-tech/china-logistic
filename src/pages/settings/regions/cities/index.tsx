@@ -14,20 +14,27 @@ import { useStoreData } from "@/store/global-store"
 export const CitiesPages = () => {
     const { openModal: openModalAdd } = useModal("cities-modal")
     const { openModal: openModalDelete } = useModal("cities-delete")
-    const { storeData, setStoreData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useStoreData()
 
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<CitiesResults>(REGION, {
         params: search,
     })
 
-        const handleDelete = (item: CitiesType) => {
+    const handleDelete = (item: CitiesType) => {
+        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: CitiesType) => {
+        clearUserData()
         setStoreData(item)
+        openModalAdd()
+    }
+
+    const handleAdd = () => {
+        clearUserData()
         openModalAdd()
     }
 
@@ -45,7 +52,7 @@ export const CitiesPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModalAdd}>
+                            <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -54,13 +61,17 @@ export const CitiesPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                         onDelete={(item) => handleDelete(item.original)}
+                        onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="cities-delete" id={storeData?.id} path={REGION} />
+            <DeleteModal
+                modalKey="cities-delete"
+                id={storeData?.id}
+                path={REGION}
+            />
         </div>
     )
 }

@@ -23,6 +23,7 @@ const TransportCreate = () => {
             toast.success("Muvaffaqiyatli qo'shildi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [TRANSPORT] })
+            form.reset()
         },
     })
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
@@ -30,6 +31,7 @@ const TransportCreate = () => {
             toast.success("Muvaffaqiyatli yangilandi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [TRANSPORT] })
+            form.reset()
         },
     })
 

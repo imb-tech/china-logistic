@@ -145,15 +145,22 @@ const customers: CustomersType[] = [
 export const CustomersPages = () => {
     const { openModal: openCustomerAdd } = useModal("customer-modal")
     const { openModal: openModalDelete } = useModal("customer-delete")
-    const { storeData, setStoreData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useStoreData()
 
     const handleDelete = (item: CustomersType) => {
+        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: CustomersType) => {
+        clearUserData()
         setStoreData(item)
+        openCustomerAdd()
+    }
+
+    const handleAdd = () => {
+        clearUserData()
         openCustomerAdd()
     }
 
@@ -169,7 +176,7 @@ export const CustomersPages = () => {
                                 placeholder="Mijozlarni qidirish"
                                 className=""
                             />
-                            <Button onClick={openCustomerAdd}>
+                            <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>

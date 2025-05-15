@@ -20,6 +20,7 @@ const ProductsCreate = () => {
             toast.success("Muvaffaqiyatli qo'shildi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [PRODUCT] })
+            form.reset()
         },
     })
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
@@ -27,6 +28,7 @@ const ProductsCreate = () => {
             toast.success("Muvaffaqiyatli yangilandi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [PRODUCT] })
+            form.reset()
         },
     })
     const form = useForm<ProductsType>()

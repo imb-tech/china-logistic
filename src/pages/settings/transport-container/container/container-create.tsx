@@ -22,6 +22,7 @@ const ContainerCreate = () => {
             toast.success("Muvaffaqiyatli qo'shildi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [CONTAINER_TYPE] })
+            form.reset()
         },
     })
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
@@ -29,6 +30,7 @@ const ContainerCreate = () => {
             toast.success("Muvaffaqiyatli yangilandi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [CONTAINER_TYPE] })
+            form.reset()
         },
     })
 

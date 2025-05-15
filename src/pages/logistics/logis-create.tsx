@@ -30,6 +30,7 @@ const LogisticsCreate = () => {
             toast.success("Muvaffaqiyatli qo'shildi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [USERS] })
+            form.reset()
         },
     })
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
@@ -37,6 +38,7 @@ const LogisticsCreate = () => {
             toast.success("Muvaffaqiyatli yangilandi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [USERS] })
+            form.reset()
         },
     })
 

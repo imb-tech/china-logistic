@@ -21,6 +21,7 @@ const StationsCreate = () => {
             toast.success("Muvaffaqiyatli qo'shildi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [STATION] })
+            form.reset()
         },
     })
     const { mutate: updateMutate, isPending: isPendingUpdate } = usePatch({
@@ -28,6 +29,7 @@ const StationsCreate = () => {
             toast.success("Muvaffaqiyatli yangilandi")
             closeModal()
             queryClient.invalidateQueries({ queryKey: [STATION] })
+            form.reset()
         },
     })
 

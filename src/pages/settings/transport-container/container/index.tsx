@@ -14,19 +14,26 @@ import { useStoreData } from "@/store/global-store"
 export const ContainerPages = () => {
     const { openModal: openModalAdd } = useModal("container-modal")
     const { openModal: openModalDelete } = useModal("container-delete")
-    const { storeData, setStoreData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ContainerResults>(CONTAINER_TYPE, {
         params: search,
     })
 
-        const handleDelete = (item: ContainerType) => {
+    const handleDelete = (item: ContainerType) => {
+        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: ContainerType) => {
+        clearUserData()
         setStoreData(item)
+        openModalAdd()
+    }
+
+    const handleAdd = () => {
+        clearUserData()
         openModalAdd()
     }
 
@@ -43,7 +50,7 @@ export const ContainerPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModalAdd}>
+                            <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -52,13 +59,17 @@ export const ContainerPages = () => {
                     <DataTable
                         columns={columns}
                         data={data?.results}
-                         onDelete={(item) => handleDelete(item.original)}
+                        onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="container-delete" id={storeData?.id} path={CONTAINER_TYPE}/>
+            <DeleteModal
+                modalKey="container-delete"
+                id={storeData?.id}
+                path={CONTAINER_TYPE}
+            />
         </div>
     )
 }

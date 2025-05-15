@@ -14,21 +14,28 @@ import { useStoreData } from "@/store/global-store"
 export const StationsPages = () => {
     const { openModal: openModalAdd } = useModal("stations-modal")
     const { openModal: openModalDelete } = useModal("stations-delete")
-    const { storeData, setStoreData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useStoreData()
     const search = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<StationsResults>(STATION, {
         params: search,
     })
 
-        const handleDelete = (item: StationsType) => {
+    const handleDelete = (item: StationsType) => {
+        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: StationsType) => {
+        clearUserData()
         setStoreData(item)
         openModalAdd()
     }
+       const handleAdd = () => {
+        clearUserData()
+        openModalAdd()
+    }
+
 
     const columns = useStationsColumns()
     return (
@@ -43,7 +50,7 @@ export const StationsPages = () => {
                                 placeholder="Qidirish"
                                 className=""
                             />
-                            <Button onClick={openModalAdd}>
+                            <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
@@ -58,7 +65,11 @@ export const StationsPages = () => {
                     />
                 </CardContent>
             </Card>
-            <DeleteModal modalKey="stations-delete" id={storeData?.id} path={STATION} />
+            <DeleteModal
+                modalKey="stations-delete"
+                id={storeData?.id}
+                path={STATION}
+            />
         </div>
     )
 }

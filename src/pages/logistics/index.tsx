@@ -147,17 +147,24 @@ export const LogisticsPages = () => {
     const { openModal: openCustomerAdd } = useModal("logis-modal")
     const { openModal: openModalDelete } = useModal("logis-delete")
 
-    const { storeData, setStoreData } = useStoreData()
+   const { storeData, setStoreData, clearUserData } = useStoreData()
 
     const handleDelete = (item: LogisticsType) => {
+        clearUserData()
         openModalDelete()
         setStoreData(item)
     }
 
     const handleUpdate = (item: LogisticsType) => {
+        clearUserData()
         setStoreData(item)
         openCustomerAdd()
     }
+     const handleAdd = () => {
+        clearUserData()
+        openCustomerAdd()
+    }
+
 
     return (
         <div className="w-full">
@@ -171,7 +178,7 @@ export const LogisticsPages = () => {
                                 placeholder="Logist qidirish"
                                 className=""
                             />
-                            <Button onClick={openCustomerAdd}>
+                            <Button onClick={handleAdd}>
                                 <Plus className="h-4 w-4" />
                                 Qo'shish
                             </Button>
