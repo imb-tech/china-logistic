@@ -8,6 +8,7 @@ import {
 import { useEffect } from "react"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
+import { getAccessToken } from "@/lib/get-token"
 
 export const Route = createFileRoute("/_main")({
     component: MainLayout,
@@ -16,9 +17,9 @@ export const Route = createFileRoute("/_main")({
 function MainLayout() {
     const pathname = useLocation().pathname
     const navigate = useNavigate()
+    const token = getAccessToken()
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
         if (!token) {
             navigate({ to: "/auth" })
         }
@@ -28,7 +29,7 @@ function MainLayout() {
         <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
-                    <Outlet />
+                <Outlet />
             </SidebarInset>
         </SidebarProvider>
     )
