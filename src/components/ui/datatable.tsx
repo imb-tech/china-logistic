@@ -105,7 +105,7 @@ export function DataTable<TData>({
     onUndo,
     onView,
     tableWrapperClassName,
-    skeletonRowCount = 14,
+    skeletonRowCount = 15,
 }: DataTableProps<TData>) {
     const {
         paramName = PAGE_KEY,
@@ -399,9 +399,8 @@ export function DataTable<TData>({
                         </TableBody>
                         <TableFooter></TableFooter>
                     </Table>
-                ) : (
-                    <EmptyBox />
-                )}
+                ) : null}
+                {data?.length === 0 ? <EmptyBox /> : null}
             </div>
             {!viewAll && data?.length ? (
                 <div className="pt-4 mx-auto w-full relative flex justify-center">

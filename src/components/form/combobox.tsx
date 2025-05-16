@@ -3,7 +3,25 @@ import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import { Combobox as ShadcnCombobox } from "@/components/ui/combobox"
 
-export function FormCombobox({
+type ComboboxProps<T extends Record<string, any>> = {
+    name: string
+    label?: string
+    placeholder?: string
+    options: T[] | undefined
+    disabled?: boolean
+    required?: boolean
+    setValue?: () => void
+    control: Control<any>
+    hideError?: boolean
+    returnVal?: string
+    onAdd?: () => void
+    labelKey?: keyof T
+    valueKey?: keyof T
+    skeletonCount?: number
+    isLoading?: boolean
+}
+
+export function FormCombobox<T extends Record<string, any>>({
     name,
     label,
     options,
@@ -13,11 +31,15 @@ export function FormCombobox({
     control,
     setValue,
     hideError = true,
-    returnVal = "label",
+    returnVal,
+    valueKey,
+    labelKey,
     onAdd,
-}: thisProps) {
+    isLoading,
+    skeletonCount,
+}: ComboboxProps<T>) {
     return (
-        <div>
+        <fieldset className="flex flex-col w-full">
             {label && (
                 <FieldLabel
                     htmlFor={name}
@@ -36,29 +58,31 @@ export function FormCombobox({
                         : {}
                 }
                 render={({ field }) => (
-                    <div className={label ? "pt-0.5" : ""}>
-                        <ShadcnCombobox
-                            options={options}
-                            value={field.value || ""}
-                            setValue={(val) => {
-                                if (
-                                    val ==
-                                    (returnVal === "label"
-                                        ? "Yangi qo'shish"
-                                        : "other")
-                                ) {
-                                    setValue?.()
-                                } else {
-                                    field.onChange(val)
-                                }
-                            }}
-                            label={placeholder || label || "Tanlang"}
-                            disabled={control._formState.disabled || disabled}
-                            isError={!!control._formState.errors?.[name]}
-                            returnVal={returnVal}
-                            onAdd={onAdd}
-                        />
-                    </div>
+                    <ShadcnCombobox
+                        options={options}
+                        value={field.value || ""}
+                        setValue={(val) => {
+                            if (
+                                val ==
+                                (returnVal === "label"
+                                    ? "Yangi qo'shish"
+                                    : "other")
+                            ) {
+                                setValue?.()
+                            } else {
+                                field.onChange(val)
+                            }
+                        }}
+                        label={placeholder || label || "Tanlang"}
+                        disabled={control._formState.disabled || disabled}
+                        isError={!!control._formState.errors?.[name]}
+                        returnVal={returnVal}
+                        onAdd={onAdd}
+                        valueKey={valueKey}
+                        labelKey={labelKey}
+                        isLoading={isLoading}
+                        skeletonCount={skeletonCount}
+                    />
                 )}
             />
             {!hideError && control._formState.errors?.[name] && (
@@ -66,20 +90,6 @@ export function FormCombobox({
                     {control._formState.errors[name]?.message as string}
                 </FieldError>
             )}
-        </div>
+        </fieldset>
     )
-}
-
-interface thisProps {
-    name: string
-    label?: string
-    placeholder?: string
-    options: { label: string | number; value: string | number }[] | undefined
-    disabled?: boolean
-    required?: boolean
-    setValue?: () => void
-    control: Control<any>
-    hideError?: boolean
-    returnVal?: "value" | "label"
-    onAdd?: () => void
 }

@@ -5,6 +5,14 @@ import { FormSelect } from "@/components/form/select"
 import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+    CONTAINER_TYPE,
+    PRODUCT,
+    REGION,
+    TRANSPORT,
+    USERS,
+} from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { Copy } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -19,6 +27,27 @@ function WholeLoad() {
     const { openModal: openModalContainerAdd } = useModal("container-modal")
     const { openModal: openModalTransportAdd } = useModal("transport-modal")
 
+    const { data: dataContainer, isLoading: isLoadingContainer } =
+        useGet<ContainerResults>(CONTAINER_TYPE, {
+            params: { page_size: 50 },
+        })
+    const { data: dataTransport, isLoading: isLoadingTransport } =
+        useGet<TransportResults>(TRANSPORT, {
+            params: { page_size: 50 },
+        })
+    const { data: dataUsers, isLoading: isLoadinaUsers } =
+        useGet<CustomersTypeResults>(USERS, {
+            params: { page_size: 50 },
+        })
+    const { data: dataCities, isLoading: isLoadingCities } =
+        useGet<CitiesResults>(REGION, {
+            params: { page_size: 50 },
+        })
+    const { data: dataProducts, isLoading: isLoadingProducts } =
+        useGet<ProductResults>(PRODUCT, {
+            params: { page_size: 50 },
+        })
+
     const onSubmit = () => {}
 
     return (
@@ -31,13 +60,16 @@ function WholeLoad() {
                     <h1>Mijoz ma'lumotlari</h1>
                     <div className="w-full border border-input rounded-lg p-3">
                         <FormCombobox
-                            options={[]}
+                            options={dataUsers?.results}
+                            valueKey="id"
+                            labelKey="full_name"
                             control={form.control}
                             name="name"
                             label="Mijozni ismi"
                             required
                             placeholder="Mijozni tanlang"
                             onAdd={openModalCustomerAdd}
+                            isLoading={isLoadinaUsers}
                         />
                     </div>
                 </CardContent>
@@ -46,15 +78,18 @@ function WholeLoad() {
             <Card>
                 <CardContent className="space-y-2">
                     <h1>Konteyner #1</h1>
-                    <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1  gap-4 rounded-lg p-3 bg-slate-100">
+                    <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1  gap-4 rounded-lg p-3 dark:bg-card dark:border bg-slate-100">
                         <FormCombobox
-                            options={[]}
+                            options={dataContainer?.results}
+                            valueKey="id"
+                            labelKey="name"
                             control={form.control}
                             name="name"
                             label="Konteyner turi"
                             required
                             placeholder="40 HQ"
                             onAdd={openModalContainerAdd}
+                            isLoading={isLoadingContainer}
                         />
                         <FormSelect
                             control={form.control}
@@ -63,7 +98,10 @@ function WholeLoad() {
                             required
                         />
                         <FormCombobox
-                            options={[]}
+                            options={dataTransport?.results}
+                            isLoading={isLoadingTransport}
+                            valueKey="id"
+                            labelKey="name"
                             control={form.control}
                             name="name"
                             label="Transport  turi"
@@ -80,7 +118,7 @@ function WholeLoad() {
 
                         <div className="space-y-2 col-span-4">
                             <h1>Mahsulot #1</h1>
-                            <div className=" grid lg:grid-cols-5 sm:grid-cols-2 grid-cols-1  gap-4  rounded-lg p-3 bg-slate-200">
+                            <div className=" grid lg:grid-cols-5 sm:grid-cols-2 grid-cols-1  gap-4  rounded-lg p-3 dark:bg-card dark:border bg-slate-200">
                                 <FormInput
                                     methods={form}
                                     name="name"
@@ -90,18 +128,22 @@ function WholeLoad() {
                                 />
                                 <FormInput
                                     methods={form}
+                                    type="url"
                                     name="name"
                                     label="Yuklash manzili (URL)"
                                     required
                                     placeholder="Joylashuv (URL from map)"
                                 />
                                 <FormCombobox
-                                    options={[]}
+                                    options={dataProducts?.results}
+                                    valueKey="id"
+                                    labelKey="name"
                                     control={form.control}
                                     name="name"
                                     label="Mahsulot nomi"
                                     required
                                     onAdd={openModalProductAdd}
+                                    isLoading={isLoadingProducts}
                                 />
                                 <FormInput
                                     methods={form}
@@ -121,13 +163,16 @@ function WholeLoad() {
                         </div>
 
                         <FormCombobox
-                            options={[]}
                             control={form.control}
                             name="name"
                             label="Yetkazib berish shahri"
                             placeholder="Shahar"
                             required
                             onAdd={openModalCitiesAdd}
+                            options={dataCities?.results}
+                            isLoading={isLoadingCities}
+                            valueKey="id"
+                            labelKey="name"
                         />
                         <FormInput
                             methods={form}
@@ -161,11 +206,14 @@ function WholeLoad() {
                     <h1>Logist ma'lumotlari</h1>
                     <div className="border border-input p-3 rounded-lg">
                         <FormCombobox
-                            options={[]}
                             control={form.control}
                             name="name"
                             label="Logistni tanlang"
+                            isLoading={isLoadinaUsers}
                             required
+                            options={dataUsers?.results}
+                            valueKey="id"
+                            labelKey="full_name"
                         />
                     </div>
                 </CardContent>

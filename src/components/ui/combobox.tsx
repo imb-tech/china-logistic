@@ -15,8 +15,26 @@ import {
 } from "@/components/ui/popover"
 import { CheckIcon, ChevronsUpDown, Plus, X } from "lucide-react"
 import { ClassNameValue } from "tailwind-merge"
+import { useState } from "react"
+import { Skeleton } from "./skeleton"
 
-export function Combobox({
+type ComboboxProps<T extends Record<string, any>> = {
+    options: T[] | undefined
+    value: string | number | null
+    setValue: (val: any) => void
+    onAdd?: () => void
+    label: string
+    disabled?: boolean
+    isLoading?: boolean
+    isError?: boolean
+    returnVal?: string
+    className?: ClassNameValue
+    labelKey?: keyof T
+    skeletonCount?: number
+    valueKey?: keyof T
+}
+
+export function Combobox<T extends Record<string, any>>({
     options,
     value,
     setValue,
@@ -25,21 +43,19 @@ export function Combobox({
     onAdd,
     isError,
     returnVal = "value",
+    labelKey = "label",
+    valueKey = "value",
     className,
-}: {
-    options: Item[] | undefined
-    value: string | number | null
-    setValue: (val: any) => void
-    onAdd?: () => void
-    label: string
-    disabled?: boolean
-    isError?: boolean
-    returnVal?: "value" | "label"
-    className?: ClassNameValue
-}) {
-    const handleSelect = (option: Item) => {
-        const returnValue = returnVal === "label" ? option.label : option.value
+    isLoading,
+    skeletonCount = 5,
+}: ComboboxProps<T>) {
+    const [open, setOpen] = useState(false)
+
+    const handleSelect = (option: T) => {
+        const returnValue =
+            returnVal === labelKey ? option[labelKey] : option[valueKey]
         setValue(returnValue)
+        setOpen(false)
     }
 
     const handleClickAdd = () => {
@@ -47,7 +63,7 @@ export function Combobox({
     }
 
     return (
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
                     variant="outline"
@@ -64,8 +80,8 @@ export function Combobox({
                         <ChevronsUpDown className=" h-4 w-4  text-primary opacity-50 " />
                         {value
                             ? options
-                                  ?.find((d) => d.value == value)
-                                  ?.label?.toString() || value
+                                  ?.find((d) => d[valueKey] == value)
+                                  ?.[labelKey]?.toString() || value
                             : label}
                     </div>
                     <span
@@ -73,7 +89,7 @@ export function Combobox({
                             e.stopPropagation()
                             handleClickAdd()
                         }}
-                        className="bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
+                        className="dark:bg-card bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
                     >
                         <Plus className=" h-4 w-4 shrink-0  text-primary" />
                     </span>
@@ -99,7 +115,7 @@ export function Combobox({
                                     key={i}
                                     onSelect={() => handleSelect(d)}
                                 >
-                                    {d.label}
+                                    {d[labelKey]}
                                     <CheckIcon
                                         className={cn(
                                             "ml-auto h-4 w-4",
@@ -110,15 +126,27 @@ export function Combobox({
                                     />
                                 </CommandItem>
                             ))}
+
+                            {isLoading
+                                ? <div className="space-y-1">
+                                    {
+                                        Array.from({ length: skeletonCount }).map(
+                                      (_, index) => (
+                                          <CommandItem
+                                              key={index}
+                                              className="p-0"
+                                          >
+                                              <Skeleton className="w-full h-7" />
+                                          </CommandItem>
+                                      ),
+                                  )
+                                    }
+                                </div>
+                                : null}
                         </CommandGroup>
                     </CommandList>
                 </Command>
             </PopoverContent>
         </Popover>
     )
-}
-
-type Item = {
-    label: string | number
-    value: string | number
 }

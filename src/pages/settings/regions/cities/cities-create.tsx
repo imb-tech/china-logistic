@@ -1,7 +1,8 @@
 import { FormCombobox } from "@/components/form/combobox"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
-import { REGION } from "@/constants/api-endpoints"
+import { COUNTRY, REGION } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
@@ -17,6 +18,11 @@ const CitiesCreate = () => {
     const form = useForm<CitiesType>({
         defaultValues: storeData ?? {},
     })
+
+    const { data, isLoading } = useGet<CountriesResults>(COUNTRY, {
+        params: { page_size: 50 },
+    })
+
     const queryClient = useQueryClient()
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {
@@ -43,34 +49,35 @@ const CitiesCreate = () => {
         }
     }
 
- 
-
     return (
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-                <FormCombobox
-                    options={[]}
-                    control={form.control}
-                    name="country"
-                    label="Davlat"
-                    required
-                    onAdd={openModalAdd}
-                />
-                <FormInput
-                    required
-                    methods={form}
-                    name="name"
-                    label="Shahar yoki Viloyat nomi"
-                />
-                <div className="flex justify-end ">
-                    <Button
-                        disabled={isPendingCreate || isPendingUpdate}
-                        loading={isPendingCreate || isPendingUpdate}
-                        type="submit"
-                    >
-                        Saqlash
-                    </Button>
-                </div>
-            </form>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+            <FormCombobox
+                options={data?.results}
+                isLoading={isLoading}
+                labelKey="name"
+                valueKey="id"
+                control={form.control}
+                name="country"
+                label="Davlat"
+                required
+                onAdd={openModalAdd}
+            />
+            <FormInput
+                required
+                methods={form}
+                name="name"
+                label="Shahar yoki Viloyat nomi"
+            />
+            <div className="flex justify-end ">
+                <Button
+                    disabled={isPendingCreate || isPendingUpdate}
+                    loading={isPendingCreate || isPendingUpdate}
+                    type="submit"
+                >
+                    Saqlash
+                </Button>
+            </div>
+        </form>
     )
 }
 
