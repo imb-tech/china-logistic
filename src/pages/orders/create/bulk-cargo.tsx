@@ -2,12 +2,14 @@ import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
 import { FormMultiCombobox } from "@/components/form/multi-combobox"
+import { FormNumberInput } from "@/components/form/number-input"
 import { FormSelect } from "@/components/form/select"
 import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
     CONTAINER_TYPE,
+    CONTAINERS_BULK_CARGO,
     PRODUCT,
     REGION,
     TRANSPORT,
@@ -17,15 +19,19 @@ import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { Copy, Plus, Trash2 } from "lucide-react"
 import { useFieldArray, useForm } from "react-hook-form"
+import { options } from "./whole-load"
+import { usePost } from "@/hooks/usePost"
+import { toast } from "sonner"
+import { useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
 
 type ClientType = {
-    id: string
     customer: number | null
     loading_address: string
-    loading_address_url: string
+    location_url: string
     product: number | null
-    product_weight: string | null
     product_volume: string | null
+    product_weight: string | null
 }
 
 type FormType = {
@@ -35,12 +41,21 @@ type FormType = {
     load_date: string | null
     destination_region: number | null
     destination_address: string
-    notes: string
-    agent: number | null
-    clients: ClientType[]
+    comment: string
+    agents: number[]
+    loads: ClientType[]
 }
 
 function BulkCargo() {
+    const [search, setSearch] = useState({
+        container: "",
+        transport: "",
+        customer: "",
+        agents: "",
+        cities: "",
+        product: "",
+    })
+    const navigate = useNavigate()
     const { openModal: openModalProductAdd } = useModal("product-modal")
     const { openModal: openModalCitiesAdd } = useModal("cities-modal")
     const { openModal: openModalContainerAdd } = useModal("container-modal")
@@ -48,15 +63,19 @@ function BulkCargo() {
 
     const { data: dataContainer, isLoading: isLoadingContainer } =
         useGet<ContainerResults>(CONTAINER_TYPE, {
-            params: { page_size: 50 },
+            params: { page_size: 50, search: search.container },
         })
     const { data: dataTransport, isLoading: isLoadingTransport } =
         useGet<TransportResults>(TRANSPORT, {
-            params: { page_size: 50 },
+            params: { page_size: 50, search: search.transport },
         })
     const { data: dataUsers, isLoading: isLoadingUsers } =
         useGet<CustomersTypeResults>(USERS, {
-            params: { page_size: 50 },
+            params: { page_size: 50, role: 3, search: search.customer },
+        })
+    const { data: dataLogist, isLoading: isLoadingLogist } =
+        useGet<CustomersTypeResults>(USERS, {
+            params: { page_size: 50, role: 2, search: search.agents },
         })
     const { data: dataCities, isLoading: isLoadingCities } =
         useGet<CitiesResults>(REGION, {
@@ -64,28 +83,27 @@ function BulkCargo() {
         })
     const { data: dataProducts, isLoading: isLoadingProducts } =
         useGet<ProductResults>(PRODUCT, {
-            params: { page_size: 50 },
+            params: { page_size: 50, search: search.product },
         })
 
     const form = useForm<FormType>({
         defaultValues: {
+            agents: [],
+            comment: "",
             container_type: null,
+            destination_address: "",
+            destination_region: null,
+            load_date: null,
             quality: null,
             transport: null,
-            load_date: null,
-            destination_region: null,
-            destination_address: "",
-            notes: "",
-            agent: null,
-            clients: [
+            loads: [
                 {
-                    id: "1",
                     customer: null,
                     loading_address: "",
-                    loading_address_url: "",
+                    location_url: "",
                     product: null,
-                    product_weight: null,
                     product_volume: null,
+                    product_weight: null,
                 },
             ],
         },
@@ -93,20 +111,27 @@ function BulkCargo() {
 
     const { fields, append, remove, insert } = useFieldArray({
         control: form.control,
-        name: "clients",
+        name: "loads",
+    })
+
+    const { mutate, isPending } = usePost({
+        onSuccess: () => {
+            toast.success("Muvaffaqiyat yaratildi")
+            form.reset()
+            navigate({ to: "/" })
+        },
     })
 
     const copyClient = (index: number) => {
-        const containerToCopy = form.getValues(`clients.${index}`)
+        const containerToCopy = form.getValues(`loads.${index}`)
         insert(index + 1, containerToCopy)
     }
 
     const addNewClient = () => {
         append({
-            id: Date.now().toString(),
             customer: null,
             loading_address: "",
-            loading_address_url: "",
+            location_url: "",
             product: null,
             product_weight: null,
             product_volume: null,
@@ -117,22 +142,24 @@ function BulkCargo() {
         const formattedData = {
             container: {
                 container_type: data.container_type,
+                comment: data.comment,
                 quality: data.quality,
                 transport: data.transport,
                 load_date: data.load_date,
                 destination_region: data.destination_region,
                 destination_address: data.destination_address,
-                agent: data.agent,
-                loads: data.clients.map((client) => ({
-                    customer: client.customer,
-                    product: client.product,
-                    product_weight: client.product_weight,
-                    product_volume: client.product_volume,
-                })),
+                loads: data.loads.map((client) => client),
             },
-            agents: [],
+            agents: data.agents,
         }
-        console.log("Formatted data:", formattedData)
+        mutate(CONTAINERS_BULK_CARGO, formattedData)
+    }
+
+    const handleChange = (key: string, value: string) => {
+        setSearch((prev) => ({
+            ...prev,
+            [key]: value,
+        }))
     }
 
     return (
@@ -157,8 +184,12 @@ function BulkCargo() {
                             required
                             placeholder="40 HQ"
                             onAdd={openModalContainerAdd}
+                            onSearchChange={(val) =>
+                                handleChange("container", val)
+                            }
                         />
                         <FormSelect
+                            options={options}
                             control={form.control}
                             name="quality"
                             label="Holati"
@@ -175,6 +206,9 @@ function BulkCargo() {
                             required
                             placeholder="Temir yo'l"
                             onAdd={openModalTransportAdd}
+                            onSearchChange={(val) =>
+                                handleChange("transport", val)
+                            }
                         />
                         <FormDatePicker
                             control={form.control}
@@ -225,22 +259,25 @@ function BulkCargo() {
                                         valueKey="id"
                                         labelKey="full_name"
                                         control={form.control}
-                                        name={`clients.${index}.customer`}
+                                        name={`loads.${index}.customer`}
                                         label="Mijoz ismi"
                                         required
+                                        onSearchChange={(val) =>
+                                            handleChange("customer", val)
+                                        }
                                     />
                                 </div>
                                 <div className="grid xl:grid-cols-5 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 xl:pr-28 sm:pb-0 pb-16">
                                     <FormInput
                                         methods={form}
-                                        name={`clients.${index}.loading_address`}
+                                        name={`loads.${index}.loading_address`}
                                         label="Yuklash manzili"
                                         required
                                         placeholder="Joy nomi"
                                     />
                                     <FormInput
                                         methods={form}
-                                        name={`clients.${index}.loading_address_url`}
+                                        name={`loads.${index}.location_url`}
                                         type="url"
                                         label="Yuklash manzili (URL)"
                                         required
@@ -252,22 +289,25 @@ function BulkCargo() {
                                         valueKey="id"
                                         labelKey="name"
                                         control={form.control}
-                                        name={`clients.${index}.product`}
+                                        name={`loads.${index}.product`}
                                         label="Mahsulot nomi"
                                         required
                                         onAdd={openModalProductAdd}
+                                        onSearchChange={(val) =>
+                                            handleChange("product", val)
+                                        }
                                     />
 
-                                    <FormInput
-                                        methods={form}
-                                        name={`clients.${index}.product_weight`}
+                                    <FormNumberInput
+                                        control={form.control}
+                                        name={`loads.${index}.product_weight`}
                                         label="Mahsulot vazni"
                                         required
                                         placeholder="26 tonna"
                                     />
-                                    <FormInput
-                                        methods={form}
-                                        name={`clients.${index}.product_volume`}
+                                    <FormNumberInput
+                                        control={form.control}
+                                        name={`loads.${index}.product_volume`}
                                         label="Mahsulot hajmi"
                                         required
                                         placeholder="68 Kb"
@@ -306,6 +346,9 @@ function BulkCargo() {
                             options={dataCities?.results}
                             valueKey="id"
                             labelKey="name"
+                            onSearchChange={(val) =>
+                                handleChange("cities", val)
+                            }
                         />
                         <FormInput
                             methods={form}
@@ -315,7 +358,7 @@ function BulkCargo() {
                         />
                         <FormTextarea
                             methods={form}
-                            name="notes"
+                            name="comment"
                             label="Izoh"
                             required
                             placeholder="Izoh..."
@@ -324,21 +367,30 @@ function BulkCargo() {
                         />
                         <div className="lg:col-span-4 sm:col-span-2">
                             <FormMultiCombobox
-                                isLoading={isLoadingUsers}
-                                options={dataUsers?.results}
+                                isLoading={isLoadingLogist}
+                                options={dataLogist?.results}
                                 valueKey="id"
                                 labelKey="full_name"
                                 control={form.control}
-                                name="agent"
+                                name="agents"
                                 label="Logistni tanlang"
+                                returnVal="id"
                                 required
+                                onSearchChange={(val) =>
+                                    handleChange("agents", val)
+                                }
                             />
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
-            <Button type="submit" className="sm:w-max w-full px-12 float-end">
+            <Button
+                disabled={isPending}
+                loading={isPending}
+                type="submit"
+                className="sm:w-max w-full px-12 float-end"
+            >
                 Saqlash
             </Button>
         </form>

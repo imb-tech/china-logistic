@@ -3,7 +3,7 @@ import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import Select from "../ui/select"
 
-export function FormSelect({
+export function FormSelect<T extends Record<string, any>>({
     name,
     label,
     options,
@@ -11,9 +11,10 @@ export function FormSelect({
     required,
     control,
     setValue,
+    valueKey,
+    labelKey,
     hideError = true,
-    returnVal = "label",
-}: thisProps) {
+}: thisProps<T>) {
     return (
         <div className="w-full">
             {label && (
@@ -32,11 +33,16 @@ export function FormSelect({
                     <div className={label ? "pt-[2px]" : ""}>
                         <Select
                             options={options}
-                            label={label || 'Tanlang'}
+                            label={label || "Tanlang"}
                             value={field.value}
-                            setValue={(val) => val === 'other' ? setValue?.(val) : field.onChange(val)}
-                            returnVal={returnVal}
+                            setValue={(val) =>
+                                val === "other"
+                                    ? setValue?.(val)
+                                    : field.onChange(val)
+                            }
                             disabled={disabled}
+                            labelKey={labelKey}
+                            valueKey={valueKey}
                         />
                     </div>
                 )}
@@ -50,14 +56,15 @@ export function FormSelect({
     )
 }
 
-interface thisProps {
+type thisProps<T extends Record<string, any>> = {
     name: string
     label?: string
-    options?: { label: string | number; value: string | number }[]
+    options: T[]
     disabled?: boolean
     required?: boolean
-    setValue?: (val: string | number) => void
+    setValue?: (val: string) => void
     control: Control<any>
     hideError?: boolean
-    returnVal?: "value" | "label"
+    labelKey?: keyof T
+    valueKey?: keyof T
 }

@@ -31,7 +31,7 @@ export function FormNumberInput<IForm extends FieldValues>({
     wrapperClassName,
     className,
     formatOptions,
-    thousandSeparator,
+    thousandSeparator=" ",
     decimalSeparator,
     hideError = true,
     ...props

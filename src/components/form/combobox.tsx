@@ -30,7 +30,7 @@ export function FormCombobox<T extends Record<string, any>>({
     required,
     control,
     hideError = true,
-    returnVal,
+    returnVal="id",
     valueKey,
     labelKey,
     onAdd,

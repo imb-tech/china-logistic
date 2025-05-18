@@ -1,12 +1,15 @@
 import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
+import { FormMultiCombobox } from "@/components/form/multi-combobox"
+import { FormNumberInput } from "@/components/form/number-input"
 import { FormSelect } from "@/components/form/select"
 import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
     CONTAINER_TYPE,
+    CONTAINERS_FULL_CARGO,
     PRODUCT,
     REGION,
     TRANSPORT,
@@ -14,10 +17,23 @@ import {
 } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
-import { cn } from "@/lib/utils"
+import { usePost } from "@/hooks/usePost"
+import { useNavigate } from "@tanstack/react-router"
 import { Copy, Plus, Trash2 } from "lucide-react"
-import { FC } from "react"
+import { FC, useState } from "react"
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form"
+import { toast } from "sonner"
+
+export const options = [
+    {
+        value: "1",
+        label: "Yangi",
+    },
+    {
+        value: "2",
+        label: "Eski",
+    },
+]
 
 interface Load {
     loading_address: string
@@ -29,13 +45,13 @@ interface Load {
 }
 
 interface Container {
-    container_type: number
-    quality: number
-    transport: number
+    container_type: number | null
+    quality: number | null
+    transport: number | null
     load_date: string
     loads: Load[]
     destination_address: string
-    destination_region: number
+    destination_region: number | null
     comment: string | null
 }
 
@@ -45,6 +61,16 @@ interface FormValues {
     containers: Container[]
 }
 function WholeLoad() {
+    const [searchProducts, setSearchProducts] = useState("")
+    const [search, setSearch] = useState({
+        container: "",
+        transport: "",
+        customer: "",
+        agents: "",
+        cities: "",
+    })
+    const navigate = useNavigate()
+
     const { openModal: openModalProductAdd } = useModal("product-modal")
     const { openModal: openModalCitiesAdd } = useModal("cities-modal")
     const { openModal: openModalCustomerAdd } = useModal("customer-modal")
@@ -53,24 +79,35 @@ function WholeLoad() {
 
     const { data: dataContainer, isLoading: isLoadingContainer } =
         useGet<ContainerResults>(CONTAINER_TYPE, {
-            params: { page_size: 50 },
+            params: { page_size: 50, search: search.container },
         })
     const { data: dataTransport, isLoading: isLoadingTransport } =
         useGet<TransportResults>(TRANSPORT, {
-            params: { page_size: 50 },
+            params: { page_size: 50, search: search.transport },
         })
-    const { data: dataUsers, isLoading: isLoadinaUsers } =
+    const { data: dataUsers, isLoading: isLoadingUsers } =
         useGet<CustomersTypeResults>(USERS, {
-            params: { page_size: 50 },
+            params: { page_size: 50, role: 3, search: search.customer },
+        })
+    const { data: dataLogist, isLoading: isLoadingLogist } =
+        useGet<CustomersTypeResults>(USERS, {
+            params: { page_size: 50, role: 2, search: search.agents },
         })
     const { data: dataCities, isLoading: isLoadingCities } =
         useGet<CitiesResults>(REGION, {
-            params: { page_size: 50 },
+            params: { page_size: 50, search: search.cities },
         })
     const { data: dataProducts, isLoading: isLoadingProducts } =
         useGet<ProductResults>(PRODUCT, {
-            params: { page_size: 50 },
+            params: { page_size: 50, search: searchProducts },
         })
+    const { mutate, isPending } = usePost({
+        onSuccess: () => {
+            toast.success("Muvaffaqiyat yaratildi")
+            form.reset()
+            navigate({ to: "/" })
+        },
+    })
 
     const form = useForm<FormValues>({
         defaultValues: {
@@ -78,10 +115,10 @@ function WholeLoad() {
             agents: [],
             containers: [
                 {
-                    container_type: 15,
-                    quality: 1,
-                    transport: 14,
-                    load_date: "2025-05-22",
+                    container_type: null,
+                    quality: null,
+                    transport: null,
+                    load_date: "",
                     loads: [
                         {
                             loading_address: "",
@@ -92,8 +129,8 @@ function WholeLoad() {
                             product_weight: null,
                         },
                     ],
-                    destination_address: "Toshkent shahar",
-                    destination_region: 17,
+                    destination_address: "",
+                    destination_region: null,
                     comment: null,
                 },
             ],
@@ -112,10 +149,10 @@ function WholeLoad() {
 
     const handleAddContainer = () => {
         appendContainer({
-            container_type: 15,
-            quality: 1,
-            transport: 14,
-            load_date: new Date().toISOString().split("T")[0],
+            container_type: null,
+            quality: null,
+            transport: null,
+            load_date: "",
             loads: [
                 {
                     loading_address: "",
@@ -141,7 +178,15 @@ function WholeLoad() {
     }
 
     const onSubmit = (data: FormValues) => {
+        mutate(CONTAINERS_FULL_CARGO, data)
         console.log(data)
+    }
+
+    const handleChange = (key: string, value: string) => {
+        setSearch((prev) => ({
+            ...prev,
+            [key]: value,
+        }))
     }
 
     return (
@@ -163,7 +208,10 @@ function WholeLoad() {
                             required
                             placeholder="Mijozni tanlang"
                             onAdd={openModalCustomerAdd}
-                            isLoading={isLoadinaUsers}
+                            isLoading={isLoadingUsers}
+                            onSearchChange={(val) =>
+                                handleChange("container", val)
+                            }
                         />
                     </div>
                 </CardContent>
@@ -186,10 +234,14 @@ function WholeLoad() {
                                     placeholder="40 HQ"
                                     onAdd={openModalContainerAdd}
                                     isLoading={isLoadingContainer}
+                                    onSearchChange={(val) =>
+                                        handleChange("container", val)
+                                    }
                                 />
                                 <FormSelect
+                                    options={options}
                                     control={form.control}
-                                    name="name"
+                                    name={`containers.${index}.quality`}
                                     label="Holati"
                                     required
                                 />
@@ -199,11 +251,14 @@ function WholeLoad() {
                                     valueKey="id"
                                     labelKey="name"
                                     control={form.control}
-                                    name="name"
-                                    label="Transport  turi"
+                                    name={`containers.${index}.transport`}
+                                    label="Transport turi"
                                     required
                                     placeholder="Temir yo'l"
                                     onAdd={openModalTransportAdd}
+                                    onSearchChange={(val) =>
+                                        handleChange("transport", val)
+                                    }
                                 />
                                 <div className="w-full">
                                     <FormDatePicker
@@ -220,6 +275,7 @@ function WholeLoad() {
                                     dataProducts={dataProducts}
                                     openModalProductAdd={openModalProductAdd}
                                     isLoadingProducts={isLoadingProducts}
+                                    setSearchProducts={setSearchProducts}
                                 />
 
                                 <FormCombobox
@@ -233,6 +289,9 @@ function WholeLoad() {
                                     isLoading={isLoadingCities}
                                     valueKey="id"
                                     labelKey="name"
+                                    onSearchChange={(val) =>
+                                        handleChange("cities", val)
+                                    }
                                 />
                                 <FormInput
                                     methods={form}
@@ -254,9 +313,7 @@ function WholeLoad() {
                                         onClick={() => copyContainer(index)}
                                         type="button"
                                         className="w-full md:w-1/4"
-                                        icon={
-                                            <Copy  size={18} />
-                                        }
+                                        icon={<Copy size={18} />}
                                     >
                                         Nusxalash
                                     </Button>
@@ -264,15 +321,13 @@ function WholeLoad() {
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            icon={
-                                                  <Trash2 size={18} />
-                                            }
+                                            icon={<Trash2 size={18} />}
                                             className="text-red-500 w-full md:w-1/4 "
                                             onClick={() =>
                                                 handleRemoveContainer(index)
                                             }
                                         >
-                                          O'chirish
+                                            O'chirish
                                         </Button>
                                     )}
                                 </div>
@@ -296,22 +351,29 @@ function WholeLoad() {
                 <CardContent className="space-y-2">
                     <h1>Logist ma'lumotlari</h1>
                     <div className="border border-input p-3 rounded-lg">
-                        <FormCombobox
+                        <FormMultiCombobox
+                            isLoading={isLoadingLogist}
+                            options={dataLogist?.results}
+                            valueKey="id"
+                            labelKey="full_name"
                             control={form.control}
                             name="agents"
                             label="Logistni tanlang"
-                            isLoading={isLoadinaUsers}
                             required
-                            options={dataUsers?.results}
-                            valueKey="id"
-                            returnVal="id"
-                            labelKey="full_name"
+                            onSearchChange={(val) =>
+                                handleChange("agents", val)
+                            }
                         />
                     </div>
                 </CardContent>
             </Card>
 
-            <Button type="submit" className="sm:w-max w-full px-20 float-end">
+            <Button
+                disabled={isPending}
+                loading={isPending}
+                type="submit"
+                className="sm:w-max w-full px-20 float-end"
+            >
                 Saqlash
             </Button>
         </form>
@@ -325,6 +387,7 @@ interface Props {
     form: UseFormReturn<FormValues>
     dataProducts: ProductResults | undefined
     openModalProductAdd: () => void
+    setSearchProducts: (val: string) => void
     isLoadingProducts: boolean
 }
 
@@ -334,6 +397,7 @@ const ContainerFields: FC<Props> = ({
     dataProducts,
     openModalProductAdd,
     isLoadingProducts,
+    setSearchProducts,
 }) => {
     const { control } = form
     const { fields, append, remove, insert } = useFieldArray({
@@ -394,15 +458,16 @@ const ContainerFields: FC<Props> = ({
                             required
                             onAdd={openModalProductAdd}
                             isLoading={isLoadingProducts}
+                            onSearchChange={setSearchProducts}
                         />
-                        <FormInput
-                            methods={form}
+                        <FormNumberInput
+                            control={form.control}
                             name={`containers.${nestIndex}.loads.${loadIndex}.product_weight`}
                             label="Mahsulot vazni"
                             required
                         />
-                        <FormInput
-                            methods={form}
+                        <FormNumberInput
+                            control={form.control}
                             name={`containers.${nestIndex}.loads.${loadIndex}.product_volume`}
                             label="Mahsulot hajmi"
                             required

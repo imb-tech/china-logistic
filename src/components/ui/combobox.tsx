@@ -50,7 +50,7 @@ export function Combobox<T extends Record<string, any>>({
     className,
     isLoading,
     skeletonCount = 5,
-    onSearchChange
+    onSearchChange,
 }: ComboboxProps<T>) {
     const [open, setOpen] = useState(false)
 
@@ -99,7 +99,7 @@ export function Combobox<T extends Record<string, any>>({
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">
-                <Command>
+                <Command shouldFilter={onSearchChange ? false : true}>
                     <CommandInput
                         onValueChange={(text) => {
                             if (onSearchChange) {
