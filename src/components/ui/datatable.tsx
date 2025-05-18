@@ -143,7 +143,7 @@ export function DataTable<TData>({
             ]
         } else return columns
     }, [actionMenuMode, columns, onDelete, onEdit, onUndo, onView])
-
+ 
     const table = useReactTable({
         data: data || [],
         columns: orderedColumns,

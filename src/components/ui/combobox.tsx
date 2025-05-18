@@ -17,8 +17,9 @@ import { CheckIcon, ChevronsUpDown, Plus, X } from "lucide-react"
 import { ClassNameValue } from "tailwind-merge"
 import { useState } from "react"
 import { Skeleton } from "./skeleton"
+import { DEBOUNCETIME } from "@/constants/default"
 
-type ComboboxProps<T extends Record<string, any>> = {
+export type ComboboxProps<T extends Record<string, any>> = {
     options: T[] | undefined
     value: string | number | null
     setValue: (val: any) => void
@@ -30,8 +31,9 @@ type ComboboxProps<T extends Record<string, any>> = {
     returnVal?: string
     className?: ClassNameValue
     labelKey?: keyof T
-    skeletonCount?: number
     valueKey?: keyof T
+    skeletonCount?: number
+    onSearchChange?: (val: string) => void
 }
 
 export function Combobox<T extends Record<string, any>>({
@@ -48,6 +50,7 @@ export function Combobox<T extends Record<string, any>>({
     className,
     isLoading,
     skeletonCount = 5,
+    onSearchChange
 }: ComboboxProps<T>) {
     const [open, setOpen] = useState(false)
 
@@ -69,14 +72,14 @@ export function Combobox<T extends Record<string, any>>({
                     variant="outline"
                     role="combobox"
                     className={cn(
-                        "w-full justify-between bg-background px-2 hover:bg-background font-normal text-gray-400 hover:text-gray-400",
+                        "w-full justify-between bg-background   px-2 hover:bg-background font-normal text-gray-400 hover:text-gray-400",
                         value && "font-medium text-foreground",
                         isError && " border-destructive",
                         className,
                     )}
                     disabled={disabled}
                 >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 ">
                         <ChevronsUpDown className=" h-4 w-4  text-primary opacity-50 " />
                         {value
                             ? options
@@ -97,7 +100,16 @@ export function Combobox<T extends Record<string, any>>({
             </PopoverTrigger>
             <PopoverContent className="p-0">
                 <Command>
-                    <CommandInput placeholder={label} />
+                    <CommandInput
+                        onValueChange={(text) => {
+                            if (onSearchChange) {
+                                setTimeout(() => {
+                                    onSearchChange(text)
+                                }, DEBOUNCETIME)
+                            }
+                        }}
+                        placeholder={label}
+                    />
                     {!!value && (
                         <span className="absolute cursor-pointer text-destructive top-1.5 right-1 p-1">
                             <X
@@ -127,22 +139,20 @@ export function Combobox<T extends Record<string, any>>({
                                 </CommandItem>
                             ))}
 
-                            {isLoading
-                                ? <div className="space-y-1">
-                                    {
-                                        Array.from({ length: skeletonCount }).map(
-                                      (_, index) => (
-                                          <CommandItem
-                                              key={index}
-                                              className="p-0"
-                                          >
-                                              <Skeleton className="w-full h-7" />
-                                          </CommandItem>
-                                      ),
-                                  )
-                                    }
+                            {isLoading ? (
+                                <div className="space-y-1">
+                                    {Array.from({ length: skeletonCount }).map(
+                                        (_, index) => (
+                                            <CommandItem
+                                                key={index}
+                                                className="p-0"
+                                            >
+                                                <Skeleton className="w-full h-7" />
+                                            </CommandItem>
+                                        ),
+                                    )}
                                 </div>
-                                : null}
+                            ) : null}
                         </CommandGroup>
                     </CommandList>
                 </Command>

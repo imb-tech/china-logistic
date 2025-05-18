@@ -14,13 +14,37 @@ import {
 } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
-import { Copy } from "lucide-react"
-import { useForm } from "react-hook-form"
+import { cn } from "@/lib/utils"
+import { Copy, Plus, Trash2 } from "lucide-react"
+import { FC } from "react"
+import { useFieldArray, useForm, UseFormReturn } from "react-hook-form"
 
-type FormType = {}
+interface Load {
+    loading_address: string
+    loading_address_url: string
+    product: number | null
+    product_quantity: number | null
+    product_volume: number | null
+    product_weight: number | null
+}
 
+interface Container {
+    container_type: number
+    quality: number
+    transport: number
+    load_date: string
+    loads: Load[]
+    destination_address: string
+    destination_region: number
+    comment: string | null
+}
+
+interface FormValues {
+    customer: number | null
+    agents: number[]
+    containers: Container[]
+}
 function WholeLoad() {
-    const form = useForm()
     const { openModal: openModalProductAdd } = useModal("product-modal")
     const { openModal: openModalCitiesAdd } = useModal("cities-modal")
     const { openModal: openModalCustomerAdd } = useModal("customer-modal")
@@ -48,7 +72,77 @@ function WholeLoad() {
             params: { page_size: 50 },
         })
 
-    const onSubmit = () => {}
+    const form = useForm<FormValues>({
+        defaultValues: {
+            customer: null,
+            agents: [],
+            containers: [
+                {
+                    container_type: 15,
+                    quality: 1,
+                    transport: 14,
+                    load_date: "2025-05-22",
+                    loads: [
+                        {
+                            loading_address: "",
+                            loading_address_url: "",
+                            product: null,
+                            product_quantity: null,
+                            product_volume: null,
+                            product_weight: null,
+                        },
+                    ],
+                    destination_address: "Toshkent shahar",
+                    destination_region: 17,
+                    comment: null,
+                },
+            ],
+        },
+    })
+
+    const {
+        fields: fieldsContainer,
+        append: appendContainer,
+        remove: removeContainer,
+        insert: insertContainer,
+    } = useFieldArray({
+        control: form.control,
+        name: "containers",
+    })
+
+    const handleAddContainer = () => {
+        appendContainer({
+            container_type: 15,
+            quality: 1,
+            transport: 14,
+            load_date: new Date().toISOString().split("T")[0],
+            loads: [
+                {
+                    loading_address: "",
+                    loading_address_url: "",
+                    product: null,
+                    product_quantity: null,
+                    product_volume: null,
+                    product_weight: null,
+                },
+            ],
+            destination_address: "",
+            destination_region: 0,
+            comment: null,
+        })
+    }
+    const copyContainer = (index: number) => {
+        const containerToCopy = form.getValues(`containers.${index}`)
+        insertContainer(index + 1, containerToCopy)
+    }
+
+    const handleRemoveContainer = (index: number) => {
+        removeContainer(index)
+    }
+
+    const onSubmit = (data: FormValues) => {
+        console.log(data)
+    }
 
     return (
         <form
@@ -64,7 +158,7 @@ function WholeLoad() {
                             valueKey="id"
                             labelKey="full_name"
                             control={form.control}
-                            name="name"
+                            name="customer"
                             label="Mijozni ismi"
                             required
                             placeholder="Mijozni tanlang"
@@ -76,127 +170,124 @@ function WholeLoad() {
             </Card>
 
             <Card>
-                <CardContent className="space-y-2">
-                    <h1>Konteyner #1</h1>
-                    <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1  gap-4 rounded-lg p-3 dark:bg-card dark:border bg-slate-100">
-                        <FormCombobox
-                            options={dataContainer?.results}
-                            valueKey="id"
-                            labelKey="name"
-                            control={form.control}
-                            name="name"
-                            label="Konteyner turi"
-                            required
-                            placeholder="40 HQ"
-                            onAdd={openModalContainerAdd}
-                            isLoading={isLoadingContainer}
-                        />
-                        <FormSelect
-                            control={form.control}
-                            name="name"
-                            label="Holati"
-                            required
-                        />
-                        <FormCombobox
-                            options={dataTransport?.results}
-                            isLoading={isLoadingTransport}
-                            valueKey="id"
-                            labelKey="name"
-                            control={form.control}
-                            name="name"
-                            label="Transport  turi"
-                            required
-                            placeholder="Temir yo'l"
-                            onAdd={openModalTransportAdd}
-                        />
-                        <FormDatePicker
-                            control={form.control}
-                            name="name"
-                            label="Yuklash sanasi"
-                            required
-                        />
-
-                        <div className="space-y-2 col-span-4">
-                            <h1>Mahsulot #1</h1>
-                            <div className=" grid lg:grid-cols-5 sm:grid-cols-2 grid-cols-1  gap-4  rounded-lg p-3 dark:bg-card dark:border bg-slate-200">
-                                <FormInput
-                                    methods={form}
-                                    name="name"
-                                    label="Yuklash manzili"
+                <CardContent className="space-y-4">
+                    {fieldsContainer.map((container, index) => (
+                        <div className="space-y-2" key={container.id}>
+                            <h1>Konteyner #{index + 1}</h1>
+                            <div className="grid lg:grid-cols-4  sm:grid-cols-2 grid-cols-1  gap-4 rounded-lg p-3 dark:bg-card dark:border bg-slate-100">
+                                <FormCombobox
+                                    options={dataContainer?.results}
+                                    valueKey="id"
+                                    labelKey="name"
+                                    control={form.control}
+                                    name={`containers.${index}.container_type`}
+                                    label="Konteyner turi"
                                     required
-                                    placeholder="Joy nomi"
+                                    placeholder="40 HQ"
+                                    onAdd={openModalContainerAdd}
+                                    isLoading={isLoadingContainer}
                                 />
-                                <FormInput
-                                    methods={form}
-                                    type="url"
+                                <FormSelect
+                                    control={form.control}
                                     name="name"
-                                    label="Yuklash manzili (URL)"
+                                    label="Holati"
                                     required
-                                    placeholder="Joylashuv (URL from map)"
                                 />
                                 <FormCombobox
-                                    options={dataProducts?.results}
+                                    options={dataTransport?.results}
+                                    isLoading={isLoadingTransport}
                                     valueKey="id"
                                     labelKey="name"
                                     control={form.control}
                                     name="name"
-                                    label="Mahsulot nomi"
+                                    label="Transport  turi"
                                     required
-                                    onAdd={openModalProductAdd}
-                                    isLoading={isLoadingProducts}
+                                    placeholder="Temir yo'l"
+                                    onAdd={openModalTransportAdd}
+                                />
+                                <div className="w-full">
+                                    <FormDatePicker
+                                        control={form.control}
+                                        name={`containers.${index}.load_date`}
+                                        label="Yuklash sanasi"
+                                        required
+                                    />
+                                </div>
+
+                                <ContainerFields
+                                    nestIndex={index}
+                                    form={form}
+                                    dataProducts={dataProducts}
+                                    openModalProductAdd={openModalProductAdd}
+                                    isLoadingProducts={isLoadingProducts}
+                                />
+
+                                <FormCombobox
+                                    label="Yetkazib berish shahri"
+                                    control={form.control}
+                                    name={`containers.${index}.destination_region`}
+                                    placeholder="Shahar"
+                                    required
+                                    onAdd={openModalCitiesAdd}
+                                    options={dataCities?.results}
+                                    isLoading={isLoadingCities}
+                                    valueKey="id"
+                                    labelKey="name"
                                 />
                                 <FormInput
                                     methods={form}
-                                    name="name"
-                                    label="Mahsulot vazni"
+                                    name={`containers.${index}.destination_address`}
+                                    label="Yetkazib berish manzili"
                                     required
-                                    placeholder="26 tonna"
                                 />
-                                <FormInput
+                                <FormTextarea
                                     methods={form}
-                                    name="name"
-                                    label="Mahsulot hajmi"
+                                    name={`containers.${index}.comment`}
+                                    label="Izoh"
                                     required
-                                    placeholder="68 Kb"
+                                    placeholder="Izoh..."
+                                    wrapperClassName="lg:col-span-4 sm:col-span-2"
+                                    rows={4}
                                 />
+                                <div className="sm:col-span-2 lg:col-span-4 flex justify-end gap-4">
+                                    <Button
+                                        onClick={() => copyContainer(index)}
+                                        type="button"
+                                        className="w-full md:w-1/4"
+                                        icon={
+                                            <Copy  size={18} />
+                                        }
+                                    >
+                                        Nusxalash
+                                    </Button>
+                                    {fieldsContainer.length > 1 && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            icon={
+                                                  <Trash2 size={18} />
+                                            }
+                                            className="text-red-500 w-full md:w-1/4 "
+                                            onClick={() =>
+                                                handleRemoveContainer(index)
+                                            }
+                                        >
+                                          O'chirish
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
                         </div>
-
-                        <FormCombobox
-                            control={form.control}
-                            name="name"
-                            label="Yetkazib berish shahri"
-                            placeholder="Shahar"
-                            required
-                            onAdd={openModalCitiesAdd}
-                            options={dataCities?.results}
-                            isLoading={isLoadingCities}
-                            valueKey="id"
-                            labelKey="name"
-                        />
-                        <FormInput
-                            methods={form}
-                            name="name"
-                            label="Yetkazib berish manzili"
-                            required
-                        />
-                        <FormTextarea
-                            methods={form}
-                            name="name"
-                            label="Izoh"
-                            required
-                            placeholder="Izoh..."
-                            wrapperClassName="col-span-4"
-                            rows={4}
-                        />
-                        <div className="col-span-4 flex justify-end">
-                            <Button
-                                className="px-14"
-                                icon={<Copy className="mr-1" size={18} />}
-                            >
-                                Nusxalash
-                            </Button>
-                        </div>
+                    ))}
+                    <div className="flex justify-center mt-5">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="rounded-full md:min-h-20 md:min-w-20 h-14 w-14  bg-slate-100 dark:bg-background "
+                            onClick={handleAddContainer}
+                        >
+                            <Plus className="md:h-11 md:w-11 min-w-8 min-h-8 p-1 dark:text-white rounded-full hover:bg-muted" />
+                        </Button>
                     </div>
                 </CardContent>
             </Card>
@@ -207,12 +298,13 @@ function WholeLoad() {
                     <div className="border border-input p-3 rounded-lg">
                         <FormCombobox
                             control={form.control}
-                            name="name"
+                            name="agents"
                             label="Logistni tanlang"
                             isLoading={isLoadinaUsers}
                             required
                             options={dataUsers?.results}
                             valueKey="id"
+                            returnVal="id"
                             labelKey="full_name"
                         />
                     </div>
@@ -227,3 +319,129 @@ function WholeLoad() {
 }
 
 export default WholeLoad
+
+interface Props {
+    nestIndex: number
+    form: UseFormReturn<FormValues>
+    dataProducts: ProductResults | undefined
+    openModalProductAdd: () => void
+    isLoadingProducts: boolean
+}
+
+const ContainerFields: FC<Props> = ({
+    nestIndex,
+    form,
+    dataProducts,
+    openModalProductAdd,
+    isLoadingProducts,
+}) => {
+    const { control } = form
+    const { fields, append, remove, insert } = useFieldArray({
+        control,
+        name: `containers.${nestIndex}.loads` as const,
+    })
+
+    const handleAddLoad = () => {
+        append({
+            loading_address: "",
+            loading_address_url: "",
+            product: null,
+            product_quantity: null,
+            product_volume: null,
+            product_weight: null,
+        })
+    }
+
+    const copyLoad = (index: number) => {
+        const loadToCopy = form.getValues(
+            `containers.${nestIndex}.loads.${index}`,
+        )
+        insert(index + 1, loadToCopy)
+    }
+
+    const handleRemoveLoad = (index: number) => {
+        remove(index)
+    }
+
+    return (
+        <>
+            {fields.map((field, loadIndex) => (
+                <div
+                    key={field.id}
+                    className="relative  rounded-lg p-3 dark:bg-card dark:border bg-slate-200 lg:col-span-4 sm:col-span-2  "
+                >
+                    <div className=" grid xl:grid-cols-6 lg:grid-cols-3  sm:grid-cols-2 grid-cols-1 gap-4 ">
+                        <FormInput
+                            methods={form}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.loading_address`}
+                            label="Yuklash manzili"
+                            required
+                        />
+                        <FormInput
+                            methods={form}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.loading_address_url`}
+                            label="Yuklash manzili (URL)"
+                            type="url"
+                            required
+                        />
+                        <FormCombobox
+                            options={dataProducts?.results}
+                            valueKey="id"
+                            labelKey="name"
+                            control={form.control}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.product`}
+                            label="Mahsulot nomi"
+                            required
+                            onAdd={openModalProductAdd}
+                            isLoading={isLoadingProducts}
+                        />
+                        <FormInput
+                            methods={form}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.product_weight`}
+                            label="Mahsulot vazni"
+                            required
+                        />
+                        <FormInput
+                            methods={form}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.product_volume`}
+                            label="Mahsulot hajmi"
+                            required
+                        />
+                        <div className="flex gap-3 items-end  w-full">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                onClick={() => copyLoad(loadIndex)}
+                                className={"w-full"}
+                            >
+                                <Copy className="h-4 min-w-4" />
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                onClick={handleAddLoad}
+                                className={"w-full"}
+                            >
+                                <Plus className="h-4 min-w-4" />
+                            </Button>
+
+                            {fields.length > 1 && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="icon"
+                                    className="text-red-500 w-full "
+                                    onClick={() => handleRemoveLoad(loadIndex)}
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </>
+    )
+}

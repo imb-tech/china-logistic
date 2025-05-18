@@ -1,6 +1,7 @@
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
 import { Input, InputProps } from "../ui/input"
+import { DEBOUNCETIME } from "@/constants/default"
 
 type ParamInputProps = {
     searchKey?: string
@@ -28,7 +29,7 @@ export default function ParamInput({
                 },
             })
         }
-    }
+    } 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value
@@ -44,7 +45,7 @@ export default function ParamInput({
                     [pageKey]: undefined,
                 },
             })
-        }, 500)
+        }, DEBOUNCETIME)
     }
 
     useEffect(() => {

@@ -3,14 +3,13 @@ import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import { Combobox as ShadcnCombobox } from "@/components/ui/combobox"
 
-type ComboboxProps<T extends Record<string, any>> = {
+ type ComboboxProps<T extends Record<string, any>> = {
     name: string
     label?: string
     placeholder?: string
     options: T[] | undefined
     disabled?: boolean
     required?: boolean
-    setValue?: () => void
     control: Control<any>
     hideError?: boolean
     returnVal?: string
@@ -19,6 +18,7 @@ type ComboboxProps<T extends Record<string, any>> = {
     valueKey?: keyof T
     skeletonCount?: number
     isLoading?: boolean
+    onSearchChange?: (val: string) => void
 }
 
 export function FormCombobox<T extends Record<string, any>>({
@@ -29,7 +29,6 @@ export function FormCombobox<T extends Record<string, any>>({
     placeholder,
     required,
     control,
-    setValue,
     hideError = true,
     returnVal,
     valueKey,
@@ -37,6 +36,7 @@ export function FormCombobox<T extends Record<string, any>>({
     onAdd,
     isLoading,
     skeletonCount,
+    onSearchChange
 }: ComboboxProps<T>) {
     return (
         <fieldset className="flex flex-col w-full">
@@ -61,18 +61,7 @@ export function FormCombobox<T extends Record<string, any>>({
                     <ShadcnCombobox
                         options={options}
                         value={field.value || ""}
-                        setValue={(val) => {
-                            if (
-                                val ==
-                                (returnVal === "label"
-                                    ? "Yangi qo'shish"
-                                    : "other")
-                            ) {
-                                setValue?.()
-                            } else {
-                                field.onChange(val)
-                            }
-                        }}
+                        setValue={field.onChange}
                         label={placeholder || label || "Tanlang"}
                         disabled={control._formState.disabled || disabled}
                         isError={!!control._formState.errors?.[name]}
@@ -82,6 +71,7 @@ export function FormCombobox<T extends Record<string, any>>({
                         labelKey={labelKey}
                         isLoading={isLoading}
                         skeletonCount={skeletonCount}
+                        onSearchChange={onSearchChange}
                     />
                 )}
             />

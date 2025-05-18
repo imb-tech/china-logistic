@@ -1,6 +1,7 @@
 import { FormCombobox } from "@/components/form/combobox"
 import { FormDatePicker } from "@/components/form/date-picker"
 import FormInput from "@/components/form/input"
+import { FormMultiCombobox } from "@/components/form/multi-combobox"
 import { FormSelect } from "@/components/form/select"
 import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
@@ -90,19 +91,14 @@ function BulkCargo() {
         },
     })
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append, remove, insert } = useFieldArray({
         control: form.control,
         name: "clients",
     })
 
-    const watchedFields = form.watch("clients")
-
     const copyClient = (index: number) => {
-        const clientToCopy = watchedFields[index]
-        append({
-            ...clientToCopy,
-            id: Date.now().toString(),
-        })
+        const containerToCopy = form.getValues(`clients.${index}`)
+        insert(index + 1, containerToCopy)
     }
 
     const addNewClient = () => {
@@ -193,7 +189,7 @@ function BulkCargo() {
             <Card>
                 <CardContent className="pt-6 space-y-4">
                     {fields.map((field, index) => (
-                        <div key={field.id} className="space-y-2">
+                        <div key={field.id} className="space-y-4">
                             <h1 className="text-lg font-semibold">
                                 Mijoz #{index + 1}
                             </h1>
@@ -204,7 +200,9 @@ function BulkCargo() {
                                         variant="outline"
                                         size="icon"
                                         onClick={() => copyClient(index)}
-                                        className={fields.length > 1 ? "" : "px-12"}
+                                        className={
+                                            fields.length > 1 ? "" : "px-12"
+                                        }
                                     >
                                         <Copy className="h-4 min-w-4" />
                                     </Button>
@@ -232,7 +230,7 @@ function BulkCargo() {
                                         required
                                     />
                                 </div>
-                                <div className="grid lg:grid-cols-5 sm:grid-cols-2 grid-cols-1 gap-4 lg:pr-28 sm:pb-0 pb-16">
+                                <div className="grid xl:grid-cols-5 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 xl:pr-28 sm:pb-0 pb-16">
                                     <FormInput
                                         methods={form}
                                         name={`clients.${index}.loading_address`}
@@ -285,7 +283,7 @@ function BulkCargo() {
                             className="rounded-full md:min-h-20 md:min-w-20 h-14 w-14  bg-slate-100 dark:bg-background "
                             onClick={addNewClient}
                         >
-                            <Plus className="md:h-11 md:w-11 min-w-8 min-h-8 dark:text-white" />
+                            <Plus className="md:h-11 md:w-11 min-w-8 min-h-8 p-1 dark:text-white rounded-full hover:bg-muted" />
                         </Button>
                     </div>
                 </CardContent>
@@ -325,7 +323,7 @@ function BulkCargo() {
                             rows={5}
                         />
                         <div className="lg:col-span-4 sm:col-span-2">
-                            <FormCombobox
+                            <FormMultiCombobox
                                 isLoading={isLoadingUsers}
                                 options={dataUsers?.results}
                                 valueKey="id"

@@ -14,32 +14,36 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { useNavigate, useSearch } from "@tanstack/react-router"
-import { CheckIcon, ChevronsUpDown, Plus, X } from "lucide-react"
+import { CheckIcon, ChevronsUpDown, X } from "lucide-react"
 import { useEffect, useState } from "react"
 
-export function ParamCombobox({
-    options,
-    paramName,
-    label,
-    disabled,
-    addNew,
-    isError,
-    returnVal = "label",
-    className,
-    asloClear,
-    defaultOpt,
-}: {
-    options: Item[] | undefined
+type ParamComboboxProps<T extends Record<string, any>> = {
+    options: T[]
     paramName: string
     label?: string
     disabled?: boolean
-    addNew?: boolean
+    labelKey: keyof T
+    valueKey: keyof T
     isError?: boolean
-    returnVal?: "value" | "label"
+    returnVal?: keyof T
     className?: string
     asloClear?: string[]
-    defaultOpt?: Item
-}) {
+    defaultOpt?: T
+}
+
+export function ParamCombobox<T extends Record<string, any>>({
+    options,
+    paramName,
+    label,
+    disabled = false,
+    isError = false,
+    returnVal = "label" as keyof T,
+    className,
+    asloClear = [],
+    defaultOpt,
+    labelKey,
+    valueKey,
+}: ParamComboboxProps<T>) {
     const navigate = useNavigate()
     const search: any = useSearch({ from: "/_main" }) as Record<
         string,
@@ -53,40 +57,41 @@ export function ParamCombobox({
             navigate({
                 search: {
                     ...search,
-                    [paramName]: defaultOpt[returnVal],
+                    [paramName]: String(defaultOpt[returnVal]),
                 },
             })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultOpt])
 
-    const handleSelect = (option: Item) => {
-        const val = returnVal === "label" ? option.label : option.value
+    const handleSelect = (option: T) => {
+        const returnValue =
+            returnVal === labelKey ? option[labelKey] : option[valueKey]
+
         navigate({
             search: {
                 ...search,
-                [paramName]: val == currentValue ? undefined : val,
+                [paramName]:
+                    String(returnValue) === currentValue
+                        ? undefined
+                        : String(returnValue),
             },
         })
         setOpen(false)
     }
 
     const handleCancel = () => {
-        navigate({ search: { ...search, [paramName]: undefined } })
-        asloClear?.forEach((param) => {
-            navigate({ search: { ...search, [param]: undefined } })
+        const updatedSearch = { ...search, [paramName]: undefined }
+        asloClear.forEach((param) => {
+            updatedSearch[param] = undefined
         })
+        navigate({ search: updatedSearch })
         setOpen(false)
     }
 
-    const sortedOptions = options?.sort((a, b) => {
-        const isASelected = a[returnVal] == currentValue
-        const isBSelected = b[returnVal] == currentValue
-        return (
-            isASelected === isBSelected ? 0
-            : isASelected ? -1
-            : 1
-        )
-    })
+    const selectedOption = options.find(
+        (d) => String(d[returnVal]) === currentValue,
+    )
 
     return (
         <Popover modal open={open} onOpenChange={setOpen}>
@@ -103,10 +108,7 @@ export function ParamCombobox({
                     )}
                     disabled={disabled}
                 >
-                    {currentValue ?
-                        options?.find((d) => d[returnVal] === currentValue)
-                            ?.label || currentValue
-                    :   label}
+                    {selectedOption?.[labelKey] ?? label}
                     <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -114,7 +116,7 @@ export function ParamCombobox({
                 <Command>
                     <div className="relative">
                         <CommandInput placeholder={label} />
-                        {!!currentValue && (
+                        {currentValue && (
                             <span className="absolute cursor-pointer text-destructive top-1.5 right-1 p-1">
                                 <X
                                     className="text-destructive"
@@ -127,48 +129,31 @@ export function ParamCombobox({
                     <CommandList>
                         <CommandEmpty>Mavjud emas</CommandEmpty>
                         <CommandGroup>
-                            {sortedOptions?.map((d, i) => (
-                                <CommandItem
-                                    key={i}
-                                    onSelect={() => handleSelect(d)}
-                                    className="text-nowrap"
-                                >
-                                    {d.label}
-                                    <CheckIcon
-                                        className={cn(
-                                            "ml-auto h-4 w-4",
-                                            currentValue === d[returnVal] ?
-                                                "opacity-100"
-                                            :   "opacity-0",
-                                        )}
-                                    />
-                                </CommandItem>
-                            ))}
-                            {addNew && (
-                                <CommandItem
-                                    onSelect={() =>
-                                        handleSelect({
-                                            label: "New Item",
-                                            value: -1,
-                                        })
-                                    }
-                                >
-                                    <Plus width={20} className="pr-1" /> Yangi
-                                    qo'shish
-                                    <CheckIcon
-                                        className={cn("ml-auto h-4 w-4")}
-                                    />
-                                </CommandItem>
-                            )}
+                            {options.map((d, i) => {
+                                const optionValue = d[returnVal]
+                                return (
+                                    <CommandItem
+                                        key={i}
+                                        onSelect={() => handleSelect(d)}
+                                        className="text-nowrap"
+                                    >
+                                        {d[labelKey]}
+                                        <CheckIcon
+                                            className={cn(
+                                                "ml-auto h-4 w-4",
+                                                String(currentValue) ===
+                                                    String(optionValue)
+                                                    ? "opacity-100"
+                                                    : "opacity-0",
+                                            )}
+                                        />
+                                    </CommandItem>
+                                )
+                            })}
                         </CommandGroup>
                     </CommandList>
                 </Command>
             </PopoverContent>
         </Popover>
     )
-}
-
-type Item = {
-    label: string | number
-    value: string | number | undefined
 }

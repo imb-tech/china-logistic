@@ -3,7 +3,25 @@ import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import { MultiCombobox as ShadcnCombobox } from "@/components/ui/multi-combobox"
 
-export function FormMultiCombobox({
+type ComboboxProps<T extends Record<string, any>> = {
+    name: string
+    label?: string
+    placeholder?: string
+    options: T[] | undefined
+    disabled?: boolean
+    required?: boolean
+    control: Control<any>
+    hideError?: boolean
+    returnVal?: string
+    onAdd?: () => void
+    labelKey?: keyof T
+    valueKey?: keyof T
+    skeletonCount?: number
+    isLoading?: boolean
+    onSearchChange?: (val: string) => void
+}
+
+export function FormMultiCombobox<T extends Record<string, any>>({
     name,
     label,
     options,
@@ -12,8 +30,14 @@ export function FormMultiCombobox({
     required,
     control,
     hideError = true,
-    returnVal = "label",
-}: thisProps) {
+    returnVal,
+    valueKey,
+    labelKey,
+    onAdd,
+    isLoading,
+    skeletonCount,
+    onSearchChange
+}: ComboboxProps<T>) {
     return (
         <div>
             {label && (
@@ -31,15 +55,21 @@ export function FormMultiCombobox({
                 render={({ field }) => (
                     <div className="pt-0.5">
                         <ShadcnCombobox
-                            data={options}
+                            options={options}
                             values={field.value}
                             setValues={field.onChange}
-                            label={placeholder || label || "Select an option"}
+                            label={placeholder || label || "Tanlang"}
                             disabled={control._formState.disabled || disabled}
                             isError={
                                 !label && !!control._formState.errors?.[name]
                             }
                             returnVal={returnVal}
+                            onAdd={onAdd}
+                            valueKey={valueKey}
+                            labelKey={labelKey}
+                            isLoading={isLoading}
+                            skeletonCount={skeletonCount}
+                            onSearchChange={onSearchChange}
                         />
                     </div>
                 )}
@@ -51,16 +81,4 @@ export function FormMultiCombobox({
             )}
         </div>
     )
-}
-
-interface thisProps {
-    name: string
-    label?: string
-    placeholder?: string
-    options: { label: string | number; value: string | number }[] | undefined
-    disabled?: boolean
-    required?: boolean
-    control: Control<any>
-    hideError?: boolean
-    returnVal?: "value" | "label"
 }
