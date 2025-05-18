@@ -30,13 +30,13 @@ export function FormMultiCombobox<T extends Record<string, any>>({
     required,
     control,
     hideError = true,
-    returnVal="id",
+    returnVal = "id",
     valueKey,
     labelKey,
     onAdd,
     isLoading,
     skeletonCount,
-    onSearchChange
+    onSearchChange,
 }: ComboboxProps<T>) {
     return (
         <div>
@@ -52,6 +52,11 @@ export function FormMultiCombobox<T extends Record<string, any>>({
             <Controller
                 name={name}
                 control={control}
+                rules={
+                    required
+                        ? { required: `${label || name} to‘ldirilishi shart` }
+                        : {}
+                }
                 render={({ field }) => (
                     <div className="pt-0.5">
                         <ShadcnCombobox
@@ -60,9 +65,7 @@ export function FormMultiCombobox<T extends Record<string, any>>({
                             setValues={field.onChange}
                             label={placeholder || label || "Tanlang"}
                             disabled={control._formState.disabled || disabled}
-                            isError={
-                                !label && !!control._formState.errors?.[name]
-                            }
+                            isError={!!control._formState.errors?.[name]}
                             returnVal={returnVal}
                             onAdd={onAdd}
                             valueKey={valueKey}

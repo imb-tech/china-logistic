@@ -28,18 +28,25 @@ export function FormDatePicker({
             <Controller
                 name={name}
                 control={control}
+                rules={
+                    required
+                        ? { required: `${label || name} to‘ldirilishi shart` }
+                        : {}
+                }
                 render={({ field }) => (
                     <DatePicker
                         calendarProps={{
                             ...calendarProps,
-                            defaultMonth:
-                                field.value ? new Date(field.value) : undefined,
+                            defaultMonth: field.value
+                                ? new Date(field.value)
+                                : undefined,
                         }}
                         date={field.value ? new Date(field.value) : undefined}
                         setDate={field.onChange}
                         placeholder={placeholder || label}
                         disabled={field.disabled || disabled}
                         fullWidth
+                        isError={!!control._formState.errors?.[name]}
                     />
                 )}
             />

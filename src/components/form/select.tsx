@@ -29,12 +29,18 @@ export function FormSelect<T extends Record<string, any>>({
             <Controller
                 name={name}
                 control={control}
+                rules={
+                    required
+                        ? { required: `${label || name} to‘ldirilishi shart` }
+                        : {}
+                }
                 render={({ field }) => (
                     <div className={label ? "pt-[2px]" : ""}>
                         <Select
                             options={options}
                             label={label || "Tanlang"}
                             value={field.value}
+                            className={!!control._formState.errors?.[name] && "border-destructive focus:right-0 "}
                             setValue={(val) =>
                                 val === "other"
                                     ? setValue?.(val)

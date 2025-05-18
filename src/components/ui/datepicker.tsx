@@ -18,6 +18,7 @@ export function DatePicker({
     disabled,
     calendarProps,
     defaultValue,
+    isError
 }: {
     date: Date | any
     setDate: any
@@ -26,6 +27,7 @@ export function DatePicker({
     disabled?: boolean
     calendarProps?: CalendarProps | undefined
     defaultValue?: Date
+    isError?:boolean
 }) {
     return (
         <Popover>
@@ -36,6 +38,7 @@ export function DatePicker({
                         "w-[280px] justify-start text-left font-normal",
                         !date && "text-muted-foreground",
                         fullWidth && "w-full",
+                        isError && "border-destructive"
                     )}
                     disabled={disabled}
                 >
