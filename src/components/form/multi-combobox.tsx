@@ -2,6 +2,7 @@ import { Controller, Control } from "react-hook-form"
 import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import { MultiCombobox as ShadcnCombobox } from "@/components/ui/multi-combobox"
+import { getNestedValue } from "./input"
 
 type ComboboxProps<T extends Record<string, any>> = {
     name: string
@@ -38,13 +39,14 @@ export function FormMultiCombobox<T extends Record<string, any>>({
     skeletonCount,
     onSearchChange,
 }: ComboboxProps<T>) {
+    const error = getNestedValue(control._formState.errors, name)
     return (
         <div>
             {label && (
                 <FieldLabel
                     htmlFor={name}
                     required={!!required}
-                    isError={!!control._formState.errors?.[name]}
+                    isError={!!error}
                 >
                     {label}
                 </FieldLabel>
@@ -54,7 +56,7 @@ export function FormMultiCombobox<T extends Record<string, any>>({
                 control={control}
                 rules={
                     required
-                        ? { required: `${label || name} to‘ldirilishi shart` }
+                        ? { required: `${label || name}ni kiriting` }
                         : {}
                 }
                 render={({ field }) => (
@@ -65,7 +67,7 @@ export function FormMultiCombobox<T extends Record<string, any>>({
                             setValues={field.onChange}
                             label={placeholder || label || "Tanlang"}
                             disabled={control._formState.disabled || disabled}
-                            isError={!!control._formState.errors?.[name]}
+                            isError={!!error}
                             returnVal={returnVal}
                             onAdd={onAdd}
                             valueKey={valueKey}
@@ -77,7 +79,7 @@ export function FormMultiCombobox<T extends Record<string, any>>({
                     </div>
                 )}
             />
-            {!hideError && control._formState.errors?.[name] && (
+            {!hideError && error && (
                 <FieldError>
                     {control._formState.errors[name]?.message as string}
                 </FieldError>

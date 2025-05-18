@@ -2,6 +2,7 @@ import { Controller, Control } from "react-hook-form"
 import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import Select from "../ui/select"
+import { getNestedValue } from "./input"
 
 export function FormSelect<T extends Record<string, any>>({
     name,
@@ -15,13 +16,14 @@ export function FormSelect<T extends Record<string, any>>({
     labelKey,
     hideError = true,
 }: thisProps<T>) {
+    const error = getNestedValue(control._formState.errors, name)
     return (
         <div className="w-full">
             {label && (
                 <FieldLabel
                     htmlFor={name}
                     required={!!required}
-                    isError={!!control._formState.errors?.[name]}
+                    isError={!!error}
                 >
                     {label}
                 </FieldLabel>
@@ -30,9 +32,7 @@ export function FormSelect<T extends Record<string, any>>({
                 name={name}
                 control={control}
                 rules={
-                    required
-                        ? { required: `${label || name} to‘ldirilishi shart` }
-                        : {}
+                    required ? { required: `${label || name}ni kiriting` } : {}
                 }
                 render={({ field }) => (
                     <div className={label ? "pt-[2px]" : ""}>
@@ -40,7 +40,10 @@ export function FormSelect<T extends Record<string, any>>({
                             options={options}
                             label={label || "Tanlang"}
                             value={field.value}
-                            className={!!control._formState.errors?.[name] && "border-destructive focus:right-0 "}
+                            className={
+                                !!error &&
+                                "border-destructive focus:right-0 "
+                            }
                             setValue={(val) =>
                                 val === "other"
                                     ? setValue?.(val)
@@ -53,7 +56,7 @@ export function FormSelect<T extends Record<string, any>>({
                     </div>
                 )}
             />
-            {!hideError && control._formState.errors?.[name] && (
+            {!hideError && error && (
                 <FieldError>
                     {control._formState.errors[name]?.message as string}
                 </FieldError>

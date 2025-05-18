@@ -1,4 +1,3 @@
-import Header from "@/components/header"
 import {
     createFileRoute,
     Outlet,
@@ -26,8 +25,8 @@ function MainLayout() {
     }, [pathname])
 
     return (
-        <SidebarProvider>
-            <AppSidebar /> 
+        <SidebarProvider   defaultOpen={false}>
+            <AppSidebar />
             <SidebarInset>
                 <Outlet />
             </SidebarInset>

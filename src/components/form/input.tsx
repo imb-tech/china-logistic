@@ -9,6 +9,7 @@ import { ClassNameValue } from "tailwind-merge"
 import { Input } from "../ui/input"
 import FieldError from "./form-error"
 import FieldLabel from "./form-label"
+import { useEffect } from "react"
 
 interface IProps<IForm extends FieldValues> {
     methods: UseFormReturn<IForm>
@@ -22,6 +23,10 @@ interface IProps<IForm extends FieldValues> {
     uppercase?: boolean // Added new prop
 }
 
+export function getNestedValue(obj: any, path: string): any {
+    return path.split(".").reduce((acc, key) => acc?.[key], obj)
+}
+
 export function FormInput<IForm extends FieldValues>({
     methods,
     name,
@@ -32,7 +37,7 @@ export function FormInput<IForm extends FieldValues>({
     className,
     type = "text",
     hideError = true,
-    uppercase = false, // Default value false
+    uppercase = false,
     ...props
 }: IProps<IForm> & React.InputHTMLAttributes<HTMLInputElement>) {
     const {
@@ -40,14 +45,13 @@ export function FormInput<IForm extends FieldValues>({
         formState: { errors },
     } = methods
 
+    const error = getNestedValue(errors, name)
+
     const reg = register(name, {
-        required: {
-            value: required,
-            message: methods.formState.errors[name]?.message as any,
-        },
+        required: required ? `${label}ni kiriting` : false,
         ...(uppercase && {
             setValueAs: (value: string) => value?.toUpperCase(),
-        }), // Transform value to uppercase if uppercase is true
+        }),
         ...registerOptions,
     })
 
@@ -57,11 +61,11 @@ export function FormInput<IForm extends FieldValues>({
                 <FieldLabel
                     htmlFor={name}
                     required={required}
-                    isError={!!errors?.[name]}
+                    isError={error}
                 >
                     {label}
                 </FieldLabel>
-            )} 
+            )}
             <Input
                 type={type}
                 placeholder={props.placeholder || label}
@@ -70,15 +74,15 @@ export function FormInput<IForm extends FieldValues>({
                 id={name}
                 fullWidth
                 className={cn(
-                    !!errors?.[name] && label
+                   error && label
                         ? "border-destructive focus:border-border !ring-destructive"
                         : "",
                     uppercase && "uppercase placeholder:capitalize", // Add uppercase class for visual feedback
                     className,
                 )}
             />
-            {!hideError && errors[name] && (
-                <FieldError>{errors[name]?.message as string}</FieldError>
+            {!hideError && error.message && (
+                <FieldError>{error.message?.message as string}</FieldError>
             )}
         </fieldset>
     )

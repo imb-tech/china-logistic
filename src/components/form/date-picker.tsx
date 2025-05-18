@@ -3,6 +3,7 @@ import { Control, Controller } from "react-hook-form"
 import { CalendarProps } from "../ui/calendar"
 import FieldError from "./form-error"
 import FieldLabel from "./form-label"
+import { getNestedValue } from "./input"
 
 export function FormDatePicker({
     name,
@@ -14,11 +15,12 @@ export function FormDatePicker({
     hideError = true,
     placeholder,
 }: thisProps) {
+    const error = getNestedValue(control._formState.errors, name)
     return (
         <div className="flex flex-col">
             {label && (
                 <FieldLabel
-                    isError={!!control._formState.errors?.[name]}
+                    isError={!!error}
                     htmlFor={name}
                     required={required}
                 >
@@ -30,7 +32,7 @@ export function FormDatePicker({
                 control={control}
                 rules={
                     required
-                        ? { required: `${label || name} to‘ldirilishi shart` }
+                        ? { required: `${label || name}ni kiriting` }
                         : {}
                 }
                 render={({ field }) => (
@@ -46,7 +48,7 @@ export function FormDatePicker({
                         placeholder={placeholder || label}
                         disabled={field.disabled || disabled}
                         fullWidth
-                        isError={!!control._formState.errors?.[name]}
+                        isError={!!error}
                     />
                 )}
             />

@@ -312,7 +312,7 @@ function WholeLoad() {
                                     <Button
                                         onClick={() => copyContainer(index)}
                                         type="button"
-                                        className="w-full md:w-1/4"
+                                        className="w-full md:w-1/6 bg-emerald-500"
                                         icon={<Copy size={18} />}
                                     >
                                         Nusxalash
