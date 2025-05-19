@@ -32,3 +32,50 @@ type OrdersTypeResults = {
   next: string
   previous: string
 }
+
+type OfferAgent = {
+  id: number;
+  role: number;
+  username: string;
+  full_name: string;
+  phone_code: string;
+  phone_number: string;
+  address: string | null;
+  region: string | null;
+  completed_orders: number;
+  in_completed_orders: number;
+};
+
+type Offers = {
+  id: number;
+  agent: OfferAgent;
+  station: {
+    id: number
+    name: string
+  };
+  load_date: string | null;
+  start_date: string | null;
+  price: number | null;
+  currency: string | null;
+  status: number;
+  container: number;
+}
+
+
+
+type OffersTypeResults = {
+  results: Offers[]
+  next: string
+  previous: string
+}
+
+
+
+type Logs = {
+  id: number
+  status: number
+  agent: any
+  changed_at: string
+  hint: string
+}
+
