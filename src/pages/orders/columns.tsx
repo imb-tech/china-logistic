@@ -1,4 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
+import { format } from "date-fns"
+import { statusColor, statusText } from "."
 
 export const useOrderColumns = (): ColumnDef<OrderType>[] => {
     return [
@@ -8,8 +10,9 @@ export const useOrderColumns = (): ColumnDef<OrderType>[] => {
         },
         {
             header: "Mijoz",
-            accessorKey: "name",
+            accessorKey: "customers",
             enableSorting: true,
+            cell: ({ row }) => row.original.customers.map((item) => item),
         },
         {
             header: "Status",
@@ -18,32 +21,22 @@ export const useOrderColumns = (): ColumnDef<OrderType>[] => {
         },
         {
             header: "Logist",
-            accessorKey: "logist",
+            accessorKey: "agent_full_name",
             enableSorting: true,
+            cell:({row})=>(
+                <span className={statusColor[row.original.status]}>{statusText[row.original.status]}</span>
+            )
         },
         {
             header: "Yaratilgan sana",
             accessorKey: "created_at",
             cell: ({ row }) =>
-                new Date(row.original.created_at).toLocaleString("uz-UZ", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                }),
+                format(row.original.created_at, "yyyy-MM-dd HH:mm"),
         },
         {
             header: "Yetkazish sanasi",
             accessorKey: "deliver_at",
-            cell: ({ row }) =>
-                new Date(row.original.created_at).toLocaleString("uz-UZ", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                }),
+            cell: ({ row }) => format(row.original.load_date, "yyyy-MM-dd"),
         },
     ]
 }

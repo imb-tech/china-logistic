@@ -5,102 +5,55 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import DeleteModal from "@/components/custom/delete-modal"
 import { useModal } from "@/hooks/useModal"
-import { useNavigate } from "@tanstack/react-router"
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { useGet } from "@/hooks/useGet"
+import { CONTAINERS } from "@/constants/api-endpoints"
 
-export const orderData: OrderType[] = [
-    {
-        id: "1",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-    {
-        id: "2",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-    {
-        id: "3",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-    {
-        id: "4",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-    {
-        id: "5",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-    {
-        id: "6",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-    {
-        id: "7",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-    {
-        id: "8",
-        name: "Ozodbek Abdisamatov",
-        deliver_at: "2024-09-25T14:30:00Z",
-        logist: "Ahmadboy Abdurahimov",
-        created_at: "2024-09-25T14:30:00Z",
-        status: "Yaratildi",
-    },
-]
+export const statusColor:{[key:string]:string} ={
+    "10":"text-primary",
+    "20":"text-lime-500",
+    "30":"text-amber-500",
+    "35":"text-purple-500",
+    "40":"text-red-500",
+    "50":"text-green-500",
+}
+
+export const statusText:{[key:string]:string} ={
+    "10":"Yaratildi",
+    "20":"Logist topildi",
+    "30":"Jarayonda",
+    "35":"Yuk omborda",
+    "40":"Favqulotda",
+    "50":"Yakunlandi",
+}
 
 const tab = [
     {
-        value: "1",
+        value: "",
         label: "Barchasi",
     },
     {
-        value: "2",
+        value: "10",
         label: "Yaratildi",
     },
     {
-        value: "3",
+        value: "20",
         label: "Logist topildi",
     },
     {
-        value: "4",
+        value: "30",
         label: "Jarayonda",
     },
     {
-        value: "5",
+        value: "35",
         label: "Yuk omborda",
     },
     {
-        value: "6",
+        value: "40",
         label: "Favqulotda",
     },
     {
-        value: "7",
+        value: "50",
         label: "Yakunlandi",
     },
 ]
@@ -108,10 +61,16 @@ const tab = [
 export const OrdersPages = () => {
     const navigate = useNavigate()
     const { openModal } = useModal("delete-order")
+    const search = useSearch({ from: "/_main/" })
+    const { data, isLoading } = useGet<OrdersTypeResults>(CONTAINERS, {
+        params: { ...search, role: 2 },
+    })
+
+    const columns = useOrderColumns()
     return (
-        <div className="w-full">
+        <div className="w-full ">
             <div className="mb-5 flex justify-between items-center gap-4">
-                <ParamTabs options={tab} />
+                <ParamTabs options={tab} paramName="status" />
                 <Button
                     onClick={() => navigate({ to: "/order-create" })}
                     icon={<Plus size={18} />}
@@ -120,13 +79,10 @@ export const OrdersPages = () => {
                 </Button>
             </div>
             <DataTable
-                columns={useOrderColumns()}
-                data={orderData}
-                paginationProps={{ totalPages: 1 }}
-                // loading={isLoading}
+                columns={columns}
+                data={data?.results}
+                loading={isLoading}
                 onDelete={() => openModal()}
-                onEdit={() => {}}
-                onView={() => {}}
             />
             <DeleteModal modalKey="delete-order" id={1} path="order" />
         </div>

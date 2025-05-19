@@ -4,24 +4,24 @@ import {
     Path,
     RegisterOptions,
     useController,
-} from "react-hook-form";
-import { cn } from "@/lib/utils";
-import { PatternFormat, PatternFormatProps } from "react-number-format";
-import FieldLabel from "./form-label";
-import FieldError from "./form-error";
+} from "react-hook-form"
+import { cn } from "@/lib/utils"
+import { PatternFormat, PatternFormatProps } from "react-number-format"
+import FieldLabel from "./form-label"
+import FieldError from "./form-error"
 
 interface IProps<IForm extends FieldValues> {
-    control: Control<IForm>;
-    name: Path<IForm>;
-    label?: string;
-    required?: boolean;
-    registerOptions?: RegisterOptions<IForm>;
-    formatOptions?: Intl.NumberFormatOptions;
-    wrapperClassName?: string;
-    decimalSeparator?: string;
-    thousandSeparator?: string;
-    hideError?: boolean;
-    format?: string;
+    control: Control<IForm>
+    name: Path<IForm>
+    label?: string
+    required?: boolean
+    registerOptions?: RegisterOptions<IForm>
+    formatOptions?: Intl.NumberFormatOptions
+    wrapperClassName?: string
+    decimalSeparator?: string
+    thousandSeparator?: string
+    hideError?: boolean
+    format?: string
 }
 
 export function FormFormatNumberInput<IForm extends FieldValues>({
@@ -46,7 +46,7 @@ export function FormFormatNumberInput<IForm extends FieldValues>({
         rules: {
             required: { value: required, message: "Ushbu maydon majburiy" },
         },
-    });
+    })
 
     return (
         <fieldset className={cn("flex flex-col w-full", wrapperClassName)}>
@@ -61,6 +61,7 @@ export function FormFormatNumberInput<IForm extends FieldValues>({
             )}
             <label className="relative flex items-center">
                 <PatternFormat
+                    allowEmptyFormatting
                     format={format}
                     id={name}
                     className={cn(
@@ -68,10 +69,10 @@ export function FormFormatNumberInput<IForm extends FieldValues>({
                         className,
                         control._formState.errors?.[name] &&
                             !label &&
-                            "border-destructive focus:border-border !ring-destructive"
+                            "border-destructive focus:border-border !ring-destructive",
                     )}
                     onValueChange={(val) => {
-                        onChange(val.value);
+                        onChange(val.value)
                     }}
                     getInputRef={ref}
                     {...field}
@@ -84,5 +85,5 @@ export function FormFormatNumberInput<IForm extends FieldValues>({
                 <FieldError>{fieldState.error?.message}</FieldError>
             )}
         </fieldset>
-    );
+    )
 }

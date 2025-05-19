@@ -1,7 +1,9 @@
+import { FormCombobox } from "@/components/form/combobox"
+import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
-import PhoneField from "@/components/form/phone-field"
 import { Button } from "@/components/ui/button"
-import { USERS } from "@/constants/api-endpoints"
+import { COUNTRY, USERS } from "@/constants/api-endpoints"
+import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
@@ -21,7 +23,13 @@ type Form = {
 
 const CustomerCreate = () => {
     const { closeModal } = useModal("customer-modal")
+    const { openModal: openModalAdd } = useModal("countries-modal")
     const { storeData } = useStoreData()
+
+    const { data, isLoading } = useGet<CountriesResults>(COUNTRY, {
+        params: { page_size: 50 },
+    })
+
     const form = useForm<Form>({
         defaultValues: storeData ?? {},
     })
@@ -64,17 +72,23 @@ const CustomerCreate = () => {
                 label="F.I.O"
                 wrapperClassName={"md:col-span-2"}
             />
-            <PhoneField
+            <FormFormatNumberInput
                 required
-                methods={form}
+                control={form.control}
                 name="phone_number"
                 wrapperClassName="md:col-span-2"
+                format="+998 ## ### ## ##"
             />
-            <FormInput
-                required
-                methods={form}
+            <FormCombobox
+                options={data?.results}
+                isLoading={isLoading}
+                labelKey="name"
+                valueKey="id"
+                control={form.control}
                 name="region"
                 label="Mintaqa/Shahar"
+                required
+                onAdd={openModalAdd}
             />
             <FormInput
                 required

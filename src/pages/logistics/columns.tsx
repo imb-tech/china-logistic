@@ -21,11 +21,7 @@ export const useLogisticsColumns = (): ColumnDef<LogisticsType>[] => {
             accessorKey: "phone_number",
             enableSorting: true,
             cell: ({ row }) => {
-                return (
-                    <span>
-                        {row.original.phone_code} {row.original.phone_number}
-                    </span>
-                )
+                return <span>{row.original.phone_number}</span>
             },
         },
         {

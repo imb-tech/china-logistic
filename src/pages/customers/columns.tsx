@@ -20,11 +20,7 @@ export const useCustomersColumns = (): ColumnDef<CustomersType>[] => {
             header: "Telefon raqami",
             accessorKey: "phone_number",
             cell: ({ row }) => {
-                return (
-                    <span>
-                        {row.original.phone_code} {row.original.phone_number}
-                    </span>
-                )
+                return <span>{row.original.phone_number}</span>
             },
             enableSorting: true,
         },
