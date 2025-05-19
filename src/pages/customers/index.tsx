@@ -6,15 +6,15 @@ import { DataTable } from "@/components/ui/datatable"
 import ParamInput from "@/components/as-params/input"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
-import { useStoreData } from "@/store/global-store"
 import { useGet } from "@/hooks/useGet"
 import { USERS } from "@/constants/api-endpoints"
 import {  useSearch } from "@tanstack/react-router"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 
 export const CustomersPages = () => {
     const { openModal: openCustomerAdd } = useModal("customer-modal")
     const { openModal: openModalDelete } = useModal("customer-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useTypedStoreData<CustomersType>()
     const search = useSearch({ from: "/_main/customers" })
     const { data, isLoading } = useGet<CustomersTypeResults>(USERS, {
         params: { ...search, role: 3 },

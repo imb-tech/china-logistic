@@ -32,6 +32,7 @@ import ParamPagination from "../as-params/pagination"
 import EmptyBox from "../custom/empty-box"
 import TableActions from "../custom/table-actions"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Checkbox } from "./checkbox"
 
 interface DataTableProps<TData> {
     data: TData[] | undefined
@@ -39,10 +40,9 @@ interface DataTableProps<TData> {
     loading?: boolean
     className?: string
     deleteSelecteds?: (val: number[]) => void
-    rowSelection?: any
-    setRowSelection?: (val: any) => void
     onRightClick?: (val: TData) => void
     selecteds_count?: boolean
+    selecteds_row?: boolean
     onRowClick?: (data: TData) => void
     disabled?: boolean
     rowColor?: (data: TData) => string
@@ -76,6 +76,7 @@ interface DataTableProps<TData> {
     onView?: (data: Row<TData>) => void
     tableWrapperClassName?: string
     skeletonRowCount?: number
+    onSelectedRowsChange?: (rows: TData[]) => void
 }
 
 export function DataTable<TData>({
@@ -84,10 +85,9 @@ export function DataTable<TData>({
     loading,
     className,
     deleteSelecteds,
-    rowSelection,
-    setRowSelection,
     onRightClick,
     selecteds_count,
+    selecteds_row,
     onRowClick,
     disabled,
     rowColor,
@@ -105,6 +105,7 @@ export function DataTable<TData>({
     onUndo,
     onView,
     tableWrapperClassName,
+    onSelectedRowsChange,
     skeletonRowCount = 15,
 }: DataTableProps<TData>) {
     const {
@@ -143,7 +144,7 @@ export function DataTable<TData>({
             ]
         } else return columns
     }, [actionMenuMode, columns, onDelete, onEdit, onUndo, onView])
- 
+
     const table = useReactTable({
         data: data || [],
         columns: orderedColumns,
@@ -156,12 +157,12 @@ export function DataTable<TData>({
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection ?? setSelecteds,
+        onRowSelectionChange: setSelecteds,
         state: {
             sorting,
             columnFilters,
             columnVisibility,
-            rowSelection: rowSelection ?? selecteds,
+            rowSelection: selecteds,
             pagination: {
                 pageIndex: search[paramName] ? +search[paramName] - 1 : 0,
                 pageSize: search[pageSizeParamName]
@@ -175,6 +176,14 @@ export function DataTable<TData>({
             viewAll ||
             !!limitOffsetPagination,
     })
+
+    React.useEffect(() => {
+        const selectedRows = table
+            .getSelectedRowModel()
+            .rows.map((row) => (row.original))
+
+        onSelectedRowsChange?.(selectedRows)
+    }, [selecteds])
 
     return (
         <main className={cn("w-full   pb-4", wrapperClassName)}>
@@ -211,7 +220,7 @@ export function DataTable<TData>({
                                         .map((headerGroup, index) => (
                                             <TableRow
                                                 key={index}
-                                                className={`grid gap-1`}
+                                                className={`grid gap-1 `}
                                                 style={{
                                                     gridTemplateColumns: `repeat(${
                                                         headerGroup?.headers
@@ -256,12 +265,30 @@ export function DataTable<TData>({
                                                 key={index}
                                                 className={cn(
                                                     " px-2 cursor-pointer",
-                                                    rowSelection &&
-                                                        index === 0 &&
-                                                        "w-8",
+                                                    index === 0 && "w-8",
                                                 )}
                                             >
                                                 №
+                                            </TableHead>
+                                        )}
+                                        {selecteds_row && (
+                                            <TableHead
+                                                key={index}
+                                                className="border border-input"
+                                            >
+                                                <Checkbox
+                                                    checked={
+                                                        table.getIsAllPageRowsSelected() ||
+                                                        (table.getIsSomePageRowsSelected() &&
+                                                            "indeterminate")
+                                                    }
+                                                    onCheckedChange={(value) =>
+                                                        table.toggleAllPageRowsSelected(
+                                                            !!value,
+                                                        )
+                                                    }
+                                                    aria-label="Select all"
+                                                />
                                             </TableHead>
                                         )}
 
@@ -272,8 +299,7 @@ export function DataTable<TData>({
                                                         key={index}
                                                         className={cn(
                                                             "border border-input px-2 cursor-pointer",
-                                                            rowSelection &&
-                                                                index === 0 &&
+                                                            index === 0 &&
                                                                 "w-8",
                                                         )}
                                                         onClick={
@@ -346,6 +372,19 @@ export function DataTable<TData>({
                                             rowColor?.(row.original),
                                         )}
                                     >
+                                        {selecteds_row && (
+                                            <TableCell className="w-8 border border-input">
+                                                <Checkbox
+                                                    checked={row.getIsSelected()}
+                                                    onCheckedChange={(value) =>
+                                                        row.toggleSelected(
+                                                            !!value,
+                                                        )
+                                                    }
+                                                    aria-label="Select row"
+                                                />
+                                            </TableCell>
+                                        )}
                                         {numeration && (
                                             <TableCell className="w-8">
                                                 {((search[paramName] || 1) -

@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { statusColor, statusText } from "."
+import OrderStatus from "./order-status"
 
 export const useOrderColumns = (): ColumnDef<OrderType>[] => {
     return [
@@ -17,15 +17,13 @@ export const useOrderColumns = (): ColumnDef<OrderType>[] => {
         {
             header: "Status",
             accessorKey: "status",
-            enableSorting: true,
+            cell: ({ row }) => <OrderStatus row={row.original} />,
         },
         {
             header: "Logist",
             accessorKey: "agent_full_name",
             enableSorting: true,
-            cell:({row})=>(
-                <span className={statusColor[row.original.status]}>{statusText[row.original.status]}</span>
-            )
+             cell: ({ row }) => row.original.agent_full_name || "-",
         },
         {
             header: "Yaratilgan sana",

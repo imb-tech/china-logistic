@@ -10,6 +10,7 @@ import CitiesCreate from "@/pages/settings/regions/cities/cities-create"
 import CountriesCreate from "@/pages/settings/regions/countries/countries-create"
 import ContainerCreate from "@/pages/settings/transport-container/container/container-create"
 import TransportCreate from "@/pages/settings/transport-container/transport/transport-create"
+import WareHouseCreate from "@/pages/warehouse/warehouse-create"
 import { ReactNode } from "@tanstack/react-router"
 
 type Props = {
@@ -51,6 +52,13 @@ const PageLayout = ({
                 modalKey="customer-modal"
             >
                 <CustomerCreate />
+            </Modal>
+             <Modal
+                size="max-w-2xl"
+                title="Yangi Avto qo'shish"
+                modalKey="warehouse-modal"
+            >
+                <WareHouseCreate />
             </Modal>
             <Modal
                 size="max-w-2xl"

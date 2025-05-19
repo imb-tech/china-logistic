@@ -4,14 +4,14 @@ import { COUNTRY } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const CountriesCreate = () => {
     const { closeModal } = useModal("countries-modal")
-    const { storeData } = useStoreData()
+    const { storeData } = useTypedStoreData<CountriesType>()
     const form = useForm<CountriesType>({
         defaultValues: storeData ?? {},
     })

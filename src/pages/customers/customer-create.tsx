@@ -7,7 +7,7 @@ import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -24,7 +24,7 @@ type Form = {
 const CustomerCreate = () => {
     const { closeModal } = useModal("customer-modal")
     const { openModal: openModalAdd } = useModal("countries-modal")
-    const { storeData } = useStoreData()
+    const { storeData } = useTypedStoreData<CustomersType>()
 
     const { data, isLoading } = useGet<CountriesResults>(COUNTRY, {
         params: { page_size: 50 },

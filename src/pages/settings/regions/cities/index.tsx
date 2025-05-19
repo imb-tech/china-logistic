@@ -9,12 +9,13 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useSearch } from "@tanstack/react-router"
 import { useGet } from "@/hooks/useGet"
 import { REGION } from "@/constants/api-endpoints"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
+
 
 export const CitiesPages = () => {
     const { openModal: openModalAdd } = useModal("cities-modal")
     const { openModal: openModalDelete } = useModal("cities-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useTypedStoreData<CitiesType>()
 
     const search:SearchParamsCities = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<CitiesResults>(REGION, {

@@ -9,12 +9,13 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useGet } from "@/hooks/useGet"
 import { PRODUCT } from "@/constants/api-endpoints"
 import { useSearch } from "@tanstack/react-router"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
+
 
 export const ProductsPages = () => {
     const { openModal: openModalAdd } = useModal("product-modal")
     const { openModal: openModalDelete } = useModal("product-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useTypedStoreData<ProductsType>()
     const search:SearchParamsProduct = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ProductResults>(PRODUCT, {
         params: {

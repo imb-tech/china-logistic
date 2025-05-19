@@ -11,5 +11,7 @@ type LogisticsType = {
 }
 
 type LogisticsTypeResults = {
+   next: string
+    previous: string
   results: LogisticsType[]
 }

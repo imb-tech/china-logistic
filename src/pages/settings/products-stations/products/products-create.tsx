@@ -4,14 +4,14 @@ import { PRODUCT } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const ProductsCreate = () => {
     const { closeModal } = useModal("product-modal")
-    const { storeData } = useStoreData()
+    const { storeData } = useTypedStoreData<ProductsType>()
     const queryClient = useQueryClient()
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {

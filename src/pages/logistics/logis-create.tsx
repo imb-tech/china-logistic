@@ -5,8 +5,8 @@ import { USERS } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { cleanData } from "@/lib/format-data"
-import { useStoreData } from "@/store/global-store"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -20,7 +20,7 @@ type Form = {
 
 const LogisticsCreate = () => {
     const { closeModal } = useModal("logis-modal")
-    const { storeData } = useStoreData()
+    const { storeData } = useTypedStoreData<LogisticsType>()
     const form = useForm<Form>({
         defaultValues: storeData ?? {},
     })

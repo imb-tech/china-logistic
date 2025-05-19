@@ -19,7 +19,6 @@ import { Route as MainIndexImport } from './routes/_main/index'
 import { Route as MainWarehouseImport } from './routes/_main/warehouse'
 import { Route as MainSettingsImport } from './routes/_main/settings'
 import { Route as MainLogisticsImport } from './routes/_main/logistics'
-import { Route as MainDocumentsImport } from './routes/_main/documents'
 import { Route as MainCustomersImport } from './routes/_main/customers'
 import { Route as MainOrdersOrderCreateImport } from './routes/_main/_orders/order-create'
 
@@ -69,12 +68,6 @@ const MainLogisticsRoute = MainLogisticsImport.update({
   getParentRoute: () => MainRoute,
 } as any)
 
-const MainDocumentsRoute = MainDocumentsImport.update({
-  id: '/documents',
-  path: '/documents',
-  getParentRoute: () => MainRoute,
-} as any)
-
 const MainCustomersRoute = MainCustomersImport.update({
   id: '/customers',
   path: '/customers',
@@ -110,13 +103,6 @@ declare module '@tanstack/react-router' {
       path: '/customers'
       fullPath: '/customers'
       preLoaderRoute: typeof MainCustomersImport
-      parentRoute: typeof MainImport
-    }
-    '/_main/documents': {
-      id: '/_main/documents'
-      path: '/documents'
-      fullPath: '/documents'
-      preLoaderRoute: typeof MainDocumentsImport
       parentRoute: typeof MainImport
     }
     '/_main/logistics': {
@@ -178,7 +164,6 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface MainRouteChildren {
   MainCustomersRoute: typeof MainCustomersRoute
-  MainDocumentsRoute: typeof MainDocumentsRoute
   MainLogisticsRoute: typeof MainLogisticsRoute
   MainSettingsRoute: typeof MainSettingsRoute
   MainWarehouseRoute: typeof MainWarehouseRoute
@@ -188,7 +173,6 @@ interface MainRouteChildren {
 
 const MainRouteChildren: MainRouteChildren = {
   MainCustomersRoute: MainCustomersRoute,
-  MainDocumentsRoute: MainDocumentsRoute,
   MainLogisticsRoute: MainLogisticsRoute,
   MainSettingsRoute: MainSettingsRoute,
   MainWarehouseRoute: MainWarehouseRoute,
@@ -201,7 +185,6 @@ const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 export interface FileRoutesByFullPath {
   '': typeof MainRouteWithChildren
   '/customers': typeof MainCustomersRoute
-  '/documents': typeof MainDocumentsRoute
   '/logistics': typeof MainLogisticsRoute
   '/settings': typeof MainSettingsRoute
   '/warehouse': typeof MainWarehouseRoute
@@ -213,7 +196,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
   '/customers': typeof MainCustomersRoute
-  '/documents': typeof MainDocumentsRoute
   '/logistics': typeof MainLogisticsRoute
   '/settings': typeof MainSettingsRoute
   '/warehouse': typeof MainWarehouseRoute
@@ -227,7 +209,6 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_main': typeof MainRouteWithChildren
   '/_main/customers': typeof MainCustomersRoute
-  '/_main/documents': typeof MainDocumentsRoute
   '/_main/logistics': typeof MainLogisticsRoute
   '/_main/settings': typeof MainSettingsRoute
   '/_main/warehouse': typeof MainWarehouseRoute
@@ -241,7 +222,6 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/customers'
-    | '/documents'
     | '/logistics'
     | '/settings'
     | '/warehouse'
@@ -252,7 +232,6 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/customers'
-    | '/documents'
     | '/logistics'
     | '/settings'
     | '/warehouse'
@@ -264,7 +243,6 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_main'
     | '/_main/customers'
-    | '/_main/documents'
     | '/_main/logistics'
     | '/_main/settings'
     | '/_main/warehouse'
@@ -310,7 +288,6 @@ export const routeTree = rootRoute
       "filePath": "_main.tsx",
       "children": [
         "/_main/customers",
-        "/_main/documents",
         "/_main/logistics",
         "/_main/settings",
         "/_main/warehouse",
@@ -320,10 +297,6 @@ export const routeTree = rootRoute
     },
     "/_main/customers": {
       "filePath": "_main/customers.tsx",
-      "parent": "/_main"
-    },
-    "/_main/documents": {
-      "filePath": "_main/documents.tsx",
       "parent": "/_main"
     },
     "/_main/logistics": {

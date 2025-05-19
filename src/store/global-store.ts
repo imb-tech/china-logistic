@@ -1,15 +1,13 @@
 import { create } from "zustand";
 
-export type User = Record<string, any>;
-
-type UserState = {
-    storeData: User | null;
-    setStoreData: (user: User) => void;
-    clearUserData: () => void;
+type StoreState = {
+  storeData: any | null;
+  setStoreData: (data: any) => void;
+  clearUserData: () => void;
 };
 
-export const useStoreData = create<UserState>()((set) => ({
-    storeData: null,
-    setStoreData: (user: User) => set({ storeData: user }),
-    clearUserData: () => set({ storeData: null}),
+export const useStoreData = create<StoreState>((set) => ({
+  storeData: null,
+  setStoreData: (data) => set({ storeData: data }),
+  clearUserData: () => set({ storeData: null }),
 }));

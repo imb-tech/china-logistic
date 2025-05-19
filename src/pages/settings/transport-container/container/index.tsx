@@ -9,12 +9,12 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useSearch } from "@tanstack/react-router"
 import { useGet } from "@/hooks/useGet"
 import { CONTAINER_TYPE } from "@/constants/api-endpoints"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 
 export const ContainerPages = () => {
     const { openModal: openModalAdd } = useModal("container-modal")
     const { openModal: openModalDelete } = useModal("container-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useTypedStoreData<ContainerType>()
     const search:SearchParamsContainer = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<ContainerResults>(CONTAINER_TYPE, {
         params: {

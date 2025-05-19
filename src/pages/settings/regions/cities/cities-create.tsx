@@ -6,14 +6,14 @@ import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const CitiesCreate = () => {
     const { closeModal } = useModal("cities-modal")
-    const { storeData } = useStoreData()
+    const { storeData } = useTypedStoreData<CitiesType>()
     const { openModal: openModalAdd } = useModal("countries-modal")
     const form = useForm<CitiesType>({
         defaultValues: storeData ?? {},

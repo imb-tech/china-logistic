@@ -1,18 +1,17 @@
-import Modal from "@/components/custom/modal"
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
 import { STATION } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const StationsCreate = () => {
     const { closeModal } = useModal("stations-modal")
-    const { storeData } = useStoreData()
+    const { storeData } = useTypedStoreData<StationsType>()
     const form = useForm<StationsType>({
         defaultValues: storeData ?? {},
     })

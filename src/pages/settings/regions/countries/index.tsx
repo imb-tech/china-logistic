@@ -9,12 +9,12 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useGet } from "@/hooks/useGet"
 import { useSearch } from "@tanstack/react-router"
 import { COUNTRY } from "@/constants/api-endpoints"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 
 export const CountriesPages = () => {
     const { openModal: openModalAdd } = useModal("countries-modal")
     const { openModal: openModalDelete } = useModal("countries-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useTypedStoreData<CountriesType>()
     const columns = useRegionsColumns()
 
     const search:SearchParamsCountries = useSearch({ from: "/_main/settings" })

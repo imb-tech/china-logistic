@@ -9,12 +9,12 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { TRANSPORT } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useSearch } from "@tanstack/react-router"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 
 export const TransportPages = () => {
     const { openModal: openModalAdd } = useModal("transport-modal")
     const { openModal: openModalDelete } = useModal("transport-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useTypedStoreData<TransportType>()
     const search: SearchParamsTransport = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<TransportResults>(TRANSPORT, {
         params: {

@@ -6,15 +6,15 @@ import ParamInput from "@/components/as-params/input"
 import { useLogisticsColumns } from "./columns"
 import { useModal } from "@/hooks/useModal"
 import DeleteModal from "@/components/custom/delete-modal"
-import { useStoreData } from "@/store/global-store"
 import { useSearch } from "@tanstack/react-router"
 import { USERS } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 
 export const LogisticsPages = () => {
     const { openModal: openCustomerAdd } = useModal("logis-modal")
     const { openModal: openModalDelete } = useModal("logis-delete")
-    const { storeData, setStoreData, clearUserData } = useStoreData()
+    const { storeData, setStoreData, clearUserData } = useTypedStoreData<LogisticsType>()
     const search = useSearch({ from: "/_main/logistics" })
     const { data, isLoading } = useGet<LogisticsTypeResults>(USERS, {
         params: { ...search, role: 2 },

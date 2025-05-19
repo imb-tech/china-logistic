@@ -4,15 +4,15 @@ import { CONTAINER_TYPE } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const ContainerCreate = () => {
     const { closeModal } = useModal("container-modal")
-    
-    const { storeData } = useStoreData()
+
+    const { storeData } = useTypedStoreData<ContainerType>()
     const form = useForm<ContainerType>({
         defaultValues: storeData ?? {},
     })
@@ -42,26 +42,24 @@ const ContainerCreate = () => {
         }
     }
 
-
-
     return (
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-                <FormInput
-                    required
-                    methods={form}
-                    name="name"
-                    label="Konteyner nomi"
-                />
-                <div className="flex justify-end ">
-                    <Button
-                        disabled={isPendingCreate || isPendingUpdate}
-                        loading={isPendingCreate || isPendingUpdate}
-                        type="submit"
-                    >
-                        Saqlash
-                    </Button>
-                </div>
-            </form>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+            <FormInput
+                required
+                methods={form}
+                name="name"
+                label="Konteyner nomi"
+            />
+            <div className="flex justify-end ">
+                <Button
+                    disabled={isPendingCreate || isPendingUpdate}
+                    loading={isPendingCreate || isPendingUpdate}
+                    type="submit"
+                >
+                    Saqlash
+                </Button>
+            </div>
+        </form>
     )
 }
 

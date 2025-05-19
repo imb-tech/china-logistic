@@ -8,26 +8,29 @@ import { useModal } from "@/hooks/useModal"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useGet } from "@/hooks/useGet"
 import { CONTAINERS } from "@/constants/api-endpoints"
+import Modal from "@/components/custom/modal"
+import OrderStatusChange from "./order-change-status"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 
-export const statusColor:{[key:string]:string} ={
-    "10":"text-primary",
-    "20":"text-lime-500",
-    "30":"text-amber-500",
-    "35":"text-purple-500",
-    "40":"text-red-500",
-    "50":"text-green-500",
+export const statusColor: { [key: string]: string } = {
+    "10": "text-primary",
+    "20": "text-lime-500",
+    "30": "text-amber-500",
+    "35": "text-purple-500",
+    "40": "text-red-500",
+    "50": "text-green-500",
 }
 
-export const statusText:{[key:string]:string} ={
-    "10":"Yaratildi",
-    "20":"Logist topildi",
-    "30":"Jarayonda",
-    "35":"Yuk omborda",
-    "40":"Favqulotda",
-    "50":"Yakunlandi",
+export const statusText: { [key: string]: string } = {
+    "10": "Yaratildi",
+    "20": "Logist topildi",
+    "30": "Jarayonda",
+    "35": "Yuk omborda",
+    "40": "Favqulotda",
+    "50": "Yakunlandi",
 }
 
-const tab = [
+export const statusOptions = [
     {
         value: "",
         label: "Barchasi",
@@ -61,16 +64,17 @@ const tab = [
 export const OrdersPages = () => {
     const navigate = useNavigate()
     const { openModal } = useModal("delete-order")
+    const { storeData } = useTypedStoreData<OrderType>()
     const search = useSearch({ from: "/_main/" })
     const { data, isLoading } = useGet<OrdersTypeResults>(CONTAINERS, {
-        params: { ...search, role: 2 },
+        params: search,
     })
 
     const columns = useOrderColumns()
     return (
         <div className="w-full ">
             <div className="mb-5 flex justify-between items-center gap-4">
-                <ParamTabs options={tab} paramName="status" />
+                <ParamTabs options={statusOptions} paramName="status" />
                 <Button
                     onClick={() => navigate({ to: "/order-create" })}
                     icon={<Plus size={18} />}
@@ -85,6 +89,15 @@ export const OrdersPages = () => {
                 onDelete={() => openModal()}
             />
             <DeleteModal modalKey="delete-order" id={1} path="order" />
+            <Modal
+                size="max-w-xl"
+                title={`Buyurtmani ${
+                    statusText[String(storeData?.status)]
+                } qilishni xohlaysizmi?`}
+                modalKey="order-status-modal"
+            >
+                <OrderStatusChange />
+            </Modal>
         </div>
     )
 }

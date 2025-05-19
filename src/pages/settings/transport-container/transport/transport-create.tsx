@@ -5,14 +5,14 @@ import { TRANSPORT } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
-import { useStoreData } from "@/store/global-store"
+import { useTypedStoreData } from "@/hooks/useStoreData"
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 const TransportCreate = () => {
     const { closeModal } = useModal("transport-modal")
-    const { storeData } = useStoreData()
+    const { storeData } = useTypedStoreData<TransportType>()
     const form = useForm<TransportType>({
         defaultValues: storeData ?? {},
     })

@@ -14,7 +14,7 @@ import { useDelete } from "@/hooks/useDelete"
 
 interface IProps {
     path: string
-    id: string | number
+    id: string | number | undefined
     name?: ReactNode
     onSuccessAction?: () => void
     modalKey?: string

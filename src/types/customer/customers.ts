@@ -11,5 +11,7 @@ type CustomersType = {
 }
 
 type CustomersTypeResults = {
+  next: string
+  previous: string
   results: CustomersType[]
 }

@@ -18,7 +18,7 @@ type OrderType = {
   quality: number;
   start_date: string | null;
   station: string | null;
-  status: number;
+  status: number | string;
   team_id: string;
   total_spent: number | string;
   transport: number;
@@ -29,4 +29,6 @@ type OrderType = {
 
 type OrdersTypeResults = {
   results: OrderType[]
+  next: string
+  previous: string
 }
