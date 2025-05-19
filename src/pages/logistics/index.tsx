@@ -67,7 +67,7 @@ export const LogisticsPages = () => {
             <DeleteModal
                 modalKey="logis-delete"
                 id={storeData?.id}
-                path="logistic"
+                path={USERS}
             />
         </div>
     )

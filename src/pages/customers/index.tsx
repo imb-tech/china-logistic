@@ -48,7 +48,7 @@ export const CustomersPages = () => {
                         <div className="flex items-center gap-3">
                             <ParamInput
                                 fullWidth
-                                placeholder="Mijozlarni qidirish"
+                                placeholder="Mijoz qidirish"
                                 className=""
                             />
                             <Button onClick={handleAdd}>
@@ -69,7 +69,7 @@ export const CustomersPages = () => {
             <DeleteModal
                 modalKey="customer-delete"
                 id={storeData?.id}
-                path="customer"
+                path={USERS}
             />
         </div>
     )

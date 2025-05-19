@@ -1,6 +1,6 @@
 import FormInput from "@/components/form/input"
 import { Button } from "@/components/ui/button"
-import { CONTAINERS, INVENTORY, INVENTORY_CAR } from "@/constants/api-endpoints"
+import { INVENTORY, INVENTORY_CAR } from "@/constants/api-endpoints"
 import { useModal } from "@/hooks/useModal"
 import { usePost } from "@/hooks/usePost"
 import { useQueryClient } from "@tanstack/react-query"

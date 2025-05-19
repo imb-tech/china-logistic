@@ -36,11 +36,6 @@ export const items: MenuItem[] = [
         path: "/warehouse",
     },
     {
-        label: "Hujjatlar",
-        icon: <File width={20} />,
-        path: "/documents",
-    },
-    {
         label: "Sozlamalar",
         icon: <Settings width={20} />,
         path: "/settings",

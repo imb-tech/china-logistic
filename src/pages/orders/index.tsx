@@ -63,12 +63,19 @@ export const statusOptions = [
 
 export const OrdersPages = () => {
     const navigate = useNavigate()
-    const { openModal } = useModal("delete-order")
-    const { storeData } = useTypedStoreData<OrderType>()
+    const { openModal: openModalDelete } = useModal("delete-order")
+    const { storeData, setStoreData, clearUserData } =
+        useTypedStoreData<OrderType>()
     const search = useSearch({ from: "/_main/" })
     const { data, isLoading } = useGet<OrdersTypeResults>(CONTAINERS, {
         params: search,
     })
+
+    const handleDelete = (item: OrderType) => {
+        clearUserData()
+        openModalDelete()
+        setStoreData(item)
+    }
 
     const columns = useOrderColumns()
     return (
@@ -86,9 +93,13 @@ export const OrdersPages = () => {
                 columns={columns}
                 data={data?.results}
                 loading={isLoading}
-                onDelete={() => openModal()}
+                onDelete={(row) => handleDelete(row.original)}
             />
-            <DeleteModal modalKey="delete-order" id={1} path="order" />
+            <DeleteModal
+                modalKey="delete-order"
+                id={storeData?.id}
+                path={CONTAINERS}
+            />
             <Modal
                 size="max-w-xl"
                 title={`Buyurtmani ${
