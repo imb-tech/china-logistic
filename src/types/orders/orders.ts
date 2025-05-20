@@ -79,3 +79,55 @@ type Logs = {
   hint: string
 }
 
+
+
+
+
+type ApiProduct = {
+  id: number
+  name: string
+  code: string
+}
+
+type ApiCustomer = {
+  id: number
+  username: string
+  full_name: string
+  phone_code: string
+  phone_number: string
+}
+
+type ApiLoad= {
+  id: number
+  customer: ApiCustomer | null
+  product: ApiProduct | null
+  product_volume: number | null
+  product_quantity: number | null
+  product_weight: number | null
+  loading_location_longitude: number | null
+  loading_location_latitude: number | null
+  loading_address: string
+  comment: string | null
+}
+
+type ApiRegion = {
+  id: number
+  name: string
+  country: {
+    id: number
+    name: string
+  }
+}
+
+type ApiCargoResponse = {
+  id: number
+  loads: ApiLoad[]
+  destination_region: ApiRegion | null
+  agent: { id: number } | null
+  container_type: number | null
+  transport: number | null
+  load_date: string
+  destination_address: string
+  quality: number | null
+  comment: string | null
+}

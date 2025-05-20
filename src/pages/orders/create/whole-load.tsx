@@ -18,9 +18,10 @@ import {
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePost } from "@/hooks/usePost"
-import { useNavigate } from "@tanstack/react-router"
+import { useQueryClient } from "@tanstack/react-query"
+import { useNavigate, useParams } from "@tanstack/react-router"
 import { Copy, Plus, Trash2 } from "lucide-react"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -61,6 +62,7 @@ interface FormValues {
     containers: Container[]
 }
 function WholeLoad() {
+    const id: { id: number } = useParams({ strict: false })
     const [searchProducts, setSearchProducts] = useState("")
     const [search, setSearch] = useState({
         container: "",
@@ -70,12 +72,19 @@ function WholeLoad() {
         cities: "",
     })
     const navigate = useNavigate()
-
+    const queryClient = useQueryClient()
     const { openModal: openModalProductAdd } = useModal("product-modal")
     const { openModal: openModalCitiesAdd } = useModal("cities-modal")
     const { openModal: openModalCustomerAdd } = useModal("customer-modal")
     const { openModal: openModalContainerAdd } = useModal("container-modal")
     const { openModal: openModalTransportAdd } = useModal("transport-modal")
+
+    const { data: dataCargo } = useGet<ApiCargoResponse>(
+        `${CONTAINERS_FULL_CARGO}/${id?.id}`,
+        {
+            options: { enabled: !!id.id },
+        },
+    )
 
     const { data: dataContainer, isLoading: isLoadingContainer } =
         useGet<ContainerResults>(CONTAINER_TYPE, {
@@ -101,11 +110,19 @@ function WholeLoad() {
         useGet<ProductResults>(PRODUCT, {
             params: { page_size: 50, search: searchProducts },
         })
-    const { mutate, isPending } = usePost({
+
+    const { mutate: mutateCreate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {
             toast.success("Muvaffaqiyat yaratildi")
             form.reset()
             navigate({ to: "/" })
+        },
+    })
+
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = usePost({
+        onSuccess: () => {
+            toast.success("Muvaffaqiyat yangilandi")
+            queryClient.invalidateQueries({ queryKey: [CONTAINERS_FULL_CARGO] })
         },
     })
 
@@ -172,14 +189,16 @@ function WholeLoad() {
         const containerToCopy = form.getValues(`containers.${index}`)
         insertContainer(index + 1, containerToCopy)
     }
-
     const handleRemoveContainer = (index: number) => {
         removeContainer(index)
     }
 
     const onSubmit = (data: FormValues) => {
-        mutate(CONTAINERS_FULL_CARGO, data)
-        console.log(data)
+        if (!!id) {
+            mutateUpdate(`${CONTAINERS_FULL_CARGO}/${id}`, data)
+        } else {
+            mutateCreate(CONTAINERS_FULL_CARGO, data)
+        }
     }
 
     const handleChange = (key: string, value: string) => {
@@ -189,6 +208,39 @@ function WholeLoad() {
         }))
     }
 
+    useEffect(() => {
+        if (dataCargo?.id) {
+            const transformedData: FormValues = {
+                customer: dataCargo.loads[0]?.customer?.id || null,
+                agents: dataCargo.agent ? [dataCargo.agent.id] : [],
+                containers: [
+                    {
+                        container_type: dataCargo.container_type,
+                        quality: dataCargo.quality,
+                        transport: dataCargo.transport,
+                        load_date: dataCargo.load_date,
+                        loads: dataCargo.loads.map((load) => ({
+                            loading_address: load.loading_address || "",
+                            loading_address_url: "",
+                            product: load.product?.id || null,
+                            product_quantity: load.product_quantity || null,
+                            product_volume: load.product_volume || null,
+                            product_weight: load.product_weight || null,
+                        })),
+                        destination_address:
+                            dataCargo.destination_address || "",
+                        destination_region:
+                            dataCargo.destination_region?.id || null,
+                        comment: dataCargo.comment || null,
+                    },
+                ],
+            }
+
+            form.reset(transformedData)
+        }
+    }, [dataCargo]);
+    
+
     return (
         <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -196,7 +248,9 @@ function WholeLoad() {
         >
             <Card>
                 <CardContent className="space-y-2">
-                    <h1>Mijoz ma'lumotlari</h1>
+                    <h1 className="text-lg font-semibold">
+                        Mijoz ma'lumotlari
+                    </h1>
                     <div className="w-full border border-input rounded-lg p-3">
                         <FormCombobox
                             options={dataUsers?.results}
@@ -221,7 +275,9 @@ function WholeLoad() {
                 <CardContent className="space-y-4">
                     {fieldsContainer.map((container, index) => (
                         <div className="space-y-2" key={container.id}>
-                            <h1>Konteyner #{index + 1}</h1>
+                            <h1 className="text-lg font-semibold">
+                                Konteyner #{index + 1}
+                            </h1>
                             <div className="grid lg:grid-cols-4  sm:grid-cols-2 grid-cols-1  gap-4 rounded-lg p-3 dark:bg-card dark:border bg-slate-100">
                                 <FormCombobox
                                     options={dataContainer?.results}
@@ -349,7 +405,9 @@ function WholeLoad() {
 
             <Card>
                 <CardContent className="space-y-2">
-                    <h1>Logist ma'lumotlari</h1>
+                    <h1 className="text-lg font-semibold">
+                        Logist ma'lumotlari
+                    </h1>
                     <div className="border border-input p-3 rounded-lg">
                         <FormMultiCombobox
                             isLoading={isLoadingLogist}
@@ -369,8 +427,8 @@ function WholeLoad() {
             </Card>
 
             <Button
-                disabled={isPending}
-                loading={isPending}
+                disabled={isPendingCreate || isPendingUpdate}
+                loading={isPendingCreate || isPendingUpdate}
                 type="submit"
                 className="sm:w-max w-full px-20 float-end"
             >

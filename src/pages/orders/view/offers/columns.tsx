@@ -45,7 +45,7 @@ export const useOffersColumns = (): ColumnDef<Offers>[] => {
         {
             header: "Stansiya",
             accessorKey: "station",
-             cell: ({ row }) => row.original?.station.name || "--",
+             cell: ({ row }) => row.original?.station?.name || "--",
         },
         {
             header: "Yukni yopish darajasi",

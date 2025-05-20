@@ -22,8 +22,10 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { options } from "./whole-load"
 import { usePost } from "@/hooks/usePost"
 import { toast } from "sonner"
-import { useState } from "react"
-import { useNavigate } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "@tanstack/react-router"
+import { useQueryClient } from "@tanstack/react-query"
+import { usePatch } from "@/hooks/usePatch"
 
 type ClientType = {
     customer: number | null
@@ -47,6 +49,7 @@ type FormType = {
 }
 
 function BulkCargo() {
+    const id: { id: number } = useParams({ strict: false })
     const [search, setSearch] = useState({
         container: "",
         transport: "",
@@ -56,10 +59,18 @@ function BulkCargo() {
         product: "",
     })
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
     const { openModal: openModalProductAdd } = useModal("product-modal")
     const { openModal: openModalCitiesAdd } = useModal("cities-modal")
     const { openModal: openModalContainerAdd } = useModal("container-modal")
     const { openModal: openModalTransportAdd } = useModal("transport-modal")
+
+    const { data: dataCargo } = useGet<ApiCargoResponse>(
+        `${CONTAINERS_BULK_CARGO}/${id?.id}`,
+        {
+            options: { enabled: !!id.id },
+        },
+    )
 
     const { data: dataContainer, isLoading: isLoadingContainer } =
         useGet<ContainerResults>(CONTAINER_TYPE, {
@@ -114,11 +125,20 @@ function BulkCargo() {
         name: "loads",
     })
 
-    const { mutate, isPending } = usePost({
+    const { mutate: mutateCreate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {
             toast.success("Muvaffaqiyat yaratildi")
             form.reset()
             navigate({ to: "/" })
+        },
+    })
+
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = usePatch({
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [CONTAINERS_BULK_CARGO],
+            })
+            toast.success("Muvaffaqiyat yangilandi")
         },
     })
 
@@ -152,7 +172,11 @@ function BulkCargo() {
             },
             agents: data.agents,
         }
-        mutate(CONTAINERS_BULK_CARGO, formattedData)
+        if (!!id) {
+            mutateUpdate(`${CONTAINERS_BULK_CARGO}/${id}`, formattedData)
+        } else {
+            mutateCreate(CONTAINERS_BULK_CARGO, formattedData)
+        }
     }
 
     const handleChange = (key: string, value: string) => {
@@ -161,6 +185,31 @@ function BulkCargo() {
             [key]: value,
         }))
     }
+
+    useEffect(() => {
+        if (dataCargo?.id) {
+            const transformedData: FormType = {
+                container_type: dataCargo.container_type ?? null,
+                quality: dataCargo.quality ?? null,
+                transport: dataCargo.transport ?? null,
+                load_date: dataCargo.load_date ?? null,
+                destination_region: dataCargo.destination_region?.id ?? null,
+                destination_address: dataCargo.destination_address ?? "",
+                comment: dataCargo.comment ?? "",
+                agents: dataCargo.agent ? [dataCargo.agent.id] : [],
+                loads: dataCargo.loads.map((load: any) => ({
+                    customer: load.customer?.id ?? null,
+                    loading_address: load.loading_address ?? "",
+                    location_url: load.location_url ?? "",
+                    product: load.product?.id ?? null,
+                    product_volume: load.product_volume ?? null,
+                    product_weight: load.product_weight ?? null,
+                })),
+            }
+
+            form.reset(transformedData)
+        }
+    }, [dataCargo])
 
     return (
         <form
@@ -386,8 +435,8 @@ function BulkCargo() {
             </Card>
 
             <Button
-                disabled={isPending}
-                loading={isPending}
+                disabled={isPendingCreate || isPendingUpdate}
+                loading={isPendingCreate || isPendingUpdate}
                 type="submit"
                 className="sm:w-max w-full px-12 float-end"
             >

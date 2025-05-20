@@ -3,21 +3,31 @@ import { statusColor, statusOptions, statusText } from "."
 import { useState } from "react"
 import { useModal } from "@/hooks/useModal"
 import { useTypedStoreData } from "@/hooks/useStoreData"
+import { useNavigate } from "@tanstack/react-router"
 
 type Props = {
     row: OrderType
 }
 
 function OrderStatus({ row }: Props) {
-    const { setStoreData } = useTypedStoreData<{status:string,id:number}>()
+    const navigate = useNavigate()
+    const { setStoreData } = useTypedStoreData<{ status: string; id: number }>()
     const [status, setStatus] = useState(row.status)
     const { openModal } = useModal("order-status-modal")
 
     const handleClick = (val: string) => {
-        setStatus(val)
-        if (val) {
-            setStoreData({ status: val, id: row.id })
-            openModal()
+        if (!row.agent && !row.agent_full_name && val === "20") {
+            navigate({
+                to: "/order/$id",
+                params: { id: row.id.toString() },
+                search: { order_type: row.order_type },
+            })
+        } else {
+            setStatus(val)
+            if (val) {
+                setStoreData({ status: val, id: row.id })
+                openModal()
+            }
         }
     }
 
