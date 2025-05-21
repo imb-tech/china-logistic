@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
     CONTAINER_TYPE,
+    CONTAINERS,
     CONTAINERS_FULL_CARGO,
     PRODUCT,
     REGION,
@@ -17,6 +18,7 @@ import {
 } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
+import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate, useParams } from "@tanstack/react-router"
@@ -119,7 +121,7 @@ function WholeLoad() {
         },
     })
 
-    const { mutate: mutateUpdate, isPending: isPendingUpdate } = usePost({
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = usePatch({
         onSuccess: () => {
             toast.success("Muvaffaqiyat yangilandi")
             queryClient.invalidateQueries({ queryKey: [CONTAINERS_FULL_CARGO] })
@@ -194,8 +196,8 @@ function WholeLoad() {
     }
 
     const onSubmit = (data: FormValues) => {
-        if (!!id) {
-            mutateUpdate(`${CONTAINERS_FULL_CARGO}/${id}`, data)
+        if (!!id?.id) {
+            mutateUpdate(`${CONTAINERS}/${id?.id}`, data)
         } else {
             mutateCreate(CONTAINERS_FULL_CARGO, data)
         }

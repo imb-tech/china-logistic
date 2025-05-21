@@ -172,8 +172,8 @@ function BulkCargo() {
             },
             agents: data.agents,
         }
-        if (!!id) {
-            mutateUpdate(`${CONTAINERS_BULK_CARGO}/${id}`, formattedData)
+        if (!!id?.id) {
+            mutateUpdate(`${CONTAINERS_BULK_CARGO}/${id?.id}`, formattedData)
         } else {
             mutateCreate(CONTAINERS_BULK_CARGO, formattedData)
         }
