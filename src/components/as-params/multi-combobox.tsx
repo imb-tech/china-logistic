@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { useNavigate, useSearch } from "@tanstack/react-router"
-import { CheckIcon, ChevronsUpDown, Plus, X } from "lucide-react"
+import { CheckIcon, ChevronDown, X } from "lucide-react"
 import { useState } from "react"
 
 type ParamComboboxProps<T extends Record<string, any>> = {
@@ -25,7 +25,6 @@ type ParamComboboxProps<T extends Record<string, any>> = {
     labelKey: keyof T
     valueKey: keyof T
     isError?: boolean
-    returnVal?: keyof T
     className?: string
 }
 
@@ -35,7 +34,6 @@ export function ParamMultiCombobox<T extends Record<string, any>>({
     label,
     disabled,
     isError,
-    returnVal = "label",
     className,
     labelKey,
     valueKey,
@@ -49,7 +47,7 @@ export function ParamMultiCombobox<T extends Record<string, any>>({
     const [open, setOpen] = useState(false)
 
     const handleSelect = (option: T) => {
-        const val = returnVal === labelKey ? option[labelKey] : option[valueKey]
+        const val = option[valueKey]
 
         const updatedValues = currentValues.includes(val)
             ? currentValues.filter((v: string | number) => v !== val)
@@ -75,13 +73,14 @@ export function ParamMultiCombobox<T extends Record<string, any>>({
             ? currentValues
                   ?.map((val: string) => {
                       const found = options.find(
-                          (d) => String(d[returnVal]) === val,
+                          (d) => String(d[valueKey]) === val,
                       )
                       return found?.[labelKey] || val
                   })
                   .join(", ")
             : undefined
 
+            
     return (
         <Popover modal open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -98,7 +97,7 @@ export function ParamMultiCombobox<T extends Record<string, any>>({
                     disabled={disabled}
                 >
                     {currentValues.length ? selectedLabels : label}
-                    <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -128,7 +127,7 @@ export function ParamMultiCombobox<T extends Record<string, any>>({
                                         className={cn(
                                             "ml-auto h-4 w-4",
                                             currentValues.includes(
-                                                String(d[returnVal]),
+                                                String(d[valueKey]),
                                             )
                                                 ? "opacity-100"
                                                 : "opacity-0",

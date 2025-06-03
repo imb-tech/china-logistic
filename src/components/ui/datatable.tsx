@@ -25,7 +25,6 @@ import {
 import { DEFAULT_PAGE_SIZE, PAGE_KEY, PAGE_SIZE_KEY } from "@/constants/default"
 import { cn } from "@/lib/utils"
 import { useSearch } from "@tanstack/react-router"
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react"
 import CursorPagination from "../as-params/cursor-pagination"
 import LimitOffsetPagination from "../as-params/limit-offset-pagination"
 import ParamPagination from "../as-params/pagination"
@@ -33,6 +32,8 @@ import EmptyBox from "../custom/empty-box"
 import TableActions from "../custom/table-actions"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Checkbox } from "./checkbox"
+import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react"
+
 
 interface DataTableProps<TData> {
     data: TData[] | undefined
@@ -180,13 +181,13 @@ export function DataTable<TData>({
     React.useEffect(() => {
         const selectedRows = table
             .getSelectedRowModel()
-            .rows.map((row) => (row.original))
+            .rows.map((row) => row.original)
 
         onSelectedRowsChange?.(selectedRows)
     }, [selecteds])
 
     return (
-        <main className={cn("w-full   pb-4", wrapperClassName)}>
+        <main className={cn("w-full   pb-4 overflow-x-auto", wrapperClassName)}>
             {!!head && <div>{head}</div>}
             {selecteds_count && (
                 <div className="flex flex-col gap-2 sm:flex-row items-end sm:items-center sm:justify-between pb-2">
@@ -206,7 +207,7 @@ export function DataTable<TData>({
 
             <div
                 className={cn(
-                    "relative overflow-x-auto overflow-y-auto rounded-md",
+                    "relative  rounded-md ",
                     tableWrapperClassName,
                 )}
             >
@@ -253,18 +254,18 @@ export function DataTable<TData>({
                 )}
                 {data?.length ? (
                     <Table
-                        className={`${className} select-text bg-card rounded-md`}
+                        className={`${className} select-text min-w-[1100px]  bg-card rounded-md`}
                     >
                         <TableHeader>
                             {table
                                 .getHeaderGroups()
                                 .map((headerGroup, index) => (
-                                    <TableRow key={index}>
+                                    <TableRow key={index} className="border-none ">
                                         {numeration && (
                                             <TableHead
                                                 key={index}
                                                 className={cn(
-                                                    " px-2 cursor-pointer",
+                                                    " px-2  cursor-pointer",
                                                     index === 0 && "w-8",
                                                 )}
                                             >
@@ -274,7 +275,7 @@ export function DataTable<TData>({
                                         {selecteds_row && (
                                             <TableHead
                                                 key={index}
-                                                className="border border-input"
+                                                className=""
                                             >
                                                 <Checkbox
                                                     checked={
@@ -298,7 +299,7 @@ export function DataTable<TData>({
                                                     <TableHead
                                                         key={index}
                                                         className={cn(
-                                                            "border border-input px-2 cursor-pointer",
+                                                            " px-2 cursor-pointer",
                                                             index === 0 &&
                                                                 "w-8",
                                                         )}
@@ -323,23 +324,26 @@ export function DataTable<TData>({
                                                                 .enableSorting
                                                                 ? {
                                                                       asc: (
-                                                                          <ArrowUp
+                                                                          <ChevronUp
+                                                                          className="text-muted-foreground"
                                                                               width={
-                                                                                  18
+                                                                                  16
                                                                               }
                                                                           />
                                                                       ),
                                                                       desc: (
-                                                                          <ArrowDown
+                                                                          <ChevronDown
+                                                                          className="text-muted-foreground"
                                                                               width={
-                                                                                  18
+                                                                                  16
                                                                               }
                                                                           />
                                                                       ),
                                                                   }[
                                                                       header.column.getIsSorted() as string
                                                                   ] ?? (
-                                                                      <ArrowUpDown
+                                                                      <ChevronsUpDown
+                                                                      className="text-muted-foreground"
                                                                           width={
                                                                               16
                                                                           }
@@ -368,12 +372,14 @@ export function DataTable<TData>({
                                             onRightClick?.(row.original)
                                         }}
                                         className={cn(
-                                            "hover:bg-border/50 ",
+                                            "hover:bg-gray-200 dark:hover:bg-secondary border-none ",
                                             rowColor?.(row.original),
+                                            index % 2 !== 0 &&
+                                                "bg-secondary/70",
                                         )}
                                     >
                                         {selecteds_row && (
-                                            <TableCell className="w-8 border border-input">
+                                            <TableCell className="w-8 ">
                                                 <Checkbox
                                                     checked={row.getIsSelected()}
                                                     onCheckedChange={(value) =>
@@ -410,11 +416,14 @@ export function DataTable<TData>({
                                                             cell.row.original,
                                                         )
                                                     }
-                                                    className={`cursor-pointer  border border-input ${
-                                                        notClick(
-                                                            cell.column.id,
-                                                        ) && "cursor-default"
-                                                    }`}
+                                                    className={cn(
+                                                        `cursor-pointer border-r border-secondary last:border-none  ${
+                                                            notClick(
+                                                                cell.column.id,
+                                                            ) &&
+                                                            "cursor-default"
+                                                        }`,
+                                                    )}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef

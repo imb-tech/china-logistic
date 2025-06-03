@@ -1,19 +1,18 @@
-import { Controller, Control } from "react-hook-form"
+import { Controller, Control, FieldValues, Path } from "react-hook-form"
 import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import { Combobox as ShadcnCombobox } from "@/components/ui/combobox"
 import { getNestedValue } from "./input"
 
-type ComboboxProps<T extends Record<string, any>> = {
-    name: string
+type ComboboxProps<TForm extends FieldValues, T extends Record<string, any>> = {
+    name: Path<TForm>
     label?: string
     placeholder?: string
     options: T[] | undefined
     disabled?: boolean
     required?: boolean
-    control: Control<any>
+    control: Control<TForm>
     hideError?: boolean
-    returnVal?: string
     onAdd?: () => void
     labelKey?: keyof T
     valueKey?: keyof T
@@ -22,7 +21,10 @@ type ComboboxProps<T extends Record<string, any>> = {
     onSearchChange?: (val: string) => void
 }
 
-export function FormCombobox<T extends Record<string, any>>({
+export function FormCombobox<
+    TForm extends FieldValues,
+    T extends Record<string, any>,
+>({
     name,
     label,
     options,
@@ -31,14 +33,13 @@ export function FormCombobox<T extends Record<string, any>>({
     required,
     control,
     hideError = true,
-    returnVal = "id",
     valueKey,
     labelKey,
     onAdd,
     isLoading,
     skeletonCount,
     onSearchChange,
-}: ComboboxProps<T>) {
+}: ComboboxProps<TForm, T>) {
     const error = getNestedValue(control._formState.errors, name)
     return (
         <fieldset className="flex flex-col w-full">
@@ -55,9 +56,7 @@ export function FormCombobox<T extends Record<string, any>>({
                 name={name}
                 control={control}
                 rules={
-                    required
-                        ? { required: `${label || name}ni kiriting` }
-                        : {}
+                    required ? { required: `${label || name}ni kiriting` } : {}
                 }
                 render={({ field }) => (
                     <ShadcnCombobox
@@ -67,7 +66,6 @@ export function FormCombobox<T extends Record<string, any>>({
                         label={placeholder || label || "Tanlang"}
                         disabled={control._formState.disabled || disabled}
                         isError={!!error}
-                        returnVal={returnVal}
                         onAdd={onAdd}
                         valueKey={valueKey}
                         labelKey={labelKey}

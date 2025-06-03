@@ -1,19 +1,18 @@
-import { Controller, Control } from "react-hook-form"
+import { Controller, Control, FieldValues, Path } from "react-hook-form"
 import FieldLabel from "./form-label"
 import FieldError from "./form-error"
 import { MultiCombobox as ShadcnCombobox } from "@/components/ui/multi-combobox"
 import { getNestedValue } from "./input"
 
-type ComboboxProps<T extends Record<string, any>> = {
-    name: string
+type ComboboxProps<T extends FieldValues> = {
+    name: Path<T>
     label?: string
     placeholder?: string
     options: T[] | undefined
     disabled?: boolean
     required?: boolean
-    control: Control<any>
+    control: Control<T>
     hideError?: boolean
-    returnVal?: string
     onAdd?: () => void
     labelKey?: keyof T
     valueKey?: keyof T
@@ -22,7 +21,7 @@ type ComboboxProps<T extends Record<string, any>> = {
     onSearchChange?: (val: string) => void
 }
 
-export function FormMultiCombobox<T extends Record<string, any>>({
+export function FormMultiCombobox<T extends FieldValues>({
     name,
     label,
     options,
@@ -31,7 +30,6 @@ export function FormMultiCombobox<T extends Record<string, any>>({
     required,
     control,
     hideError = true,
-    returnVal = "id",
     valueKey,
     labelKey,
     onAdd,
@@ -68,7 +66,6 @@ export function FormMultiCombobox<T extends Record<string, any>>({
                             label={placeholder || label || "Tanlang"}
                             disabled={control._formState.disabled || disabled}
                             isError={!!error}
-                            returnVal={returnVal}
                             onAdd={onAdd}
                             valueKey={valueKey}
                             labelKey={labelKey}

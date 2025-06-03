@@ -13,7 +13,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { CheckIcon, ChevronsUpDown, Plus } from "lucide-react"
+import { CheckIcon, ChevronDown, Plus } from "lucide-react"
 import { useState } from "react"
 import { ClassNameValue } from "tailwind-merge"
 import { Skeleton } from "./skeleton"
@@ -28,7 +28,6 @@ type ComboboxProps<T extends Record<string, any>> = {
     disabled?: boolean
     isLoading?: boolean
     isError?: boolean
-    returnVal?: string
     className?: ClassNameValue
     labelKey?: keyof T
     skeletonCount?: number
@@ -43,7 +42,6 @@ export function MultiCombobox<T extends Record<string, any>>({
     disabled,
     onAdd,
     isError,
-    returnVal = "value",
     labelKey = "label",
     valueKey = "value",
     className,
@@ -54,8 +52,7 @@ export function MultiCombobox<T extends Record<string, any>>({
     const [open, setOpen] = useState(false)
 
     const handleSelect = (option: T) => {
-        const newValue =
-            returnVal === labelKey ? option[labelKey] : option[valueKey]
+        const newValue = option[valueKey]
         const updatedValues = values?.find((v) => v === newValue)
             ? values?.filter((v) => v !== newValue)
             : (values || []).concat(newValue)
@@ -66,6 +63,7 @@ export function MultiCombobox<T extends Record<string, any>>({
     const handleClickAdd = () => {
         onAdd ? onAdd?.() : undefined
     }
+    
 
     return (
         <Popover modal open={open} onOpenChange={setOpen}>
@@ -83,11 +81,11 @@ export function MultiCombobox<T extends Record<string, any>>({
                     disabled={disabled}
                 >
                     <div className="flex items-center gap-2">
-                        <ChevronsUpDown className=" h-4 w-4  text-primary opacity-50 " />
+                        <ChevronDown className=" h-4 w-4  text-primary opacity-50 " />
                         {values?.length && values?.length < 3
                             ? options
                                   ?.filter((d) =>
-                                      values?.includes(d[returnVal]),
+                                      values?.includes(d[valueKey]),
                                   )
                                   .map((d) => d[labelKey])
                                   .join(", ")
@@ -95,7 +93,7 @@ export function MultiCombobox<T extends Record<string, any>>({
                             ? values?.length + " ta tanlandi"
                             : label}
                     </div>
-                    <span
+                   {onAdd && <span
                         onClick={(e) => {
                             e.stopPropagation()
                             handleClickAdd()
@@ -103,7 +101,7 @@ export function MultiCombobox<T extends Record<string, any>>({
                         className="dark:bg-card bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
                     >
                         <Plus className=" h-4 w-4 shrink-0  text-primary" />
-                    </span>
+                    </span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">
@@ -131,7 +129,7 @@ export function MultiCombobox<T extends Record<string, any>>({
                                     <CheckIcon
                                         className={cn(
                                             "ml-auto h-4 w-4",
-                                            values?.includes(d[returnVal])
+                                            values?.includes(d[valueKey])
                                                 ? "opacity-100"
                                                 : "opacity-0",
                                         )}

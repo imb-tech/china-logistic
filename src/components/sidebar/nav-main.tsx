@@ -4,30 +4,41 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { MenuItem } from "@/hooks/usePaths"
-import { useLocation, useNavigate } from "@tanstack/react-router"
+import { items } from "@/hooks/usePaths"
+import { Link } from "@tanstack/react-router"
 
-export function NavMain({ items }: { items: MenuItem[] }) {
-    const navigate = useNavigate()
-    const { pathname } = useLocation()
-
+export function NavMain() {
     return (
-        <SidebarGroup>
+        <SidebarGroup className="lg:pt-[70px]">
             <SidebarGroupContent className="flex flex-col gap-2 ">
                 <SidebarMenu>
-                    {items.map((item) => (
-                        <SidebarMenuItem key={item.label}>
-                            <SidebarMenuButton
-                                onClick={() => navigate({ to: item.path })}
-                                tooltip={item.label}
-                                isActive={pathname === item.path}
-                                className={"cursor-pointer "}
-                            >
-                                {item.icon}
-                                <span >{item.label}</span>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
+                    <SidebarMenuItem className="mb-3 lg:hidden">
+                        <div className="flex gap-3 items-center min-w-[180px]">
+                            <SidebarTrigger className="text-gray-500 dark:text-white" />
+                            <span className="text-2xl text-primary font-bold">
+                                Yamin Group
+                            </span>
+                        </div>
+                    </SidebarMenuItem>
+                    {items.map((item,index) => (
+                        <Link
+                            key={index}
+                            to={item.path}
+                            activeProps={{
+                                className:
+                                    "[&_button]:bg-primary hover:[&_button]:bg-primary hover:[&_button]:text-primary-foreground text-primary-foreground",
+                            }}
+                            className="rounded-lg"
+                        >
+                            <SidebarMenuItem>
+                                <SidebarMenuButton tooltip={item.label}>
+                                    {item.icon}
+                                    <span>{item.label}</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </Link>
                     ))}
                 </SidebarMenu>
             </SidebarGroupContent>

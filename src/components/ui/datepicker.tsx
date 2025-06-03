@@ -18,7 +18,8 @@ export function DatePicker({
     disabled,
     calendarProps,
     defaultValue,
-    isError
+    isError,
+    size="lg",
 }: {
     date: Date | any
     setDate: any
@@ -27,25 +28,31 @@ export function DatePicker({
     disabled?: boolean
     calendarProps?: CalendarProps | undefined
     defaultValue?: Date
-    isError?:boolean
+    isError?: boolean
+    size?: "default" | "lg" | "sm" | "icon"
 }) {
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Button
+                    size={size}
                     variant={"outline"}
                     className={cn(
                         "w-[280px] justify-start text-left font-normal",
                         !date && "text-muted-foreground",
                         fullWidth && "w-full",
-                        isError && "border-destructive"
+                        isError && "border-destructive",
                     )}
                     disabled={disabled}
                 >
                     <CalendarIcon className="mr-1 text-gray-400 h-4 w-4" />
-                    {date ?
+                    {date ? (
                         format(date, "dd/MM/yyyy")
-                    :   <span className="text-gray-400">{placeholder || "Kunni tanlang"}</span>}
+                    ) : (
+                        <span className="text-gray-400">
+                            {placeholder || "Kunni tanlang"}
+                        </span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">

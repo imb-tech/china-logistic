@@ -14,21 +14,21 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { useNavigate, useSearch } from "@tanstack/react-router"
-import { CheckIcon, ChevronsUpDown, X } from "lucide-react"
+import { CheckIcon, ChevronDown, X } from "lucide-react"
 import { useEffect, useState } from "react"
- 
+
 type ParamComboboxProps<T extends Record<string, any>> = {
     options: T[]
     paramName: string
     label?: string
     disabled?: boolean
-    labelKey: keyof T
-    valueKey: keyof T
+    labelKey?: keyof T
+    valueKey?: keyof T
     isError?: boolean
-    returnVal?: keyof T
     className?: string
     asloClear?: string[]
     defaultOpt?: T
+    isSearch?: boolean
 }
 
 export function ParamCombobox<T extends Record<string, any>>({
@@ -37,12 +37,12 @@ export function ParamCombobox<T extends Record<string, any>>({
     label,
     disabled = false,
     isError = false,
-    returnVal = "label" as keyof T,
     className,
     asloClear = [],
     defaultOpt,
-    labelKey,
-    valueKey,
+    labelKey = "label",
+    valueKey = "value",
+    isSearch = true,
 }: ParamComboboxProps<T>) {
     const navigate = useNavigate()
     const search: any = useSearch({ from: "/_main" }) as Record<
@@ -57,7 +57,7 @@ export function ParamCombobox<T extends Record<string, any>>({
             navigate({
                 search: {
                     ...search,
-                    [paramName]: String(defaultOpt[returnVal]),
+                    [paramName]: String(defaultOpt[valueKey]),
                 },
             })
         }
@@ -65,8 +65,7 @@ export function ParamCombobox<T extends Record<string, any>>({
     }, [defaultOpt])
 
     const handleSelect = (option: T) => {
-        const returnValue =
-            returnVal === labelKey ? option[labelKey] : option[valueKey]
+        const returnValue = option[valueKey]
 
         navigate({
             search: {
@@ -90,8 +89,14 @@ export function ParamCombobox<T extends Record<string, any>>({
     }
 
     const selectedOption = options.find(
-        (d) => String(d[returnVal]) === currentValue,
+        (d) => String(d[valueKey]) === currentValue,
     )
+
+    const sortedOptions = options?.sort((a, b) => {
+        const isASelected = a[valueKey] == currentValue
+        const isBSelected = b[valueKey] == currentValue
+        return isASelected === isBSelected ? 0 : isASelected ? -1 : 1
+    })
 
     return (
         <Popover modal open={open} onOpenChange={setOpen}>
@@ -109,28 +114,32 @@ export function ParamCombobox<T extends Record<string, any>>({
                     disabled={disabled}
                 >
                     {selectedOption?.[labelKey] ?? label}
-                    <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
+            <PopoverContent className="p-0">
                 <Command>
                     <div className="relative">
-                        <CommandInput placeholder={label} />
-                        {currentValue && (
-                            <span className="absolute cursor-pointer text-destructive top-1.5 right-1 p-1">
-                                <X
-                                    className="text-destructive"
-                                    width={16}
-                                    onClick={handleCancel}
-                                />
-                            </span>
+                        {isSearch && (
+                            <>
+                                <CommandInput placeholder={label} />
+                                {currentValue && (
+                                    <span className="absolute cursor-pointer text-destructive top-1.5 right-1 p-1">
+                                        <X
+                                            className="text-destructive"
+                                            width={16}
+                                            onClick={handleCancel}
+                                        />
+                                    </span>
+                                )}
+                            </>
                         )}
                     </div>
                     <CommandList>
                         <CommandEmpty>Mavjud emas</CommandEmpty>
                         <CommandGroup>
-                            {options.map((d, i) => {
-                                const optionValue = d[returnVal]
+                            {sortedOptions.map((d, i) => {
+                                const optionValue = d[valueKey]
                                 return (
                                     <CommandItem
                                         key={i}

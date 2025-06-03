@@ -9,7 +9,6 @@ import { ClassNameValue } from "tailwind-merge"
 import { Input } from "../ui/input"
 import FieldError from "./form-error"
 import FieldLabel from "./form-label"
-import { useEffect } from "react"
 
 interface IProps<IForm extends FieldValues> {
     methods: UseFormReturn<IForm>
@@ -56,7 +55,7 @@ export function FormInput<IForm extends FieldValues>({
     })
 
     return (
-        <fieldset className={cn("flex flex-col w-full", wrapperClassName)}>
+        <fieldset className={cn("flex flex-col w-full justify-between ", wrapperClassName)}>
             {label && (
                 <FieldLabel
                     htmlFor={name}

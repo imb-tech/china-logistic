@@ -21,7 +21,6 @@ export default function ParamInput({
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            const searchVal = inputRef.current?.value
             navigate({
                 search: {
                     ...params,
@@ -65,6 +64,7 @@ export default function ParamInput({
                 ref={inputRef}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
+                className="h-9"
                 {...props}
             />
         </>

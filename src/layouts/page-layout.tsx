@@ -31,19 +31,15 @@ const PageLayout = ({
         <div className="w-full">
             <div
                 className={cn(
-                    "fixed top-0 right-0  z-10 transition-[width,height,padding] ",
-                    open
-                        ? "lg:w-[calc(100%-238px)] duration-300 w-full"
-                        : "lg:w-[calc(100%-47px)] duration-200 w-full",
+                    "fixed top-0 right-0  z-10 transition-[width,height,padding] w-full",
                 )}
             >
                 <Header
-                    title={title}
-                    leftChildren={leftChildren}
                     rigthChildren={rigthChildren}
+                    leftChildren={leftChildren}
                 />
             </div>
-            <main className="flex xl:gap-2 px-4 md:px-6 pt-24  relative ">
+            <main className="flex xl:gap-2 px-3 md:px-4 pt-[75px] pb-4  relative ">
                 {children}
             </main>
             <Modal
@@ -53,7 +49,7 @@ const PageLayout = ({
             >
                 <CustomerCreate />
             </Modal>
-             <Modal
+            <Modal
                 size="max-w-2xl"
                 title="Yangi Avto qo'shish"
                 modalKey="warehouse-modal"
