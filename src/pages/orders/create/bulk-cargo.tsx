@@ -26,6 +26,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import { usePatch } from "@/hooks/usePatch"
+import { cn } from "@/lib/utils"
 
 type ClientType = {
     customer: number | null
@@ -87,7 +88,7 @@ function BulkCargo() {
     const { data: dataLogist, isLoading: isLoadingLogist } =
         useGet<CustomersTypeResults>(USERS, {
             params: { page_size: 50, role: 2, search: search.agents },
-        }) 
+        })
     const { data: dataCities, isLoading: isLoadingCities } =
         useGet<CitiesResults>(REGION, {
             params: { page_size: 50 },
@@ -283,9 +284,10 @@ function BulkCargo() {
                                         variant="outline"
                                         size="icon"
                                         onClick={() => copyClient(index)}
-                                        className={
-                                            fields.length > 1 ? "" : "px-12"
-                                        }
+                                        className={cn(
+                                            "!h-9",
+                                            fields.length > 1 ? "" : "px-12",
+                                        )}
                                     >
                                         <Copy className="h-4 min-w-4" />
                                     </Button>
@@ -294,7 +296,7 @@ function BulkCargo() {
                                             type="button"
                                             variant="outline"
                                             size="icon"
-                                            className="text-red-500"
+                                            className="text-red-500 !h-9"
                                             onClick={() => remove(index)}
                                         >
                                             <Trash2 className="h-4 w-4" />

@@ -370,7 +370,7 @@ function WholeLoad() {
                                     <Button
                                         onClick={() => copyContainer(index)}
                                         type="button"
-                                        className="w-full md:w-1/6 bg-emerald-500"
+                                        className="w-full md:w-1/6 bg-emerald-500 hover:bg-emerald-600 !h-9"
                                         icon={<Copy size={18} />}
                                     >
                                         Nusxalash
@@ -380,7 +380,7 @@ function WholeLoad() {
                                             type="button"
                                             variant="outline"
                                             icon={<Trash2 size={18} />}
-                                            className="text-red-500 w-full md:w-1/4 "
+                                            className="text-red-500 w-full md:w-1/6 !h-9"
                                             onClick={() =>
                                                 handleRemoveContainer(index)
                                             }
@@ -538,7 +538,7 @@ const ContainerFields: FC<Props> = ({
                                 variant="outline"
                                 size="icon"
                                 onClick={() => copyLoad(loadIndex)}
-                                className={"w-full"}
+                                className={"w-full !h-9"}
                             >
                                 <Copy className="h-4 min-w-4" />
                             </Button>
@@ -547,7 +547,7 @@ const ContainerFields: FC<Props> = ({
                                 variant="outline"
                                 size="icon"
                                 onClick={handleAddLoad}
-                                className={"w-full"}
+                                className={"w-full !h-9"}
                             >
                                 <Plus className="h-4 min-w-4" />
                             </Button>
@@ -557,7 +557,7 @@ const ContainerFields: FC<Props> = ({
                                     type="button"
                                     variant="outline"
                                     size="icon"
-                                    className="text-red-500 w-full "
+                                    className="text-red-500 w-full !h-9 "
                                     onClick={() => handleRemoveLoad(loadIndex)}
                                 >
                                     <Trash2 className="h-4 w-4" />
