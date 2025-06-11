@@ -12,7 +12,7 @@ export const useOrderColumns = (): ColumnDef<OrderType>[] => {
             header: "Mijoz",
             accessorKey: "customers",
             enableSorting: true,
-            cell: ({ row }) => row.original.customers.map((item) => item),
+            cell: ({ row }) => row.original.customers[0],
         },
         {
             header: "Status",
@@ -29,11 +29,11 @@ export const useOrderColumns = (): ColumnDef<OrderType>[] => {
             header: "Yaratilgan sana",
             accessorKey: "created_at",
             cell: ({ row }) =>
-                format(row.original.created_at, "yyyy-MM-dd HH:mm"),
+                format(row.original.created_at, "yyyy-MM-dd"),
         },
         {
             header: "Yetkazish sanasi",
-            accessorKey: "deliver_at",
+            accessorKey: "load_date",
             cell: ({ row }) => format(row.original.load_date, "yyyy-MM-dd"),
         },
     ]

@@ -18,6 +18,8 @@ import Spinner from "./spinner"
                     "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
                 secondary:
                     "!bg-primary/10 !text-primary hover:!bg-primary/5",
+                      secondary_danger:
+                    "!bg-destructive/10 !text-destructive hover:!bg-destructive/30",
                 ghost: "hover:bg-accent hover:text-accent-foreground",
                 link: "text-primary underline-offset-4 hover:underline",
             },

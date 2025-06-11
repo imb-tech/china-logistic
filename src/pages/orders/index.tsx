@@ -2,7 +2,7 @@ import { useOrderColumns } from "./columns"
 import { DataTable } from "@/components/ui/datatable"
 import ParamTabs from "@/components/as-params/tabs"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { LayoutList, Plus, Table } from "lucide-react"
 import DeleteModal from "@/components/custom/delete-modal"
 import { useModal } from "@/hooks/useModal"
 import { useNavigate, useSearch } from "@tanstack/react-router"
@@ -11,6 +11,10 @@ import { CONTAINERS } from "@/constants/api-endpoints"
 import Modal from "@/components/custom/modal"
 import OrderStatusChange from "./order-change-status"
 import { useTypedStoreData } from "@/hooks/useStoreData"
+import OrderCard from "./order-card"
+import EmptyBox from "@/components/custom/empty-box"
+import OrderCardSkeletion from "./order-card-skeletion"
+import ParamPagination from "@/components/as-params/pagination"
 
 export const statusColor: { [key: string]: string } = {
     "10": "text-primary",
@@ -61,12 +65,23 @@ export const statusOptions = [
     },
 ]
 
+const tabs = [
+    {
+        label: <Table size={20} />,
+        value: "table",
+    },
+    {
+        label: <LayoutList size={20} />,
+        value: "card",
+    },
+]
+
 export const OrdersPages = () => {
     const navigate = useNavigate()
     const { openModal: openModalDelete } = useModal("delete-order")
     const { storeData, setStoreData, clearUserData } =
         useTypedStoreData<OrderType>()
-    const search = useSearch({ from: "/_main/" })
+    const search: SearchParams = useSearch({ from: "/_main/" })
     const { data, isLoading } = useGet<OrdersTypeResults>(CONTAINERS, {
         params: search,
     })
@@ -82,19 +97,51 @@ export const OrdersPages = () => {
         <div className="w-full ">
             <div className="mb-5 flex justify-between items-center gap-4">
                 <ParamTabs options={statusOptions} paramName="status" />
-                <Button
-                    onClick={() => navigate({ to: "/order-create" })}
-                    icon={<Plus size={18} />}
-                >
-                    Buyurtma qo'shish
-                </Button>
+                <div className="flex items-center gap-3">
+                    <Button
+                        onClick={() => navigate({ to: "/order-create" })}
+                        icon={<Plus size={18} />}
+                    >
+                        Buyurtma qo'shish
+                    </Button>
+                    <ParamTabs options={tabs} />
+                </div>
             </div>
-            <DataTable
-                columns={columns}
-                data={data?.results}
-                loading={isLoading}
-                onDelete={(row) => handleDelete(row.original)}
-            />
+
+            {search.page_tabs === "table" ? (
+                <DataTable
+                    columns={columns}
+                    data={data?.results}
+                    loading={isLoading}
+                    onDelete={(row) => handleDelete(row.original)}
+                />
+            ) : (
+                <div>
+                    <div className="grid grid-cols-4 gap-4">
+                        {isLoading
+                            ? Array.from({ length: 20 }).map((_, index) => (
+                                  <OrderCardSkeletion key={index} />
+                              ))
+                            : !!data?.results?.length &&
+                              data?.results?.map((item) => (
+                                  <OrderCard
+                                      key={item.id}
+                                      item={item}
+                                      onDelete={(item) => handleDelete(item)}
+                                  />
+                              ))}
+                    </div>
+                    {!!data?.results?.length && (
+                        <div className="my-4 flex justify-center">
+                            <ParamPagination
+                                disabled={isLoading}
+                                totalPages={1}
+                            />
+                        </div>
+                    )}
+                    {!data?.results?.length && <EmptyBox />}
+                </div>
+            )}
             <DeleteModal
                 modalKey="delete-order"
                 id={storeData?.id}

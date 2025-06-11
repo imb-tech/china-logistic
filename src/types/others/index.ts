@@ -22,6 +22,7 @@ type SearchParams = {
     money_type?: string
     status?: string
     page_size?: string
+    page_tabs?:string
 }
 
 type PaginationProps = {
