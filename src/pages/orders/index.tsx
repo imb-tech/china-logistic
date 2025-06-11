@@ -104,19 +104,11 @@ export const OrdersPages = () => {
                     >
                         Buyurtma qo'shish
                     </Button>
-                    <ParamTabs options={tabs} />
+                    <ParamTabs options={tabs}  />
                 </div>
             </div>
 
-            {search.page_tabs === "table" ? (
-                <DataTable
-                    columns={columns}
-                    data={data?.results}
-                    loading={isLoading}
-                    onDelete={(row) => handleDelete(row.original)}
-                    numeration
-                />
-            ) : (
+            {search.page_tabs === "card" ? (
                 <div>
                     <div className="grid grid-cols-4 gap-4">
                         {isLoading
@@ -142,6 +134,14 @@ export const OrdersPages = () => {
                     )}
                     {!data?.results?.length && <EmptyBox />}
                 </div>
+            ) : (
+                <DataTable
+                    columns={columns}
+                    data={data?.results}
+                    loading={isLoading}
+                    onDelete={(row) => handleDelete(row.original)}
+                    numeration
+                />
             )}
             <DeleteModal
                 modalKey="delete-order"

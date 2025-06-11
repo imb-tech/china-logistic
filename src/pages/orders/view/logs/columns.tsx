@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { statusColor, statusText } from "../.."
+import { cn } from "@/lib/utils"
 
 export const useLogsColumns = (): ColumnDef<Logs>[] => {
     return [
@@ -8,8 +9,13 @@ export const useLogsColumns = (): ColumnDef<Logs>[] => {
             header: "Yuklash statusi",
             accessorKey: "agent",
             cell: ({ row }) => (
-                <span className={statusColor[row.original.status]}>
-                    {statusText[row.original.status]}
+                <span
+                    className={cn(
+                        "whitespace-nowrap",
+                        statusColor[row.original.status],
+                    )}
+                >
+                    {statusText[row.original.status] || "Agent o'zgartirildi"}
                 </span>
             ),
         },

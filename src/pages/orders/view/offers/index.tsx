@@ -4,7 +4,12 @@ import { Plus } from "lucide-react"
 import { DataTable } from "@/components/ui/datatable"
 import { useOffersColumns } from "./columns"
 import { useParams } from "@tanstack/react-router"
-import { OFFERS, OFFERS_SEND, USERS } from "@/constants/api-endpoints"
+import {
+    OFFERS,
+    OFFERS_ACCEPT,
+    OFFERS_SEND,
+    USERS,
+} from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { MultiCombobox } from "@/components/ui/multi-combobox"
 import { useState } from "react"
@@ -34,9 +39,17 @@ export const OffersPages = () => {
     )
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {
-            toast.success("Muvaffaqiyatli taklif yuborildi")
+            toast.success("Taklif  muvaffaqiyatli yuborildi")
             queryClient.invalidateQueries({ queryKey: [`${OFFERS}/${id?.id}`] })
             setValues([])
+        },
+    })
+    const { mutate: offerMutate } = usePost({
+        onSuccess: () => {
+            toast.success(
+                "Muvaffaqiyatli taklif qo'shildi, endi tasdiqlashingiz mumkin",
+            )
+            queryClient.invalidateQueries({ queryKey: [`${OFFERS}/${id?.id}`] })
         },
     })
 
@@ -53,7 +66,13 @@ export const OffersPages = () => {
         console.log(val)
     }
 
-    const columns = useOffersColumns({ onOffer })
+    const onOfferAccept = (val: Offers) => {
+        offerMutate(OFFERS_ACCEPT, {
+            offer_id: val.id,
+        })
+    }
+
+    const columns = useOffersColumns({ onOffer, onOfferAccept })
 
     return (
         <div className="w-full">

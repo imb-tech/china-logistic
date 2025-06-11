@@ -6,15 +6,20 @@ import { Check, Clock4, Plus, X } from "lucide-react"
 
 type Props = {
     onOffer: (val: Offers) => void
+    onOfferAccept: (val: Offers) => void
 }
 
-export const useOffersColumns = ({ onOffer }: Props): ColumnDef<Offers>[] => {
+export const useOffersColumns = ({ onOffer,onOfferAccept }: Props): ColumnDef<Offers>[] => {
     return [
         {
             header: "Logist",
             accessorKey: "agent",
             enableSorting: true,
-            cell: ({ row }) => <span className="whitespace-nowrap">{row.original.agent?.full_name}</span>,
+            cell: ({ row }) => (
+                <span className="whitespace-nowrap">
+                    {row.original.agent?.full_name}
+                </span>
+            ),
         },
         {
             header: "Narx",
@@ -75,16 +80,20 @@ export const useOffersColumns = ({ onOffer }: Props): ColumnDef<Offers>[] => {
                             type="button"
                             size={"sm"}
                             variant={"secondary_danger"}
-                            onClick={() => onOffer(row.original)}
+                            onClick={() => onOfferAccept(row.original)}
                             icon={
                                 <Check className="text-destructive" size={18} />
                             }
                         />
                     </div>
                 ) : row.original.status === 3 ? (
-                    <Check className="text-primary" size={20} />
+                    <div className="flex justify-end">
+                        <Check className="text-primary" size={20} />
+                    </div>
                 ) : (
-                    <X className="text-destructive" size={20} />
+                    <div className="flex justify-end">
+                        <X className="text-destructive" size={20} />
+                    </div>
                 ),
         },
     ]

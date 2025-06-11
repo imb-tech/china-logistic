@@ -34,7 +34,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Checkbox } from "./checkbox"
 import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react"
 
-
 interface DataTableProps<TData> {
     data: TData[] | undefined
     columns: ColumnDef<TData>[]
@@ -84,7 +83,7 @@ export function DataTable<TData>({
     data,
     columns,
     loading,
-    className="min-w-[1100px]",
+    className = "min-w-[1100px]",
     deleteSelecteds,
     onRightClick,
     selecteds_count,
@@ -205,12 +204,7 @@ export function DataTable<TData>({
                 </div>
             )}
 
-            <div
-                className={cn(
-                    "relative  rounded-md ",
-                    tableWrapperClassName,
-                )}
-            >
+            <div className={cn("relative  rounded-md ", tableWrapperClassName)}>
                 {loading && (
                     <Table className="flex flex-col gap-1">
                         {Array.from({ length: skeletonRowCount })?.map(
@@ -260,23 +254,12 @@ export function DataTable<TData>({
                             {table
                                 .getHeaderGroups()
                                 .map((headerGroup, index) => (
-                                    <TableRow key={index} className="border-none ">
-                                        {numeration && (
-                                            <TableHead
-                                                key={index}
-                                                className={cn(
-                                                    " px-2  cursor-pointer",
-                                                    index === 0 && "w-8",
-                                                )}
-                                            >
-                                                №
-                                            </TableHead>
-                                        )}
+                                    <TableRow
+                                        key={index}
+                                        className="border-none "
+                                    >
                                         {selecteds_row && (
-                                            <TableHead
-                                                key={index}
-                                                className=""
-                                            >
+                                            <TableHead key={index} className="">
                                                 <Checkbox
                                                     checked={
                                                         table.getIsAllPageRowsSelected() ||
@@ -292,6 +275,17 @@ export function DataTable<TData>({
                                                 />
                                             </TableHead>
                                         )}
+                                        {numeration && (
+                                            <TableHead
+                                                key={index}
+                                                className={cn(
+                                                    " px-2  cursor-pointer",
+                                                    index === 0 && "w-8",
+                                                )}
+                                            >
+                                                №
+                                            </TableHead>
+                                        )}
 
                                         {headerGroup.headers.map(
                                             (header, index) => {
@@ -299,10 +293,7 @@ export function DataTable<TData>({
                                                     <TableHead
                                                         key={index}
                                                         className={cn(
-                                                            " px-2 cursor-pointer",
-                                                            index === 0 &&
-                                                                "w-8",
-                                                        )}
+                                                            " px-2 cursor-pointer")}
                                                         onClick={
                                                             header.column
                                                                 .columnDef
@@ -325,7 +316,7 @@ export function DataTable<TData>({
                                                                 ? {
                                                                       asc: (
                                                                           <ChevronUp
-                                                                          className="text-muted-foreground"
+                                                                              className="text-muted-foreground"
                                                                               width={
                                                                                   16
                                                                               }
@@ -333,7 +324,7 @@ export function DataTable<TData>({
                                                                       ),
                                                                       desc: (
                                                                           <ChevronDown
-                                                                          className="text-muted-foreground"
+                                                                              className="text-muted-foreground"
                                                                               width={
                                                                                   16
                                                                               }
@@ -343,7 +334,7 @@ export function DataTable<TData>({
                                                                       header.column.getIsSorted() as string
                                                                   ] ?? (
                                                                       <ChevronsUpDown
-                                                                      className="text-muted-foreground"
+                                                                          className="text-muted-foreground"
                                                                           width={
                                                                               16
                                                                           }

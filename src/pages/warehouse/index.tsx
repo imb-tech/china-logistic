@@ -43,6 +43,7 @@ export const WarehousePages = () => {
                             <Button
                                 onClick={handleAdd}
                                 disabled={!storeDataCustomerRow?.length}
+                                className="whitespace-nowrap"
                             >
                                 <Plus className="h-4 w-4" />
                                 Transport Qo'shish
