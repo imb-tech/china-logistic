@@ -75,20 +75,22 @@ export function Combobox<T extends Record<string, any>>({
                     variant="outline"
                     role="combobox"
                     className={cn(
-                        "w-full justify-between bg-background   px-2 hover:bg-background font-normal text-gray-400 hover:text-gray-400",
+                        "w-full  justify-between bg-background   px-2 hover:bg-background font-normal text-gray-400 hover:text-gray-400",
                         value && "font-medium text-foreground",
                         isError && " border-destructive",
                         className,
                     )}
                     disabled={disabled}
                 >
-                    <div className="flex items-center gap-2 ">
-                        <ChevronDown className=" h-4 w-4  text-primary opacity-50 " />
-                        {value
-                            ? options
-                                  ?.find((d) => d[valueKey] == value)
-                                  ?.[labelKey]?.toString() || value
-                            : label}
+                    <div className="flex items-center gap-2   ">
+                        <ChevronDown className=" min-h-4 min-w-4  text-primary opacity-50 " />
+                        <span className="line-clamp-1 break-all">
+                            {value
+                                ? options
+                                      ?.find((d) => d[valueKey] == value)
+                                      ?.[labelKey]?.toString() || value
+                                : label}
+                        </span>
                     </div>
                     {onAdd && (
                         <span
