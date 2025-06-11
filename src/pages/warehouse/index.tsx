@@ -56,6 +56,7 @@ export const WarehousePages = () => {
                         selecteds_count
                         selecteds_row
                         onSelectedRowsChange={(val) => setStoreData(val)}
+                        numeration
                     />
                 </CardContent>
             </Card>

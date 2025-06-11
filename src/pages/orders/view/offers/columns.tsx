@@ -1,18 +1,20 @@
+import { Button } from "@/components/ui/button"
 import { formatMoney } from "@/lib/format-money"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
+import { Check, Clock4, Plus, X } from "lucide-react"
 
-export const useOffersColumns = (): ColumnDef<Offers>[] => {
+type Props = {
+    onOffer: (val: Offers) => void
+}
+
+export const useOffersColumns = ({ onOffer }: Props): ColumnDef<Offers>[] => {
     return [
-        {
-            header: "№",
-            cell: ({ row }) => row.index + 1,
-        },
         {
             header: "Logist",
             accessorKey: "agent",
             enableSorting: true,
-            cell: ({ row }) => row.original.agent?.full_name,
+            cell: ({ row }) => <span className="whitespace-nowrap">{row.original.agent?.full_name}</span>,
         },
         {
             header: "Narx",
@@ -45,12 +47,45 @@ export const useOffersColumns = (): ColumnDef<Offers>[] => {
         {
             header: "Stansiya",
             accessorKey: "station",
-             cell: ({ row }) => row.original?.station?.name || "--",
+            cell: ({ row }) => row.original?.station?.name || "--",
         },
         {
             header: "Yukni yopish darajasi",
             accessorKey: "agent",
-              cell: ({ row }) => row.original?.agent?.completed_orders || 0,
+            cell: ({ row }) => row.original?.agent?.completed_orders || 0,
+        },
+        {
+            header: " ",
+            accessorKey: "action",
+            cell: ({ row }) =>
+                row.original.status === 1 ? (
+                    <div className="flex items-center gap-2 justify-end">
+                        <Button
+                            type="button"
+                            size={"sm"}
+                            variant={"secondary"}
+                            onClick={() => onOffer(row.original)}
+                            icon={<Plus size={18} />}
+                        />
+                        <Clock4 className="text-orange-300" size={20} />
+                    </div>
+                ) : row.original.status === 2 ? (
+                    <div className="flex justify-end">
+                        <Button
+                            type="button"
+                            size={"sm"}
+                            variant={"secondary_danger"}
+                            onClick={() => onOffer(row.original)}
+                            icon={
+                                <Check className="text-destructive" size={18} />
+                            }
+                        />
+                    </div>
+                ) : row.original.status === 3 ? (
+                    <Check className="text-primary" size={20} />
+                ) : (
+                    <X className="text-destructive" size={20} />
+                ),
         },
     ]
 }

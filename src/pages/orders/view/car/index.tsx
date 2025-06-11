@@ -1,17 +1,20 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/datatable"
-import { useLogsColumns } from "./columns"
+import { useCarColumns } from "./columns"
 import { useParams } from "@tanstack/react-router"
-import { CONTAINERS_LOGS } from "@/constants/api-endpoints"
+import { INVENTORY_CAR } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 
-export const LogsPages = () => {
+export const CarsPages = () => {
     const id = useParams({ from: "/_main/_orders/order/$id" })
-    const { data, isLoading } = useGet<Logs[]>(`${CONTAINERS_LOGS}/${id?.id}`, {
-        options: { enabled: !!id.id },
-    })
+    const { data, isLoading } = useGet<CarType[]>(
+        `${INVENTORY_CAR}/${id?.id}`,
+        {
+            options: { enabled: !!id.id },
+        },
+    )
 
-    const columns = useLogsColumns()
+    const columns = useCarColumns()
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">

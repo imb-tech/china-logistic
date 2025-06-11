@@ -278,31 +278,35 @@ function BulkCargo() {
                                 Mijoz #{index + 1}
                             </h1>
                             <div className="relative  rounded-lg p-3  dark:bg-card dark:border bg-slate-100">
-                                <div className="flex space-x-2 absolute right-3 bottom-3">
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() => copyClient(index)}
-                                        className={cn(
-                                            "!h-9",
-                                            fields.length > 1 ? "" : "px-12",
-                                        )}
-                                    >
-                                        <Copy className="h-4 min-w-4" />
-                                    </Button>
-                                    {fields.length > 1 && (
+                                {!dataCargo?.id && (
+                                    <div className="flex space-x-2 absolute right-3 bottom-3">
                                         <Button
                                             type="button"
                                             variant="outline"
                                             size="icon"
-                                            className="text-red-500 !h-9"
-                                            onClick={() => remove(index)}
+                                            onClick={() => copyClient(index)}
+                                            className={cn(
+                                                "!h-9",
+                                                fields.length > 1
+                                                    ? ""
+                                                    : "px-12",
+                                            )}
                                         >
-                                            <Trash2 className="h-4 w-4" />
+                                            <Copy className="h-4 min-w-4" />
                                         </Button>
-                                    )}
-                                </div>
+                                        {fields.length > 1 && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                className="text-red-500 !h-9"
+                                                onClick={() => remove(index)}
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                )}
                                 <div className="mb-4">
                                     <FormCombobox
                                         isLoading={isLoadingUsers}
@@ -318,7 +322,12 @@ function BulkCargo() {
                                         }
                                     />
                                 </div>
-                                <div className="grid xl:grid-cols-5 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 xl:pr-28 sm:pb-0 pb-16">
+                                <div
+                                    className={cn(
+                                        "grid xl:grid-cols-5 lg:grid-cols-3  sm:grid-cols-2 grid-cols-1 gap-4 ",
+                                        !dataCargo?.id &&"xl:pr-28 sm:pb-0 pb-16",
+                                    )}
+                                >
                                     <FormInput
                                         methods={form}
                                         name={`loads.${index}.loading_address`}
@@ -367,16 +376,18 @@ function BulkCargo() {
                             </div>
                         </div>
                     ))}
-                    <div className="flex justify-center">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="rounded-full md:min-h-20 md:min-w-20 h-14 w-14  bg-slate-100 dark:bg-background "
-                            onClick={addNewClient}
-                        >
-                            <Plus className="md:h-11 md:w-11 min-w-8 min-h-8 p-1 dark:text-white rounded-full hover:bg-muted" />
-                        </Button>
-                    </div>
+                    {!dataCargo?.id && (
+                        <div className="flex justify-center">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="rounded-full md:min-h-20 md:min-w-20 h-14 w-14  bg-slate-100 dark:bg-background "
+                                onClick={addNewClient}
+                            >
+                                <Plus className="md:h-11 md:w-11 min-w-8 min-h-8 p-1 dark:text-white rounded-full hover:bg-muted" />
+                            </Button>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 

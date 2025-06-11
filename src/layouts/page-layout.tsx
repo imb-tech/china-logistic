@@ -1,6 +1,5 @@
 import Modal from "@/components/custom/modal"
 import Header from "@/components/header"
-import { useSidebar } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import CustomerCreate from "@/pages/customers/customer-create"
 import LogisticsCreate from "@/pages/logistics/logis-create"
@@ -26,7 +25,6 @@ const PageLayout = ({
     leftChildren,
     rigthChildren,
 }: Props) => {
-    const { open } = useSidebar()
     return (
         <div className="w-full">
             <div

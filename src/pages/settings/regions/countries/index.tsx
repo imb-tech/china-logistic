@@ -73,6 +73,7 @@ export const CountriesPages = () => {
                             paramName: "countries_page",
                         }}
                         className="min-w-[650px]"
+                        numeration
                     />
                 </CardContent>
             </Card>

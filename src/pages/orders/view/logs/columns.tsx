@@ -5,10 +5,6 @@ import { statusColor, statusText } from "../.."
 export const useLogsColumns = (): ColumnDef<Logs>[] => {
     return [
         {
-            header: "№",
-            cell: ({ row }) => row.index + 1,
-        },
-        {
             header: "Yuklash statusi",
             accessorKey: "agent",
             cell: ({ row }) => (

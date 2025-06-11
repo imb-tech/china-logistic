@@ -15,8 +15,8 @@ export function FormSelect<
     required,
     control,
     setValue,
-    valueKey,
-    labelKey,
+    valueKey="value",
+    labelKey="label",
     hideError = true,
 }: thisProps<TForm, T>) {
     const error = getNestedValue(control._formState.errors, name)

@@ -5,10 +5,6 @@ import OrderStatus from "./order-status"
 export const useOrderColumns = (): ColumnDef<OrderType>[] => {
     return [
         {
-            header: "№",
-            cell: ({ row }) => row.index + 1,
-        },
-        {
             header: "Mijoz",
             accessorKey: "customers",
             enableSorting: true,

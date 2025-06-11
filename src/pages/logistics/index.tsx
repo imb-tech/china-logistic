@@ -61,6 +61,7 @@ export const LogisticsPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        numeration
                     />
                 </CardContent>
             </Card>

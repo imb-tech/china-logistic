@@ -72,6 +72,7 @@ export const StationsPages = () => {
                             pageSizeParamName: "station_page_size",
                             paramName: "station_page",
                         }}
+                        numeration
                     />
                 </CardContent>
             </Card>

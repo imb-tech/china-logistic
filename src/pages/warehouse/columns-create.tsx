@@ -4,10 +4,6 @@ import { ColumnDef } from "@tanstack/react-table"
 export const useWarehouseCreateColumns = (): ColumnDef<WarehouseType>[] => {
     return [
         {
-            header: "№",
-            cell: ({ row }) => row.index + 1,
-        },
-        {
             header: "Mahsulot nomi",
             accessorKey: "id",
             cell: ({ row }) => row.original.load.product.name,

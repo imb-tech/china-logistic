@@ -73,6 +73,7 @@ export const ProductsPages = () => {
                             paramName: "product_page",
                         }}
                         className="min-w-[650px]"
+                        numeration
                     />
                 </CardContent>
             </Card>

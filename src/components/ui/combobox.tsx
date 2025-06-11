@@ -83,7 +83,7 @@ export function Combobox<T extends Record<string, any>>({
                     disabled={disabled}
                 >
                     <div className="flex items-center gap-2   ">
-                        <ChevronDown className=" min-h-4 min-w-4  text-primary opacity-50 " />
+                        <ChevronDown className=" min-h-4 min-w-4 h-4 w-4  text-primary opacity-50 " />
                         <span className="line-clamp-1 break-all">
                             {value
                                 ? options

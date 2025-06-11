@@ -79,6 +79,13 @@ type Logs = {
   hint: string
 }
 
+type CarType = {
+  id: number,
+  total_weight: number
+  total_quantity: number
+  car_number: string
+}
+
 
 
 
@@ -97,7 +104,7 @@ type ApiCustomer = {
   phone_number: string
 }
 
-type ApiLoad= {
+type ApiLoad = {
   id: number
   customer: ApiCustomer | null
   product: ApiProduct | null
@@ -130,4 +137,13 @@ type ApiCargoResponse = {
   destination_address: string
   quality: number | null
   comment: string | null
+}
+
+type OffersCreate = {
+  agent_id?: number;
+  currency?: string | null;
+  load_date: string | null;
+  station?: number
+  price?: number | null;
+  start_date: string | null;
 }

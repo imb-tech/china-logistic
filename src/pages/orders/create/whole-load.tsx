@@ -20,6 +20,7 @@ import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { cn } from "@/lib/utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate, useParams } from "@tanstack/react-router"
 import { Copy, Plus, Trash2 } from "lucide-react"
@@ -240,8 +241,7 @@ function WholeLoad() {
 
             form.reset(transformedData)
         }
-    }, [dataCargo]);
-    
+    }, [dataCargo])
 
     return (
         <form
@@ -334,6 +334,7 @@ function WholeLoad() {
                                     openModalProductAdd={openModalProductAdd}
                                     isLoadingProducts={isLoadingProducts}
                                     setSearchProducts={setSearchProducts}
+                                    dataCargo={dataCargo}
                                 />
 
                                 <FormCombobox
@@ -366,42 +367,47 @@ function WholeLoad() {
                                     wrapperClassName="lg:col-span-4 sm:col-span-2"
                                     rows={4}
                                 />
-                                <div className="sm:col-span-2 lg:col-span-4 flex justify-end gap-4">
-                                    <Button
-                                        onClick={() => copyContainer(index)}
-                                        type="button"
-                                        className="w-full md:w-1/6 bg-emerald-500 hover:bg-emerald-600 !h-9"
-                                        icon={<Copy size={18} />}
-                                    >
-                                        Nusxalash
-                                    </Button>
-                                    {fieldsContainer.length > 1 && (
+
+                                {!dataCargo?.id && (
+                                    <div className="sm:col-span-2 lg:col-span-4 flex justify-end gap-4">
                                         <Button
+                                            onClick={() => copyContainer(index)}
                                             type="button"
-                                            variant="outline"
-                                            icon={<Trash2 size={18} />}
-                                            className="text-red-500 w-full md:w-1/6 !h-9"
-                                            onClick={() =>
-                                                handleRemoveContainer(index)
-                                            }
+                                            className="w-full md:w-1/6 bg-emerald-500 hover:bg-emerald-600 !h-9"
+                                            icon={<Copy size={18} />}
                                         >
-                                            O'chirish
+                                            Nusxalash
                                         </Button>
-                                    )}
-                                </div>
+                                        {fieldsContainer.length > 1 && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                icon={<Trash2 size={18} />}
+                                                className="text-red-500 w-full md:w-1/6 !h-9"
+                                                onClick={() =>
+                                                    handleRemoveContainer(index)
+                                                }
+                                            >
+                                                O'chirish
+                                            </Button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}
-                    <div className="flex justify-center mt-5">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="rounded-full md:min-h-20 md:min-w-20 h-14 w-14  bg-slate-100 dark:bg-background "
-                            onClick={handleAddContainer}
-                        >
-                            <Plus className="md:h-11 md:w-11 min-w-8 min-h-8 p-1 dark:text-white rounded-full hover:bg-muted" />
-                        </Button>
-                    </div>
+                    {!dataCargo?.id && (
+                        <div className="flex justify-center mt-5">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="rounded-full md:min-h-20 md:min-w-20 h-14 w-14  bg-slate-100 dark:bg-background "
+                                onClick={handleAddContainer}
+                            >
+                                <Plus className="md:h-11 md:w-11 min-w-8 min-h-8 p-1 dark:text-white rounded-full hover:bg-muted" />
+                            </Button>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 
@@ -449,6 +455,7 @@ interface Props {
     openModalProductAdd: () => void
     setSearchProducts: (val: string) => void
     isLoadingProducts: boolean
+    dataCargo?: ApiCargoResponse
 }
 
 const ContainerFields: FC<Props> = ({
@@ -458,6 +465,7 @@ const ContainerFields: FC<Props> = ({
     openModalProductAdd,
     isLoadingProducts,
     setSearchProducts,
+    dataCargo,
 }) => {
     const { control } = form
     const { fields, append, remove, insert } = useFieldArray({
@@ -494,7 +502,14 @@ const ContainerFields: FC<Props> = ({
                     key={field.id}
                     className="relative  rounded-lg p-3 dark:bg-card dark:border bg-slate-200 lg:col-span-4 sm:col-span-2  "
                 >
-                    <div className=" grid xl:grid-cols-6 lg:grid-cols-3  sm:grid-cols-2 grid-cols-1 gap-4 ">
+                    <div
+                        className={cn(
+                            " grid lg:grid-cols-3  sm:grid-cols-2 grid-cols-1 gap-4 ",
+                            dataCargo?.id
+                                ? "xl:grid-cols-5"
+                                : "xl:grid-cols-6 ",
+                        )}
+                    >
                         <FormInput
                             methods={form}
                             name={`containers.${nestIndex}.loads.${loadIndex}.loading_address`}
@@ -532,38 +547,42 @@ const ContainerFields: FC<Props> = ({
                             label="Mahsulot hajmi"
                             required
                         />
-                        <div className="flex gap-3 items-end  w-full">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="icon"
-                                onClick={() => copyLoad(loadIndex)}
-                                className={"w-full !h-9"}
-                            >
-                                <Copy className="h-4 min-w-4" />
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="icon"
-                                onClick={handleAddLoad}
-                                className={"w-full !h-9"}
-                            >
-                                <Plus className="h-4 min-w-4" />
-                            </Button>
-
-                            {fields.length > 1 && (
+                        {!dataCargo?.id && (
+                            <div className="flex gap-3 items-end  w-full">
                                 <Button
                                     type="button"
                                     variant="outline"
                                     size="icon"
-                                    className="text-red-500 w-full !h-9 "
-                                    onClick={() => handleRemoveLoad(loadIndex)}
+                                    onClick={() => copyLoad(loadIndex)}
+                                    className={"w-full !h-9"}
                                 >
-                                    <Trash2 className="h-4 w-4" />
+                                    <Copy className="h-4 min-w-4" />
                                 </Button>
-                            )}
-                        </div>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={handleAddLoad}
+                                    className={"w-full !h-9"}
+                                >
+                                    <Plus className="h-4 min-w-4" />
+                                </Button>
+
+                                {fields.length > 1 && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="icon"
+                                        className="text-red-500 w-full !h-9 "
+                                        onClick={() =>
+                                            handleRemoveLoad(loadIndex)
+                                        }
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}

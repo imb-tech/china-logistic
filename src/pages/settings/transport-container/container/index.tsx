@@ -72,6 +72,7 @@ export const ContainerPages = () => {
                             paramName: "container_page",
                         }}
                         className="min-w-[650px]"
+                        numeration
                     />
                 </CardContent>
             </Card>

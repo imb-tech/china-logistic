@@ -4,6 +4,7 @@ import { OffersPages } from "./offers"
 import { LogsPages } from "./logs"
 import WholeLoad from "../create/whole-load"
 import { useSearch } from "@tanstack/react-router"
+import { CarsPages } from "./car"
 
 export const OrdersDetailsPages = () => {
     const serach: { order_type: number } = useSearch({
@@ -29,7 +30,7 @@ export const OrdersDetailsPages = () => {
         {
             value: "4",
             label: "Chegaradagi mashinalar",
-            content: <LogsPages />,
+            content: <CarsPages />,
         },
         {
             value: "5",

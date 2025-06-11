@@ -16,6 +16,8 @@ export function FormDatePicker<TForm extends FieldValues>({
     placeholder,
 }: thisProps<TForm>) {
     const error = getNestedValue(control._formState.errors, name)
+
+
     return (
         <div className="flex flex-col">
             {label && (
@@ -31,9 +33,7 @@ export function FormDatePicker<TForm extends FieldValues>({
                 name={name}
                 control={control}
                 rules={
-                    required
-                        ? { required: `${label || name}ni kiriting` }
-                        : {}
+                    required ? { required: `${label || name}ni kiriting` } : {}
                 }
                 render={({ field }) => (
                     <DatePicker

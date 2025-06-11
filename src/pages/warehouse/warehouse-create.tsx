@@ -65,6 +65,7 @@ const WareHouseCreate = () => {
                             columns={columns}
                             data={storeData || []}
                             viewAll={true}
+                            numeration
                         />
                     </AccordionContent>
                 </AccordionItem>

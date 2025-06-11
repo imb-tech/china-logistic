@@ -114,6 +114,7 @@ export const OrdersPages = () => {
                     data={data?.results}
                     loading={isLoading}
                     onDelete={(row) => handleDelete(row.original)}
+                    numeration
                 />
             ) : (
                 <div>

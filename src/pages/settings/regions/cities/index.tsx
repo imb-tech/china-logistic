@@ -75,6 +75,7 @@ export const CitiesPages = () => {
                             paramName: "cities_page",
                         }}
                         className="min-w-[650px]"
+                        numeration
                     />
                 </CardContent>
             </Card>
