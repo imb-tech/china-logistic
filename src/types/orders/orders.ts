@@ -74,7 +74,10 @@ type OffersTypeResults = {
 type Logs = {
   id: number
   status: number
-  agent: any
+  agent_data: {
+    id: number
+    full_name: string
+  }
   changed_at: string
   hint: string
 }

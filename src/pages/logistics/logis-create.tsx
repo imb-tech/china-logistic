@@ -48,7 +48,7 @@ const LogisticsCreate = () => {
         if (storeData?.id) {
             updateMutate(`${USERS}/${storeData?.id}`, formtaData)
         } else {
-            cretaeMutate(USERS, formtaData)
+            cretaeMutate(USERS, { ...formtaData, role: 2 })
         }
     }
 

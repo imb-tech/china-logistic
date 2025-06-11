@@ -56,7 +56,7 @@ const CustomerCreate = () => {
         if (storeData?.id) {
             updateMutate(`${USERS}/${storeData?.id}`, data)
         } else {
-            cretaeMutate(USERS, data)
+            cretaeMutate(USERS, { ...data, role: 3 })
         }
     }
 

@@ -39,7 +39,7 @@ export const useLogsColumns = (): ColumnDef<Logs>[] => {
         {
             header: "O'zgartirilgan logist",
             accessorKey: "agent",
-            cell: ({ row }) => row.original?.agent?.name || "--",
+            cell: ({ row }) => row.original?.agent_data?.full_name || "--",
         },
     ]
 }
