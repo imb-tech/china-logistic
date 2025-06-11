@@ -74,6 +74,7 @@ export const CitiesPages = () => {
                             pageSizeParamName: "cities_page_size",
                             paramName: "cities_page",
                         }}
+                        className="min-w-[650px]"
                     />
                 </CardContent>
             </Card>

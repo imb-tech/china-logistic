@@ -63,7 +63,6 @@ export function MultiCombobox<T extends Record<string, any>>({
     const handleClickAdd = () => {
         onAdd ? onAdd?.() : undefined
     }
-    
 
     return (
         <Popover modal open={open} onOpenChange={setOpen}>
@@ -84,24 +83,24 @@ export function MultiCombobox<T extends Record<string, any>>({
                         <ChevronDown className=" h-4 w-4  text-primary opacity-50 " />
                         {values?.length && values?.length < 3
                             ? options
-                                  ?.filter((d) =>
-                                      values?.includes(d[valueKey]),
-                                  )
+                                  ?.filter((d) => values?.includes(d[valueKey]))
                                   .map((d) => d[labelKey])
                                   .join(", ")
                             : values?.length
                             ? values?.length + " ta tanlandi"
                             : label}
                     </div>
-                   {onAdd && <span
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            handleClickAdd()
-                        }}
-                        className="dark:bg-card bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
-                    >
-                        <Plus className=" h-4 w-4 shrink-0  text-primary" />
-                    </span>}
+                    {onAdd && (
+                        <span
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleClickAdd()
+                            }}
+                            className="dark:bg-card bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
+                        >
+                            <Plus className=" h-4 w-4 shrink-0  text-primary" />
+                        </span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">

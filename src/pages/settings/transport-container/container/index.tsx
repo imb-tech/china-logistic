@@ -71,6 +71,7 @@ export const ContainerPages = () => {
                             pageSizeParamName: "container_page_size",
                             paramName: "container_page",
                         }}
+                        className="min-w-[650px]"
                     />
                 </CardContent>
             </Card>

@@ -84,7 +84,7 @@ export function DataTable<TData>({
     data,
     columns,
     loading,
-    className,
+    className="min-w-[1100px]",
     deleteSelecteds,
     onRightClick,
     selecteds_count,
@@ -254,7 +254,7 @@ export function DataTable<TData>({
                 )}
                 {data?.length ? (
                     <Table
-                        className={`${className} select-text min-w-[1100px]  bg-card rounded-md`}
+                        className={`${className} select-text  bg-card rounded-md`}
                     >
                         <TableHeader>
                             {table

@@ -72,6 +72,7 @@ export const CountriesPages = () => {
                             pageSizeParamName: "countries_page_size",
                             paramName: "countries_page",
                         }}
+                        className="min-w-[650px]"
                     />
                 </CardContent>
             </Card>

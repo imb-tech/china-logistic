@@ -72,6 +72,7 @@ export const ProductsPages = () => {
                             pageSizeParamName: "product_page_size",
                             paramName: "product_page",
                         }}
+                        className="min-w-[650px]"
                     />
                 </CardContent>
             </Card>

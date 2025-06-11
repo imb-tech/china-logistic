@@ -67,6 +67,7 @@ export const StationsPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        className="min-w-[650px]"
                         paginationProps={{
                             pageSizeParamName: "station_page_size",
                             paramName: "station_page",

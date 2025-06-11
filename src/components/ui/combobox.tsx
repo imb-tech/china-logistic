@@ -28,7 +28,6 @@ export type ComboboxProps<T extends Record<string, any>> = {
     disabled?: boolean
     isLoading?: boolean
     isError?: boolean
-    returnVal?: string
     className?: ClassNameValue
     labelKey?: keyof T
     valueKey?: keyof T
@@ -91,15 +90,17 @@ export function Combobox<T extends Record<string, any>>({
                                   ?.[labelKey]?.toString() || value
                             : label}
                     </div>
-                    <span
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            handleClickAdd()
-                        }}
-                        className="dark:bg-card bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
-                    >
-                        <Plus className=" h-4 w-4 shrink-0  text-primary" />
-                    </span>
+                    {onAdd && (
+                        <span
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleClickAdd()
+                            }}
+                            className="dark:bg-card bg-slate-200 hover:bg-slate-300 hover:scale-105 p-1 rounded-full"
+                        >
+                            <Plus className=" h-4 w-4 shrink-0  text-primary" />
+                        </span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">
@@ -126,7 +127,7 @@ export function Combobox<T extends Record<string, any>>({
                     <CommandList>
                         <CommandEmpty>Mavjud emas</CommandEmpty>
                         <CommandGroup>
-                            {options?.map((d, i) => (
+                            {sortedOptions?.map((d, i) => (
                                 <CommandItem
                                     key={i}
                                     onSelect={() => handleSelect(d)}

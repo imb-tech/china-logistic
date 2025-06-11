@@ -14,7 +14,8 @@ import { useTypedStoreData } from "@/hooks/useStoreData"
 export const TransportPages = () => {
     const { openModal: openModalAdd } = useModal("transport-modal")
     const { openModal: openModalDelete } = useModal("transport-delete")
-    const { storeData, setStoreData, clearUserData } = useTypedStoreData<TransportType>()
+    const { storeData, setStoreData, clearUserData } =
+        useTypedStoreData<TransportType>()
     const search: SearchParamsTransport = useSearch({ from: "/_main/settings" })
     const { data, isLoading } = useGet<TransportResults>(TRANSPORT, {
         params: {
@@ -71,6 +72,7 @@ export const TransportPages = () => {
                             pageSizeParamName: "transport_page_size",
                             paramName: "transport_page",
                         }}
+                        className="min-w-[650px]"
                     />
                 </CardContent>
             </Card>

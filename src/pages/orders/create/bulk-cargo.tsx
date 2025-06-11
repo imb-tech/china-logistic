@@ -423,7 +423,6 @@ function BulkCargo() {
                                 control={form.control}
                                 name="agents"
                                 label="Logistni tanlang"
-                                returnVal="id"
                                 required
                                 onSearchChange={(val) =>
                                     handleChange("agents", val)
