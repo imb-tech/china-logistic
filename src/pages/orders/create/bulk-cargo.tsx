@@ -87,7 +87,7 @@ function BulkCargo() {
     const { data: dataLogist, isLoading: isLoadingLogist } =
         useGet<CustomersTypeResults>(USERS, {
             params: { page_size: 50, role: 2, search: search.agents },
-        })
+        }) 
     const { data: dataCities, isLoading: isLoadingCities } =
         useGet<CitiesResults>(REGION, {
             params: { page_size: 50 },

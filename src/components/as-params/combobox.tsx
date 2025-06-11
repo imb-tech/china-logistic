@@ -12,6 +12,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import { DEBOUNCETIME } from "@/constants/default"
 import { cn } from "@/lib/utils"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { CheckIcon, ChevronDown, X } from "lucide-react"
@@ -29,6 +30,7 @@ type ParamComboboxProps<T extends Record<string, any>> = {
     asloClear?: string[]
     defaultOpt?: T
     isSearch?: boolean
+    onSearchChange?: (val: string) => void
 }
 
 export function ParamCombobox<T extends Record<string, any>>({
@@ -43,6 +45,7 @@ export function ParamCombobox<T extends Record<string, any>>({
     labelKey = "label",
     valueKey = "value",
     isSearch = true,
+    onSearchChange,
 }: ParamComboboxProps<T>) {
     const navigate = useNavigate()
     const search: any = useSearch({ from: "/_main" }) as Record<
@@ -122,7 +125,16 @@ export function ParamCombobox<T extends Record<string, any>>({
                     <div className="relative">
                         {isSearch && (
                             <>
-                                <CommandInput placeholder={label} />
+                                <CommandInput
+                                    onValueChange={(text) => {
+                                        if (onSearchChange) {
+                                            setTimeout(() => {
+                                                onSearchChange(text)
+                                            }, DEBOUNCETIME)
+                                        }
+                                    }}
+                                    placeholder={label}
+                                />
                                 {currentValue && (
                                     <span className="absolute cursor-pointer text-destructive top-1.5 right-1 p-1">
                                         <X
