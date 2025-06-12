@@ -22,7 +22,8 @@ type SearchParams = {
     money_type?: string
     status?: string
     page_size?: string
-    page_tabs?:string
+    page_tabs?: string
+    type?: string
 }
 
 type PaginationProps = {
@@ -43,7 +44,7 @@ type User = {
     photo: string
     phone: string
     is_superuser: boolean
-    chat_id:number
+    chat_id: number
 }
 
 type MonthCalProps = {

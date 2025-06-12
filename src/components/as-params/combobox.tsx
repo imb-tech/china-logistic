@@ -109,14 +109,16 @@ export function ParamCombobox<T extends Record<string, any>>({
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                        "w-max justify-between font-normal text-muted-foreground",
+                        "w-max justify-between   font-normal text-muted-foreground",
                         currentValue && "font-medium text-foreground",
                         isError && "!text-destructive",
                         className,
                     )}
                     disabled={disabled}
                 >
-                    {selectedOption?.[labelKey] ?? label}
+                    <span className="line-clamp-1 break-all">
+                        {selectedOption?.[labelKey] ?? label}
+                    </span>
                     <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>

@@ -16,11 +16,11 @@ function OrderStatus({ row }: Props) {
     const { openModal } = useModal("order-status-modal")
 
     const handleClick = (val: string) => {
-        if (!row.agent && !row.agent_full_name && val === "20") {
+        if (!row.agent && !row.agent && val === "20") {
             navigate({
                 to: "/order/$id",
                 params: { id: row.id.toString() },
-                search: { order_type: row.order_type },
+                search: { type: row.type },
             })
         } else {
             setStatus(val)

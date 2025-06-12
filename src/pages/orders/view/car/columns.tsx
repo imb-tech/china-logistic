@@ -5,14 +5,14 @@ export const useCarColumns = (): ColumnDef<CarType>[] => {
     return [
         {
             header: "Mashina raqami ",
-            accessorKey: "car_number",
+            accessorKey: "transit_number",
             enableSorting: true,
         },
         {
             header: "Mashinadagi yuk soni",
-            accessorKey: "total_quantity",
+            accessorKey: "product_count",
             enableSorting: true,
-            cell: ({ row }) => formatMoney(row.original.total_quantity),
+            cell: ({ row }) => formatMoney(row.original.product_count),
         },
         {
             header: "Mashinadagi yuk og'irligi",

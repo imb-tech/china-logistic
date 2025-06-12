@@ -6,19 +6,19 @@ export const useWarehouseCreateColumns = (): ColumnDef<WarehouseType>[] => {
         {
             header: "Mahsulot nomi",
             accessorKey: "id",
-            cell: ({ row }) => row.original.load.product.name,
+            cell: ({ row }) => row.original.product,
         },
         {
             header: "Umumiy miqdori",
             accessorKey: "id",
             cell: ({ row }) =>
-                formatMoney(row.original.load.product_quantity) || "--",
+                formatMoney(row.original.volume) || "--",
         },
         {
             header: "Umumiy og'irligi",
             accessorKey: "id",
             cell: ({ row }) =>
-                formatMoney(row.original.load.product_weight) || "--",
+                formatMoney(row.original.weight) || "--",
         },
     ]
 }

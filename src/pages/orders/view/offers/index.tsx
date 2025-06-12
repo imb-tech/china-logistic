@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/ui/datatable"
 import { useOffersColumns } from "./columns"
-import { useParams } from "@tanstack/react-router"
+import { useParams, useSearch } from "@tanstack/react-router"
 import {
     OFFERS,
     OFFERS_ACCEPT,
@@ -26,21 +26,23 @@ export const OffersPages = () => {
     const [values, setValues] = useState([])
     const [current, setCurrent] = useState<Offers>()
     const { openModal } = useModal("offers-modal")
+    const searchParams: SearchParams = useSearch({
+        from: "/_main/_orders/order/$id",
+    })
+    const { status, type, ...pages } = searchParams
     const id = useParams({ from: "/_main/_orders/order/$id" })
     const { data: dataLogist, isLoading: isLoadingLogist } =
         useGet<CustomersTypeResults>(USERS, {
             params: { page_size: 50, role: 2, search },
         })
-    const { data, isLoading } = useGet<OffersTypeResults>(
-        `${OFFERS}/${id?.id}`,
-        {
-            options: { enabled: !!id.id },
-        },
-    )
+    const { data, isLoading } = useGet<OffersTypeResults>(OFFERS, {
+        params: { ...pages, order: id?.id },
+        options: { enabled: !!id.id },
+    })
     const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
         onSuccess: () => {
             toast.success("Taklif  muvaffaqiyatli yuborildi")
-            queryClient.invalidateQueries({ queryKey: [`${OFFERS}/${id?.id}`] })
+            queryClient.refetchQueries({ queryKey: [OFFERS] })
             setValues([])
         },
     })
@@ -49,26 +51,25 @@ export const OffersPages = () => {
             toast.success(
                 "Muvaffaqiyatli taklif qo'shildi, endi tasdiqlashingiz mumkin",
             )
-            queryClient.invalidateQueries({ queryKey: [`${OFFERS}/${id?.id}`] })
+            queryClient.refetchQueries({ queryKey: [OFFERS] })
         },
     })
 
     const onSubmit = () => {
-        cretaeMutate(OFFERS_SEND, {
-            container: id.id,
-            agents: values,
+        cretaeMutate(OFFERS, {
+            order: id.id,
+            offers: values,
         })
     }
 
     const onOffer = (val: Offers) => {
         openModal()
         setCurrent(val)
-        console.log(val)
     }
 
     const onOfferAccept = (val: Offers) => {
         offerMutate(OFFERS_ACCEPT, {
-            offer_id: val.id,
+            offer: val.id,
         })
     }
 
@@ -108,13 +109,14 @@ export const OffersPages = () => {
                         columns={columns}
                         data={data?.results}
                         loading={isLoading}
+                        paginationProps={{ totalPages: data?.pages }}
                         numeration
                     />
                 </CardContent>
             </Card>
             <Modal
                 size="max-w-2xl"
-                title={`${current?.agent.full_name} uchun taklifni to'ldiring`}
+                title={`${current?.agent_name} uchun taklifni to'ldiring`}
                 modalKey="offers-modal"
             >
                 {current?.id && <OfferCreate current={current} />}

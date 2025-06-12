@@ -17,7 +17,7 @@ export const useOffersColumns = ({ onOffer,onOfferAccept }: Props): ColumnDef<Of
             enableSorting: true,
             cell: ({ row }) => (
                 <span className="whitespace-nowrap">
-                    {row.original.agent?.full_name}
+                    {row.original.agent_name}
                 </span>
             ),
         },
@@ -52,12 +52,12 @@ export const useOffersColumns = ({ onOffer,onOfferAccept }: Props): ColumnDef<Of
         {
             header: "Stansiya",
             accessorKey: "station",
-            cell: ({ row }) => row.original?.station?.name || "--",
+            cell: ({ row }) => row.original?.station_name || "--",
         },
         {
             header: "Yukni yopish darajasi",
-            accessorKey: "agent",
-            cell: ({ row }) => row.original?.agent?.completed_orders || 0,
+            accessorKey: "completed_orders",
+            cell: ({ row }) => row.original?.completed_orders || 0,
         },
         {
             header: " ",

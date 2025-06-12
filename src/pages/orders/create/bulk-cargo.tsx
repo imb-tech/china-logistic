@@ -8,8 +8,11 @@ import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
+    CARGO_LIST,
+    CARGO_LIST_DETAIL,
+    CARGO_LIST_UPDATE,
     CONTAINER_TYPE,
-    CONTAINERS_BULK_CARGO,
+    ORDERS_CREATE,
     PRODUCT,
     REGION,
     TRANSPORT,
@@ -30,20 +33,20 @@ import { cn } from "@/lib/utils"
 
 type ClientType = {
     customer: number | null
-    loading_address: string
-    location_url: string
+    address_text: string
+    address_url: string
     product: number | null
-    product_volume: string | null
-    product_weight: string | null
+    volume: string | null
+    weight: string | null
 }
 
 type FormType = {
     container_type: number | null
-    quality: number | null
+    condition: number | null
     transport: number | null
     load_date: string | null
-    destination_region: number | null
-    destination_address: string
+    region: number | null
+    address_text: string
     comment: string
     agents: number[]
     loads: ClientType[]
@@ -67,7 +70,7 @@ function BulkCargo() {
     const { openModal: openModalTransportAdd } = useModal("transport-modal")
 
     const { data: dataCargo } = useGet<ApiCargoResponse>(
-        `${CONTAINERS_BULK_CARGO}/${id?.id}`,
+        `${CARGO_LIST_DETAIL}/${id?.id}`,
         {
             options: { enabled: !!id.id },
         },
@@ -100,22 +103,22 @@ function BulkCargo() {
 
     const form = useForm<FormType>({
         defaultValues: {
+            container_type: null,
+            load_date: null,
+            address_text: "",
             agents: [],
             comment: "",
-            container_type: null,
-            destination_address: "",
-            destination_region: null,
-            load_date: null,
-            quality: null,
+            region: null,
+            condition: null,
             transport: null,
             loads: [
                 {
                     customer: null,
-                    loading_address: "",
-                    location_url: "",
                     product: null,
-                    product_volume: null,
-                    product_weight: null,
+                    address_text: "",
+                    address_url: "",
+                    volume: null,
+                    weight: null,
                 },
             ],
         },
@@ -137,7 +140,7 @@ function BulkCargo() {
     const { mutate: mutateUpdate, isPending: isPendingUpdate } = usePatch({
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: [CONTAINERS_BULK_CARGO],
+                queryKey: [CARGO_LIST],
             })
             toast.success("Muvaffaqiyat yangilandi")
         },
@@ -151,32 +154,36 @@ function BulkCargo() {
     const addNewClient = () => {
         append({
             customer: null,
-            loading_address: "",
-            location_url: "",
+            address_text: "",
+            address_url: "",
             product: null,
-            product_weight: null,
-            product_volume: null,
+            weight: null,
+            volume: null,
         })
     }
 
     const onSubmit = (data: FormType) => {
         const formattedData = {
-            container: {
-                container_type: data.container_type,
-                comment: data.comment,
-                quality: data.quality,
-                transport: data.transport,
-                load_date: data.load_date,
-                destination_region: data.destination_region,
-                destination_address: data.destination_address,
-                loads: data.loads.map((client) => client),
-            },
+            type: 1,
             agents: data.agents,
+            containers: [
+                {
+                    type: 1,
+                    container_type: data.container_type,
+                    comment: data.comment,
+                    condition: data.condition,
+                    transport: data.transport,
+                    load_date: data.load_date,
+                    region: data.region,
+                    address_text: data.address_text,
+                    loads: data.loads.map((client) => client),
+                },
+            ],
         }
         if (!!id?.id) {
-            mutateUpdate(`${CONTAINERS_BULK_CARGO}/${id?.id}`, formattedData)
+            mutateUpdate(`${CARGO_LIST_UPDATE}/${id?.id}`, {...formattedData, obj_id:dataCargo?.id})
         } else {
-            mutateCreate(CONTAINERS_BULK_CARGO, formattedData)
+            mutateCreate(ORDERS_CREATE, formattedData)
         }
     }
 
@@ -191,20 +198,21 @@ function BulkCargo() {
         if (dataCargo?.id) {
             const transformedData: FormType = {
                 container_type: dataCargo.container_type ?? null,
-                quality: dataCargo.quality ?? null,
+                condition: dataCargo.condition ?? null,
                 transport: dataCargo.transport ?? null,
                 load_date: dataCargo.load_date ?? null,
-                destination_region: dataCargo.destination_region?.id ?? null,
-                destination_address: dataCargo.destination_address ?? "",
+                region: dataCargo.region ?? null,
+                address_text: dataCargo.address_text ?? "",
                 comment: dataCargo.comment ?? "",
-                agents: dataCargo.agent ? [dataCargo.agent.id] : [],
+                agents: dataCargo.agent ? [dataCargo.agent] : [],
                 loads: dataCargo.loads.map((load: any) => ({
-                    customer: load.customer?.id ?? null,
-                    loading_address: load.loading_address ?? "",
-                    location_url: load.location_url ?? "",
-                    product: load.product?.id ?? null,
-                    product_volume: load.product_volume ?? null,
-                    product_weight: load.product_weight ?? null,
+                    obj_id:load.id,
+                    customer: load.customer ?? null,
+                    address_text: load.address_text ?? "",
+                    address_url: load.address_url ?? "",
+                    product: load.product ?? null,
+                    volume: load.volume ?? null,
+                    weight: load.weight ?? null,
                 })),
             }
 
@@ -241,7 +249,7 @@ function BulkCargo() {
                         <FormSelect
                             options={options}
                             control={form.control}
-                            name="quality"
+                            name="condition"
                             label="Holati"
                             required
                         />
@@ -325,19 +333,20 @@ function BulkCargo() {
                                 <div
                                     className={cn(
                                         "grid xl:grid-cols-5 lg:grid-cols-3  sm:grid-cols-2 grid-cols-1 gap-4 ",
-                                        !dataCargo?.id &&"xl:pr-28 sm:pb-0 pb-16",
+                                        !dataCargo?.id &&
+                                            "xl:pr-28 sm:pb-0 pb-16",
                                     )}
                                 >
                                     <FormInput
                                         methods={form}
-                                        name={`loads.${index}.loading_address`}
+                                        name={`loads.${index}.address_text`}
                                         label="Yuklash manzili"
                                         required
                                         placeholder="Joy nomi"
                                     />
                                     <FormInput
                                         methods={form}
-                                        name={`loads.${index}.location_url`}
+                                        name={`loads.${index}.address_url`}
                                         type="url"
                                         label="Yuklash manzili (URL)"
                                         required
@@ -360,14 +369,14 @@ function BulkCargo() {
 
                                     <FormNumberInput
                                         control={form.control}
-                                        name={`loads.${index}.product_weight`}
+                                        name={`loads.${index}.weight`}
                                         label="Mahsulot vazni"
                                         required
                                         placeholder="26 tonna"
                                     />
                                     <FormNumberInput
                                         control={form.control}
-                                        name={`loads.${index}.product_volume`}
+                                        name={`loads.${index}.volume`}
                                         label="Mahsulot hajmi"
                                         required
                                         placeholder="68 Kb"
@@ -400,7 +409,7 @@ function BulkCargo() {
                         <FormCombobox
                             control={form.control}
                             isLoading={isLoadingCities}
-                            name="destination_region"
+                            name="region"
                             label="Yetkazib berish shahri"
                             placeholder="Shahar"
                             required
@@ -414,7 +423,7 @@ function BulkCargo() {
                         />
                         <FormInput
                             methods={form}
-                            name="destination_address"
+                            name="address_text"
                             label="Yetkazib berish manzili"
                             required
                         />

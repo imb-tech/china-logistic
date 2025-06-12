@@ -3,10 +3,10 @@ import { FormDatePicker } from "@/components/form/date-picker"
 import { FormNumberInput } from "@/components/form/number-input"
 import { FormSelect } from "@/components/form/select"
 import { Button } from "@/components/ui/button"
-import { OFFERS, OFFERS_FILL, STATION } from "@/constants/api-endpoints"
+import { OFFERS, STATION } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
-import { usePost } from "@/hooks/usePost"
+import { usePatch } from "@/hooks/usePatch"
 import { useQueryClient } from "@tanstack/react-query"
 import { useParams } from "@tanstack/react-router"
 import { useState } from "react"
@@ -46,19 +46,19 @@ const OfferCreate = ({ current }: { current: Offers }) => {
     })
 
     const queryClient = useQueryClient()
-    const { mutate: cretaeMutate, isPending: isPendingCreate } = usePost({
+    const { mutate: cretaeMutate, isPending: isPendingCreate } = usePatch({
         onSuccess: () => {
             toast.success("Muvaffaqiyatli yuborildi")
-            queryClient.invalidateQueries({ queryKey: [`${OFFERS}/${id?.id}`] })
+            queryClient.refetchQueries({ queryKey: [OFFERS] })
             closeModal()
             form.reset()
         },
     })
 
     const onSubmit = (data: OffersCreate) => {
-        cretaeMutate(`${OFFERS_FILL}/${current?.id}`, {
+        cretaeMutate(`${OFFERS}/${current?.id}`, {
             ...data,
-            agent_id: current.agent.id,
+            status: 2,
         })
     }
 
@@ -78,7 +78,7 @@ const OfferCreate = ({ current }: { current: Offers }) => {
                 name="currency"
                 options={currencyData}
             />
-            {!current?.station?.id && (
+            {!current?.station_name && (
                 <div className="sm:col-span-2">
                     <FormCombobox
                         isLoading={isLoading}

@@ -8,9 +8,11 @@ import FormTextarea from "@/components/form/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
+    CARGO_LIST,
+    CARGO_LIST_DETAIL,
+    CARGO_LIST_UPDATE,
     CONTAINER_TYPE,
-    CONTAINERS,
-    CONTAINERS_FULL_CARGO,
+    ORDERS_CREATE,
     PRODUCT,
     REGION,
     TRANSPORT,
@@ -40,22 +42,21 @@ export const options = [
 ]
 
 interface Load {
-    loading_address: string
-    loading_address_url: string
+    address_text: string
+    address_url: string
     product: number | null
-    product_quantity: number | null
-    product_volume: number | null
-    product_weight: number | null
+    volume: number | null
+    weight: number | null
 }
 
 interface Container {
     container_type: number | null
-    quality: number | null
+    condition: number | null
     transport: number | null
     load_date: string
     loads: Load[]
-    destination_address: string
-    destination_region: number | null
+    address_text: string
+    region: number | null
     comment: string | null
 }
 
@@ -83,7 +84,7 @@ function WholeLoad() {
     const { openModal: openModalTransportAdd } = useModal("transport-modal")
 
     const { data: dataCargo } = useGet<ApiCargoResponse>(
-        `${CONTAINERS_FULL_CARGO}/${id?.id}`,
+        `${CARGO_LIST_DETAIL}/${id?.id}`,
         {
             options: { enabled: !!id.id },
         },
@@ -125,7 +126,7 @@ function WholeLoad() {
     const { mutate: mutateUpdate, isPending: isPendingUpdate } = usePatch({
         onSuccess: () => {
             toast.success("Muvaffaqiyat yangilandi")
-            queryClient.invalidateQueries({ queryKey: [CONTAINERS_FULL_CARGO] })
+            queryClient.invalidateQueries({ queryKey: [CARGO_LIST] })
         },
     })
 
@@ -136,21 +137,20 @@ function WholeLoad() {
             containers: [
                 {
                     container_type: null,
-                    quality: null,
+                    condition: null,
                     transport: null,
                     load_date: "",
                     loads: [
                         {
-                            loading_address: "",
-                            loading_address_url: "",
+                            address_text: "",
+                            address_url: "",
                             product: null,
-                            product_quantity: null,
-                            product_volume: null,
-                            product_weight: null,
+                            volume: null,
+                            weight: null,
                         },
                     ],
-                    destination_address: "",
-                    destination_region: null,
+                    address_text: "",
+                    region: null,
                     comment: null,
                 },
             ],
@@ -170,21 +170,20 @@ function WholeLoad() {
     const handleAddContainer = () => {
         appendContainer({
             container_type: null,
-            quality: null,
+            condition: null,
             transport: null,
             load_date: "",
             loads: [
                 {
-                    loading_address: "",
-                    loading_address_url: "",
+                    address_text: "",
+                    address_url: "",
                     product: null,
-                    product_quantity: null,
-                    product_volume: null,
-                    product_weight: null,
+                    volume: null,
+                    weight: null,
                 },
             ],
-            destination_address: "",
-            destination_region: 0,
+            address_text: "",
+            region: 0,
             comment: null,
         })
     }
@@ -198,9 +197,13 @@ function WholeLoad() {
 
     const onSubmit = (data: FormValues) => {
         if (!!id?.id) {
-            mutateUpdate(`${CONTAINERS}/${id?.id}`, data)
+            mutateUpdate(`${CARGO_LIST_UPDATE}/${id?.id}`, {
+                ...data,
+                type: 2,
+                obj_id: dataCargo?.id,
+            })
         } else {
-            mutateCreate(CONTAINERS_FULL_CARGO, data)
+            mutateCreate(ORDERS_CREATE, { ...data, type: 2 })
         }
     }
 
@@ -214,26 +217,24 @@ function WholeLoad() {
     useEffect(() => {
         if (dataCargo?.id) {
             const transformedData: FormValues = {
-                customer: dataCargo.loads[0]?.customer?.id || null,
-                agents: dataCargo.agent ? [dataCargo.agent.id] : [],
+                customer: dataCargo.loads?.[0]?.customer || null,
+                agents: dataCargo.agent ? [dataCargo.agent] : [],
                 containers: [
                     {
                         container_type: dataCargo.container_type,
-                        quality: dataCargo.quality,
+                        condition: dataCargo.condition,
                         transport: dataCargo.transport,
                         load_date: dataCargo.load_date,
                         loads: dataCargo.loads.map((load) => ({
-                            loading_address: load.loading_address || "",
-                            loading_address_url: "",
-                            product: load.product?.id || null,
-                            product_quantity: load.product_quantity || null,
-                            product_volume: load.product_volume || null,
-                            product_weight: load.product_weight || null,
+                            obj_id:load.id,
+                            address_text: load.address_text ?? "",
+                            address_url: load.address_url ?? "",
+                            product: load.product || null,
+                            volume: load.volume || null,
+                            weight: load.weight || null,
                         })),
-                        destination_address:
-                            dataCargo.destination_address || "",
-                        destination_region:
-                            dataCargo.destination_region?.id || null,
+                        address_text: dataCargo.address_text || "",
+                        region: dataCargo.region || null,
                         comment: dataCargo.comment || null,
                     },
                 ],
@@ -299,7 +300,7 @@ function WholeLoad() {
                                 <FormSelect
                                     options={options}
                                     control={form.control}
-                                    name={`containers.${index}.quality`}
+                                    name={`containers.${index}.condition`}
                                     label="Holati"
                                     required
                                 />
@@ -340,7 +341,7 @@ function WholeLoad() {
                                 <FormCombobox
                                     label="Yetkazib berish shahri"
                                     control={form.control}
-                                    name={`containers.${index}.destination_region`}
+                                    name={`containers.${index}.region`}
                                     placeholder="Shahar"
                                     required
                                     onAdd={openModalCitiesAdd}
@@ -354,7 +355,7 @@ function WholeLoad() {
                                 />
                                 <FormInput
                                     methods={form}
-                                    name={`containers.${index}.destination_address`}
+                                    name={`containers.${index}.address_text`}
                                     label="Yetkazib berish manzili"
                                     required
                                 />
@@ -475,12 +476,11 @@ const ContainerFields: FC<Props> = ({
 
     const handleAddLoad = () => {
         append({
-            loading_address: "",
-            loading_address_url: "",
+            address_text: "",
+            address_url: "",
             product: null,
-            product_quantity: null,
-            product_volume: null,
-            product_weight: null,
+            volume: null,
+            weight: null,
         })
     }
 
@@ -512,13 +512,13 @@ const ContainerFields: FC<Props> = ({
                     >
                         <FormInput
                             methods={form}
-                            name={`containers.${nestIndex}.loads.${loadIndex}.loading_address`}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.address_text`}
                             label="Yuklash manzili"
                             required
                         />
                         <FormInput
                             methods={form}
-                            name={`containers.${nestIndex}.loads.${loadIndex}.loading_address_url`}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.address_url`}
                             label="Yuklash manzili (URL)"
                             type="url"
                             required
@@ -537,13 +537,13 @@ const ContainerFields: FC<Props> = ({
                         />
                         <FormNumberInput
                             control={form.control}
-                            name={`containers.${nestIndex}.loads.${loadIndex}.product_weight`}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.weight`}
                             label="Mahsulot vazni"
                             required
                         />
                         <FormNumberInput
                             control={form.control}
-                            name={`containers.${nestIndex}.loads.${loadIndex}.product_volume`}
+                            name={`containers.${nestIndex}.loads.${loadIndex}.volume`}
                             label="Mahsulot hajmi"
                             required
                         />

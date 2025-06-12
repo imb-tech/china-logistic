@@ -1,14 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import OrderStatus from "./order-status"
-
+ 
 export const useOrderColumns = (): ColumnDef<OrderType>[] => {
     return [
         {
             header: "Mijoz",
             accessorKey: "customers",
             enableSorting: true,
-            cell: ({ row }) => row.original.customers[0],
+            cell: ({ row }) => row.original.customers[0] || "-",
         },
         {
             header: "Status",
@@ -17,9 +17,9 @@ export const useOrderColumns = (): ColumnDef<OrderType>[] => {
         },
         {
             header: "Logist",
-            accessorKey: "agent_full_name",
+            accessorKey: "agent",
             enableSorting: true,
-             cell: ({ row }) => row.original.agent_full_name || "-",
+             cell: ({ row }) => row.original.agent || "-",
         },
         {
             header: "Yaratilgan sana",

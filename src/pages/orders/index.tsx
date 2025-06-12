@@ -7,7 +7,7 @@ import DeleteModal from "@/components/custom/delete-modal"
 import { useModal } from "@/hooks/useModal"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useGet } from "@/hooks/useGet"
-import { CONTAINERS } from "@/constants/api-endpoints"
+import { CARGO_DELETE, CARGO_LIST } from "@/constants/api-endpoints"
 import Modal from "@/components/custom/modal"
 import OrderStatusChange from "./order-change-status"
 import { useTypedStoreData } from "@/hooks/useStoreData"
@@ -82,14 +82,22 @@ export const OrdersPages = () => {
     const { storeData, setStoreData, clearUserData } =
         useTypedStoreData<OrderType>()
     const search: SearchParams = useSearch({ from: "/_main/" })
-    const { data, isLoading } = useGet<OrdersTypeResults>(CONTAINERS, {
-        params: search,
+    const { page_tabs, ...params } = search
+    const { data, isLoading } = useGet<OrdersTypeResults>(CARGO_LIST, {
+        params,
     })
 
     const handleDelete = (item: OrderType) => {
         clearUserData()
         openModalDelete()
         setStoreData(item)
+    }
+    const handleNavigate = (item: OrderType) => {
+        navigate({
+            to: "/order/$id",
+            params: { id: item.id.toString() },
+            search: { type: item.type },
+        })
     }
 
     const columns = useOrderColumns()
@@ -104,7 +112,7 @@ export const OrdersPages = () => {
                     >
                         Buyurtma qo'shish
                     </Button>
-                    <ParamTabs options={tabs}  />
+                    <ParamTabs options={tabs} />
                 </div>
             </div>
 
@@ -121,6 +129,7 @@ export const OrdersPages = () => {
                                       key={item.id}
                                       item={item}
                                       onDelete={(item) => handleDelete(item)}
+                                      onView={(item) => handleNavigate(item)}
                                   />
                               ))}
                     </div>
@@ -128,7 +137,7 @@ export const OrdersPages = () => {
                         <div className="my-4 flex justify-center">
                             <ParamPagination
                                 disabled={isLoading}
-                                totalPages={1}
+                                totalPages={data.pages}
                             />
                         </div>
                     )}
@@ -140,13 +149,16 @@ export const OrdersPages = () => {
                     data={data?.results}
                     loading={isLoading}
                     onDelete={(row) => handleDelete(row.original)}
+                    onRowClick={(item) => handleNavigate(item)}
+                    paginationProps={{ totalPages: data?.pages }}
                     numeration
                 />
             )}
             <DeleteModal
                 modalKey="delete-order"
                 id={storeData?.id}
-                path={CONTAINERS}
+                path={CARGO_DELETE}
+                refetchKeys={[CARGO_LIST]}
             />
             <Modal
                 size="max-w-xl"

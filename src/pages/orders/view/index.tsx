@@ -7,15 +7,15 @@ import { useSearch } from "@tanstack/react-router"
 import { CarsPages } from "./car"
 
 export const OrdersDetailsPages = () => {
-    const serach: { order_type: number } = useSearch({
+    const serach: { type: number } = useSearch({
         from: "/_main/_orders/order/$id",
     })
-
+ 
     const statusOptions = [
         {
             value: "1",
             label: "Yuk ma'lumotlari",
-            content: serach?.order_type === 1 ? <BulkCargo /> : <WholeLoad />,
+            content: serach?.type === 1 ? <BulkCargo /> : <WholeLoad />,
         },
         {
             value: "2",

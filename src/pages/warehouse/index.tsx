@@ -21,7 +21,7 @@ export const WarehousePages = () => {
     const { data, isLoading } = useGet<WarehouseTypeResults>(INVENTORY, {
         params: search,
     })
-
+ 
     const handleAdd = () => {
         openCustomerAdd()
     }
@@ -56,6 +56,7 @@ export const WarehousePages = () => {
                         loading={isLoading}
                         selecteds_count
                         selecteds_row
+                        paginationProps={{totalPages:data?.pages}}
                         onSelectedRowsChange={(val) => setStoreData(val)}
                         numeration
                     />

@@ -7,7 +7,7 @@ export const useLogsColumns = (): ColumnDef<Logs>[] => {
     return [
         {
             header: "Yuklash statusi",
-            accessorKey: "agent",
+            accessorKey: "status",
             cell: ({ row }) => (
                 <span
                     className={cn(
@@ -21,9 +21,9 @@ export const useLogsColumns = (): ColumnDef<Logs>[] => {
         },
         {
             header: "Sababi",
-            accessorKey: "hint",
+            accessorKey: "reason",
             enableSorting: true,
-            cell: ({ row }) => row.original.hint || "--",
+            cell: ({ row }) => row.original.reason || "--",
         },
         {
             header: "O'zgarish vaqti",
@@ -39,7 +39,7 @@ export const useLogsColumns = (): ColumnDef<Logs>[] => {
         {
             header: "O'zgartirilgan logist",
             accessorKey: "agent",
-            cell: ({ row }) => row.original?.agent_data?.full_name || "--",
+            cell: ({ row }) => row.original?.agent || "--",
         },
     ]
 }

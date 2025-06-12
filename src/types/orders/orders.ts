@@ -1,21 +1,20 @@
 
 type OrderType = {
   agent: string | null;
-  agent_full_name: string;
+  is_late: boolean
   comment: string;
-  container_number: string | null;
   container_type: number;
   created_at: string;
   currency: string | null;
   customers: string[];
-  destination_address: string;
-  destination_region: number;
+  address_text: string;
+  region: number;
   hint: string | null;
   id: number;
   load_date: string;
-  order_type: number;
+  type: number;
   price: number | string | null;
-  quality: number;
+  condition: number;
   start_date: string | null;
   station: string | null;
   status: number | string;
@@ -30,7 +29,9 @@ type OrderType = {
 type OrdersTypeResults = {
   results: OrderType[]
   next: string
+  count: number
   previous: string
+  pages: number
 }
 
 type OfferAgent = {
@@ -48,11 +49,9 @@ type OfferAgent = {
 
 type Offers = {
   id: number;
-  agent: OfferAgent;
-  station: {
-    id: number
-    name: string
-  };
+  agent_name: string;
+  station_name: string
+  completed_orders?: number
   load_date: string | null;
   start_date: string | null;
   price: number | null;
@@ -67,6 +66,7 @@ type OffersTypeResults = {
   results: Offers[]
   next: string
   previous: string
+  pages: number
 }
 
 
@@ -74,19 +74,19 @@ type OffersTypeResults = {
 type Logs = {
   id: number
   status: number
-  agent_data: {
-    id: number
-    full_name: string
-  }
+  agent: string
   changed_at: string
-  hint: string
+  reason: string
 }
 
 type CarType = {
   id: number,
-  total_weight: number
-  total_quantity: number
-  car_number: string
+  product: string
+  volume: number,
+  total_weight: number,
+  customer: string
+  transit_number: string
+  product_count: number
 }
 
 
@@ -108,16 +108,14 @@ type ApiCustomer = {
 }
 
 type ApiLoad = {
-  id: number
-  customer: ApiCustomer | null
-  product: ApiProduct | null
-  product_volume: number | null
-  product_quantity: number | null
-  product_weight: number | null
-  loading_location_longitude: number | null
-  loading_location_latitude: number | null
-  loading_address: string
-  comment: string | null
+  id?: number
+  customer?: number | null
+  product?: number | null
+  volume?: number | null
+  weight?: number | null
+  address_text?: string
+  comment?: string | null
+  address_url?: string
 }
 
 type ApiRegion = {
@@ -132,13 +130,13 @@ type ApiRegion = {
 type ApiCargoResponse = {
   id: number
   loads: ApiLoad[]
-  destination_region: ApiRegion | null
-  agent: { id: number } | null
+  region: number
+  agent: number | null
   container_type: number | null
   transport: number | null
   load_date: string
-  destination_address: string
-  quality: number | null
+  address_text: string
+  condition: number | null
   comment: string | null
 }
 

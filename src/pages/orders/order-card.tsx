@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Flag, Package, Trash, Truck, User } from "lucide-react"
+import { Flag, Info, Package, Trash, Truck, User } from "lucide-react"
 import OrderStatus from "./order-status"
 import { Button } from "@/components/ui/button"
 import { format } from "date-fns"
@@ -7,11 +7,15 @@ import { format } from "date-fns"
 type Props = {
     item: OrderType
     onDelete: (item: OrderType) => void
+    onView: (item: OrderType) => void
 }
 
-function OrderCard({ item, onDelete }: Props) {
+function OrderCard({ item, onDelete, onView }: Props) {
     return (
-        <Card className="px-4 pb-6 pt-2 space-y-4">
+        <Card
+            onClick={() => onView(item)}
+            className="px-4 pb-6 pt-2 space-y-4 cursor-pointer hover:shadow-md hover:scale-[102%] transition-all"
+        >
             <CardHeader className="flex flex-row p-0 pb-2 border-b border-b-muted justify-between items-center gap-3 w-full">
                 <span>#{item.id}</span>
                 <div className="flex items-center gap-2">
@@ -41,7 +45,7 @@ function OrderCard({ item, onDelete }: Props) {
                         <span>Logist:</span>
                     </div>
                     <span className="line-clamp-1 break-all">
-                        {item.agent_full_name || "-"}
+                        {item.agent || "-"}
                     </span>
                 </div>
                 <div className="flex justify-between items-center gap-3 text-sm ">
@@ -72,9 +76,17 @@ function OrderCard({ item, onDelete }: Props) {
                         <span>Yuklash manzili:</span>
                     </div>
                     <span className="line-clamp-1 break-all">
-                        {item.destination_address || "-"}
+                        {item.address_text || "-"}
                     </span>
                 </div>
+                {item.is_late && (
+                    <div className="text-sm ">
+                        <div className="flex items-center gap-2 whitespace-nowrap text-destructive">
+                            <Info size={16} />
+                            <span>Kechikayotgan yuk</span>
+                        </div>
+                    </div>
+                )}
             </CardContent>
         </Card>
     )
