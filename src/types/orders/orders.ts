@@ -58,6 +58,7 @@ type Offers = {
   currency: number;
   status: number;
   container: number;
+  is_station_required:boolean
 }
 
 

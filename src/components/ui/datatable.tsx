@@ -293,7 +293,7 @@ export function DataTable<TData>({
                                                     <TableHead
                                                         key={index}
                                                         className={cn(
-                                                            " px-2 cursor-pointer")}
+                                                            "px-2 cursor-pointer")}
                                                         onClick={
                                                             header.column
                                                                 .columnDef

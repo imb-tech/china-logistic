@@ -94,7 +94,7 @@ export default function TableActions({
     ) : (
         <div
             className={cn(
-                "flex items-center justify-center gap-3 py-2",
+                "flex items-center justify-end gap-3 py-2",
                 className,
             )}
         >

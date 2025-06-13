@@ -86,7 +86,7 @@ const OfferCreate = ({ current }: { current: Offers }) => {
                 name="currency"
                 options={currencyData}
             />
-            {!current?.station_name && (
+            {current?.is_station_required && (
                 <div className="sm:col-span-2">
                     <FormCombobox
                         isLoading={isLoading}
