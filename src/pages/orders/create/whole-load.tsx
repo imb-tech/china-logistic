@@ -226,7 +226,7 @@ function WholeLoad() {
                         transport: dataCargo.transport,
                         load_date: dataCargo.load_date,
                         loads: dataCargo.loads.map((load) => ({
-                            obj_id:load.id,
+                            obj_id: load.id,
                             address_text: load.address_text ?? "",
                             address_url: load.address_url ?? "",
                             product: load.product || null,
@@ -412,28 +412,30 @@ function WholeLoad() {
                 </CardContent>
             </Card>
 
-            <Card>
-                <CardContent className="space-y-2">
-                    <h1 className="text-lg font-semibold">
-                        Logist ma'lumotlari
-                    </h1>
-                    <div className="border border-input p-3 rounded-lg">
-                        <FormMultiCombobox
-                            isLoading={isLoadingLogist}
-                            options={dataLogist?.results}
-                            valueKey="id"
-                            labelKey="full_name"
-                            control={form.control}
-                            name="agents"
-                            label="Logistni tanlang"
-                            required
-                            onSearchChange={(val) =>
-                                handleChange("agents", val)
-                            }
-                        />
-                    </div>
-                </CardContent>
-            </Card>
+            {!dataCargo?.id && (
+                <Card>
+                    <CardContent className="space-y-2">
+                        <h1 className="text-lg font-semibold">
+                            Logist ma'lumotlari
+                        </h1>
+                        <div className="border border-input p-3 rounded-lg">
+                            <FormMultiCombobox
+                                isLoading={isLoadingLogist}
+                                options={dataLogist?.results}
+                                valueKey="id"
+                                labelKey="full_name"
+                                control={form.control}
+                                name="agents"
+                                label="Logistni tanlang"
+                                required
+                                onSearchChange={(val) =>
+                                    handleChange("agents", val)
+                                }
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
 
             <Button
                 disabled={isPendingCreate || isPendingUpdate}

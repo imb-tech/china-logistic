@@ -36,9 +36,8 @@ export default function FileUpload<TForm extends FieldValues>({
     wrapperClassName,
     multiple = false,
     isCompressed = true,
-    maxSize = 10,
-    maxLength = 5,
-    dropAccept = ["JPG", "PNG", "JPEG"],
+    maxSize = 1000,
+    maxLength = 1,
     isPaste = true,
     hideError = true,
 }: TProps<TForm>) {
@@ -121,10 +120,7 @@ export default function FileUpload<TForm extends FieldValues>({
 
     return (
         <fieldset
-            className={cn(
-                "flex flex-col gap- min-w-48 w-full",
-                wrapperClassName,
-            )}
+            className={cn("flex flex-col  min-w-48 w-full", wrapperClassName)}
         >
             {label && (
                 <FieldLabel isError={!!fieldState.error} required={required}>
@@ -143,7 +139,7 @@ export default function FileUpload<TForm extends FieldValues>({
 
             <FileUploader
                 classes={cn(
-                    "!h-40 !w-full !border-primary mt-4 flex justify-center items-center gap-3 [&_path]:!fill-primary [&_div]:flex-col [&_div]:!justify-center [&_div]:items-center [&_div]:!grow-0",
+                    "!h-20 !w-full !border-primary mt-0 flex justify-center items-center gap-3 [&_path]:!fill-primary [&_div]:flex-col [&_div]:!justify-center [&_div]:items-center [&_div]:!grow-0",
                     !!fieldState.error &&
                         "!border-destructive [&_path]:!fill-destructive",
                     field.disabled &&
@@ -164,7 +160,7 @@ export default function FileUpload<TForm extends FieldValues>({
                 }
                 multiple={multiple}
                 name={field.name}
-                types={dropAccept}
+                label={label}
             />
 
             {fieldState.error && !hideError && (
@@ -214,7 +210,7 @@ export default function FileUpload<TForm extends FieldValues>({
                         )
                     })}
                 </div>
-                {fileArray.length > 0 && (
+                {fileArray.length > 1 && (
                     <div className="grid place-items-end">
                         <Button
                             variant="outline"

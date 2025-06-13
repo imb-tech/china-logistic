@@ -3,13 +3,17 @@ import { formatMoney } from "@/lib/format-money"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { Check, Clock4, Plus, X } from "lucide-react"
+import { currencyName } from "./create"
 
 type Props = {
     onOffer: (val: Offers) => void
     onOfferAccept: (val: Offers) => void
 }
 
-export const useOffersColumns = ({ onOffer,onOfferAccept }: Props): ColumnDef<Offers>[] => {
+export const useOffersColumns = ({
+    onOffer,
+    onOfferAccept,
+}: Props): ColumnDef<Offers>[] => {
     return [
         {
             header: "Logist",
@@ -25,7 +29,12 @@ export const useOffersColumns = ({ onOffer,onOfferAccept }: Props): ColumnDef<Of
             header: "Narx",
             accessorKey: "price",
             enableSorting: true,
-            cell: ({ row }) => formatMoney(Number(row.original.price)),
+            cell: ({ row }) => (
+                <span>
+                    {formatMoney(Number(row.original.price))}
+                    {currencyName[row.original.currency]}
+                </span>
+            ),
         },
         {
             header: "Yuklash sanasi",

@@ -181,7 +181,10 @@ function BulkCargo() {
             ],
         }
         if (!!id?.id) {
-            mutateUpdate(`${CARGO_LIST_UPDATE}/${id?.id}`, {...formattedData, obj_id:dataCargo?.id})
+            mutateUpdate(`${CARGO_LIST_UPDATE}/${id?.id}`, {
+                ...formattedData,
+                obj_id: dataCargo?.id,
+            })
         } else {
             mutateCreate(ORDERS_CREATE, formattedData)
         }
@@ -204,9 +207,9 @@ function BulkCargo() {
                 region: dataCargo.region ?? null,
                 address_text: dataCargo.address_text ?? "",
                 comment: dataCargo.comment ?? "",
-                agents: dataCargo.agent ? [dataCargo.agent] : [],
+                agents: dataCargo.agents ?? [],
                 loads: dataCargo.loads.map((load: any) => ({
-                    obj_id:load.id,
+                    obj_id: load.id,
                     customer: load.customer ?? null,
                     address_text: load.address_text ?? "",
                     address_url: load.address_url ?? "",
@@ -436,25 +439,26 @@ function BulkCargo() {
                             wrapperClassName="lg:col-span-4 sm:col-span-2"
                             rows={5}
                         />
-                        <div className="lg:col-span-4 sm:col-span-2">
-                            <FormMultiCombobox
-                                isLoading={isLoadingLogist}
-                                options={dataLogist?.results}
-                                valueKey="id"
-                                labelKey="full_name"
-                                control={form.control}
-                                name="agents"
-                                label="Logistni tanlang"
-                                required
-                                onSearchChange={(val) =>
-                                    handleChange("agents", val)
-                                }
-                            />
-                        </div>
+                        {!dataCargo?.id && (
+                            <div className="lg:col-span-4 sm:col-span-2">
+                                <FormMultiCombobox
+                                    isLoading={isLoadingLogist}
+                                    options={dataLogist?.results}
+                                    valueKey="id"
+                                    labelKey="full_name"
+                                    control={form.control}
+                                    name="agents"
+                                    label="Logistni tanlang"
+                                    required
+                                    onSearchChange={(val) =>
+                                        handleChange("agents", val)
+                                    }
+                                />
+                            </div>
+                        )}
                     </div>
                 </CardContent>
             </Card>
-
             <Button
                 disabled={isPendingCreate || isPendingUpdate}
                 loading={isPendingCreate || isPendingUpdate}

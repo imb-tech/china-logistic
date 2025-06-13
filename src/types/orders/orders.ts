@@ -55,7 +55,7 @@ type Offers = {
   load_date: string | null;
   start_date: string | null;
   price: number | null;
-  currency: string | null;
+  currency: number;
   status: number;
   container: number;
 }
@@ -77,6 +77,24 @@ type Logs = {
   agent: string
   changed_at: string
   reason: string
+}
+
+type Expanse = {
+  id: number
+  agent: number
+  currency: number
+  amount: number
+  agent_name: string
+  reason: string
+  created_at:string
+  update_at:string
+}
+
+type OrderDocument = {
+  id: number
+  file: string
+  created_at:string
+  description:string
 }
 
 type CarType = {
@@ -132,6 +150,7 @@ type ApiCargoResponse = {
   loads: ApiLoad[]
   region: number
   agent: number | null
+  agents:number[]
   container_type: number | null
   transport: number | null
   load_date: string

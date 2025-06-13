@@ -5,12 +5,14 @@ import { LogsPages } from "./logs"
 import WholeLoad from "../create/whole-load"
 import { useSearch } from "@tanstack/react-router"
 import { CarsPages } from "./car"
+import { ToatalCostPages } from "./total-cost"
+import { DocumentPages } from "./document"
 
 export const OrdersDetailsPages = () => {
-    const serach: { type: number } = useSearch({
+    const serach: { type: number; status: string } = useSearch({
         from: "/_main/_orders/order/$id",
     })
- 
+
     const statusOptions = [
         {
             value: "1",
@@ -35,7 +37,7 @@ export const OrdersDetailsPages = () => {
         {
             value: "5",
             label: "Hujjatlar",
-            content: <LogsPages />,
+            content: <DocumentPages />,
         },
     ]
 
@@ -44,6 +46,7 @@ export const OrdersDetailsPages = () => {
             <div className="mb-5 flex justify-between items-center gap-4">
                 <ParamTabs options={statusOptions} paramName="status" />
             </div>
+            {serach?.status === "1" && <ToatalCostPages />}
         </div>
     )
 }

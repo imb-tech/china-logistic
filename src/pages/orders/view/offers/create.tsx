@@ -13,7 +13,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-const currencyData = [
+export const currencyData = [
     {
         value: 1,
         label: "USD",
@@ -35,9 +35,15 @@ const currencyData = [
         label: "RUB",
     },
 ]
+export const currencyName:{[key:number]:string} = {
+    1: "USD",
+    3: "UZS",
+    2: "YUAN",
+    4: "EURO",
+    5: "RUB",
+}
 
 const OfferCreate = ({ current }: { current: Offers }) => {
-    const id = useParams({ from: "/_main/_orders/order/$id" })
     const [search, setSearch] = useState("")
     const { closeModal } = useModal("offers-modal")
     const form = useForm<OffersCreate>()
