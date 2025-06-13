@@ -13,5 +13,6 @@ type CustomersType = {
 type CustomersTypeResults = {
   next: string
   previous: string
+  pages:number
   results: CustomersType[]
 }

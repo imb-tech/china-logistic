@@ -14,7 +14,8 @@ import { useTypedStoreData } from "@/hooks/useStoreData"
 export const LogisticsPages = () => {
     const { openModal: openCustomerAdd } = useModal("logis-modal")
     const { openModal: openModalDelete } = useModal("logis-delete")
-    const { storeData, setStoreData, clearUserData } = useTypedStoreData<LogisticsType>()
+    const { storeData, setStoreData, clearUserData } =
+        useTypedStoreData<LogisticsType>()
     const search = useSearch({ from: "/_main/logistics" })
     const { data, isLoading } = useGet<LogisticsTypeResults>(USERS, {
         params: { ...search, role: 2 },
@@ -61,6 +62,9 @@ export const LogisticsPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                        paginationProps={{
+                            totalPages: data?.pages,
+                        }}
                         numeration
                     />
                 </CardContent>

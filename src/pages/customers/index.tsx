@@ -63,6 +63,9 @@ export const CustomersPages = () => {
                         onDelete={(item) => handleDelete(item.original)}
                         onEdit={(item) => handleUpdate(item.original)}
                         loading={isLoading}
+                         paginationProps={{
+                            totalPages: data?.pages,
+                        }}
                         numeration
                     />
                 </CardContent>
