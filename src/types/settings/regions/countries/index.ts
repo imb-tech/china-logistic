@@ -7,6 +7,7 @@ type CountriesResults = {
     next: string
     previous: string
     results: CountriesType[]
+    pages:number
 }
 
 type SearchParamsCountries = {

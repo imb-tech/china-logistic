@@ -35,7 +35,7 @@ export const currencyData = [
         label: "RUB",
     },
 ]
-export const currencyName:{[key:number]:string} = {
+export const currencyName: { [key: number]: string } = {
     1: "USD",
     3: "UZS",
     2: "YUAN",
@@ -67,6 +67,8 @@ const OfferCreate = ({ current }: { current: Offers }) => {
             status: 2,
         })
     }
+
+    console.log(form.formState.errors)
 
     return (
         <form

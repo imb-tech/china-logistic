@@ -46,7 +46,7 @@ export const OrdersDetailsPages = () => {
             <div className="mb-5 flex justify-between items-center gap-4">
                 <ParamTabs options={statusOptions} paramName="status" />
             </div>
-            {serach?.status === "1" && <ToatalCostPages />}
+            {(serach?.status === "1" || !serach.status) && <ToatalCostPages />}
         </div>
     )
 }

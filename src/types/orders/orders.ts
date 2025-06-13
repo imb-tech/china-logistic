@@ -158,7 +158,7 @@ type ApiCargoResponse = {
   condition: number | null
   comment: string | null
   accepted_offer: {
-    agent_name: string
+    full_name: string
     price: number
     currency:number
   }

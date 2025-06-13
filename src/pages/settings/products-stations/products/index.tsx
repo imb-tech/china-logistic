@@ -71,6 +71,7 @@ export const ProductsPages = () => {
                         paginationProps={{
                             pageSizeParamName: "product_page_size",
                             paramName: "product_page",
+                            totalPages:data?.pages
                         }}
                         className="min-w-[650px]"
                         numeration

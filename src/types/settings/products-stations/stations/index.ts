@@ -7,6 +7,7 @@ type StationsResults = {
     next: string
     previous: string
     results: StationsType[]
+    pages:number
 }
 
 type SearchParamsStation = {

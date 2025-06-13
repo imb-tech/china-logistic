@@ -445,7 +445,7 @@ function BulkCargo() {
                             <div className="space-y-1 flex flex-col">
                                 <span className="whitespace-nowrap">
                                     Tanlangan Logist:{" "}
-                                    {dataCargo?.accepted_offer?.agent_name ||
+                                    {dataCargo?.accepted_offer?.full_name ||
                                         "mavjud emas"}
                                 </span>
                                 <span className="whitespace-nowrap">

@@ -73,6 +73,7 @@ export const CitiesPages = () => {
                         paginationProps={{
                             pageSizeParamName: "cities_page_size",
                             paramName: "cities_page",
+                            totalPages:data?.pages
                         }}
                         className="min-w-[650px]"
                         numeration

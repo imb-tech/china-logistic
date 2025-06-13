@@ -71,6 +71,7 @@ export const StationsPages = () => {
                         paginationProps={{
                             pageSizeParamName: "station_page_size",
                             paramName: "station_page",
+                            totalPages:data?.pages
                         }}
                         numeration
                     />

@@ -8,6 +8,7 @@ type ProductResults = {
     next: string
     previous: string
     results: ProductsType[]
+    pages:number
 }
 
 type SearchParamsProduct = {

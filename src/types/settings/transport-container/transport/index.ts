@@ -8,6 +8,7 @@ type TransportResults = {
     next: string
     previous: string
     results: TransportType[]
+    pages:number
 }
 
 type SearchParamsTransport = {

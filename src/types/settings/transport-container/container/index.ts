@@ -7,6 +7,7 @@ type ContainerResults = {
     next: string
     previous: string
     results: ContainerType[]
+    pages:number
 }
 
 type SearchParamsContainer = {

@@ -71,6 +71,7 @@ export const TransportPages = () => {
                         paginationProps={{
                             pageSizeParamName: "transport_page_size",
                             paramName: "transport_page",
+                            totalPages:data?.pages
                         }}
                         className="min-w-[650px]"
                         numeration

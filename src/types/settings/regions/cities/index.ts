@@ -8,6 +8,7 @@ type CitiesResults = {
     next: string
     previous: string
     results: CitiesType[]
+    pages:number
 }
 
 type SearchParamsCities = {
