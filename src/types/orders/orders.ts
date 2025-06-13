@@ -86,15 +86,15 @@ type Expanse = {
   amount: number
   agent_name: string
   reason: string
-  created_at:string
-  update_at:string
+  created_at: string
+  update_at: string
 }
 
 type OrderDocument = {
   id: number
   file: string
-  created_at:string
-  description:string
+  created_at: string
+  description: string
 }
 
 type CarType = {
@@ -150,13 +150,19 @@ type ApiCargoResponse = {
   loads: ApiLoad[]
   region: number
   agent: number | null
-  agents:number[]
+  agents: number[]
   container_type: number | null
   transport: number | null
   load_date: string
   address_text: string
   condition: number | null
   comment: string | null
+  accepted_offer: {
+    agent_name: string
+    price: number
+    currency:number
+  }
+
 }
 
 type OffersCreate = {

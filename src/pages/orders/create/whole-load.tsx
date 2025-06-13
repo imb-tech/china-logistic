@@ -22,6 +22,7 @@ import { useGet } from "@/hooks/useGet"
 import { useModal } from "@/hooks/useModal"
 import { usePatch } from "@/hooks/usePatch"
 import { usePost } from "@/hooks/usePost"
+import { formatMoney } from "@/lib/format-money"
 import { cn } from "@/lib/utils"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate, useParams } from "@tanstack/react-router"
@@ -29,6 +30,7 @@ import { Copy, Plus, Trash2 } from "lucide-react"
 import { FC, useEffect, useState } from "react"
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form"
 import { toast } from "sonner"
+import { currencyName } from "../view/offers/create"
 
 export const options = [
     {
@@ -368,6 +370,12 @@ function WholeLoad() {
                                     wrapperClassName="lg:col-span-4 sm:col-span-2"
                                     rows={4}
                                 />
+                                {dataCargo?.id && (
+                                    <div className="space-y-1 flex flex-col">
+                                        <span className="whitespace-nowrap">Tanlangan Logist: {dataCargo?.accepted_offer?.agent_name || "mavjud emas"}</span>
+                                        <span className="whitespace-nowrap">Narxi : {formatMoney(dataCargo.accepted_offer?.price)} {currencyName[dataCargo?.accepted_offer?.currency]}</span>
+                                    </div>
+                                )}
 
                                 {!dataCargo?.id && (
                                     <div className="sm:col-span-2 lg:col-span-4 flex justify-end gap-4">

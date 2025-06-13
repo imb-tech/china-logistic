@@ -30,6 +30,8 @@ import { useNavigate, useParams } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import { usePatch } from "@/hooks/usePatch"
 import { cn } from "@/lib/utils"
+import { formatMoney } from "@/lib/format-money"
+import { currencyName } from "../view/offers/create"
 
 type ClientType = {
     customer: number | null
@@ -439,7 +441,19 @@ function BulkCargo() {
                             wrapperClassName="lg:col-span-4 sm:col-span-2"
                             rows={5}
                         />
-                        {!dataCargo?.id && (
+                        {dataCargo?.id ? (
+                            <div className="space-y-1 flex flex-col">
+                                <span className="whitespace-nowrap">
+                                    Tanlangan Logist:{" "}
+                                    {dataCargo?.accepted_offer?.agent_name ||
+                                        "mavjud emas"}
+                                </span>
+                                <span className="whitespace-nowrap">
+                                    Narxi :{" "}
+                                    {formatMoney(dataCargo.accepted_offer?.price)} {currencyName[dataCargo?.accepted_offer?.currency]}
+                                </span>
+                            </div>
+                        ) : (
                             <div className="lg:col-span-4 sm:col-span-2">
                                 <FormMultiCombobox
                                     isLoading={isLoadingLogist}
