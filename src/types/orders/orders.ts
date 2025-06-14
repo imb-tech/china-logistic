@@ -58,7 +58,7 @@ type Offers = {
   currency: number;
   status: number;
   container: number;
-  is_station_required:boolean
+  is_station_required: boolean
 }
 
 
@@ -149,6 +149,8 @@ type ApiRegion = {
 type ApiCargoResponse = {
   id: number
   loads: ApiLoad[]
+  transport_number: number | null
+  container_number: number | null
   region: number
   agent: number | null
   agents: number[]
@@ -161,7 +163,7 @@ type ApiCargoResponse = {
   accepted_offer: {
     full_name: string
     price: number
-    currency:number
+    currency: number
   }
 
 }

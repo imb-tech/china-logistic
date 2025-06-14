@@ -53,8 +53,10 @@ interface Load {
 
 interface Container {
     container_type: number | null
+    container_number: number | null
     condition: number | null
     transport: number | null
+    transport_number: number | null
     load_date: string
     loads: Load[]
     address_text: string
@@ -172,6 +174,8 @@ function WholeLoad() {
     const handleAddContainer = () => {
         appendContainer({
             container_type: null,
+            container_number: null,
+            transport_number: null,
             condition: null,
             transport: null,
             load_date: "",
@@ -224,8 +228,10 @@ function WholeLoad() {
                 containers: [
                     {
                         container_type: dataCargo.container_type,
+                        container_number: dataCargo.container_number,
                         condition: dataCargo.condition,
                         transport: dataCargo.transport,
+                        transport_number: dataCargo.transport_number,
                         load_date: dataCargo.load_date,
                         loads: dataCargo.loads.map((load) => ({
                             obj_id: load.id,
@@ -299,6 +305,13 @@ function WholeLoad() {
                                         handleChange("container", val)
                                     }
                                 />
+                                {dataCargo?.id && (
+                                    <FormInput
+                                        methods={form}
+                                        name={`containers.${index}.container_number`}
+                                        label="Konteyner raqami"
+                                    />
+                                )}
                                 <FormSelect
                                     options={options}
                                     control={form.control}
@@ -321,6 +334,13 @@ function WholeLoad() {
                                         handleChange("transport", val)
                                     }
                                 />
+                                {dataCargo?.id && (
+                                    <FormInput
+                                        methods={form}
+                                        name={`containers.${index}.transport_number`}
+                                        label="Transport raqami"
+                                    />
+                                )}
                                 <div className="w-full">
                                     <FormDatePicker
                                         control={form.control}
@@ -372,8 +392,23 @@ function WholeLoad() {
                                 />
                                 {dataCargo?.id && (
                                     <div className="space-y-1 flex flex-col">
-                                        <span className="whitespace-nowrap">Tanlangan Logist: {dataCargo?.accepted_offer?.full_name || "mavjud emas"}</span>
-                                        <span className="whitespace-nowrap">Narxi : {formatMoney(dataCargo.accepted_offer?.price)} {currencyName[dataCargo?.accepted_offer?.currency]}</span>
+                                        <span className="whitespace-nowrap">
+                                            Tanlangan Logist:{" "}
+                                            {dataCargo?.accepted_offer
+                                                ?.full_name || "mavjud emas"}
+                                        </span>
+                                        <span className="whitespace-nowrap">
+                                            Narxi :{" "}
+                                            {formatMoney(
+                                                dataCargo.accepted_offer?.price,
+                                            )}{" "}
+                                            {
+                                                currencyName[
+                                                    dataCargo?.accepted_offer
+                                                        ?.currency
+                                                ]
+                                            }
+                                        </span>
                                     </div>
                                 )}
 

@@ -44,8 +44,10 @@ type ClientType = {
 
 type FormType = {
     container_type: number | null
+    container_number: number | null
     condition: number | null
     transport: number | null
+    transport_number: number | null
     load_date: string | null
     region: number | null
     address_text: string
@@ -108,6 +110,8 @@ function BulkCargo() {
             container_type: null,
             load_date: null,
             address_text: "",
+            container_number: null,
+            transport_number: null,
             agents: [],
             comment: "",
             region: null,
@@ -172,6 +176,8 @@ function BulkCargo() {
                 {
                     type: 1,
                     container_type: data.container_type,
+                    container_number: data.container_number,
+                    transport_number: data.transport_number,
                     comment: data.comment,
                     condition: data.condition,
                     transport: data.transport,
@@ -203,8 +209,10 @@ function BulkCargo() {
         if (dataCargo?.id) {
             const transformedData: FormType = {
                 container_type: dataCargo.container_type ?? null,
+                container_number: dataCargo.container_number ?? null,
                 condition: dataCargo.condition ?? null,
                 transport: dataCargo.transport ?? null,
+                transport_number: dataCargo.transport_number ?? null,
                 load_date: dataCargo.load_date ?? null,
                 region: dataCargo.region ?? null,
                 address_text: dataCargo.address_text ?? "",
@@ -251,6 +259,13 @@ function BulkCargo() {
                                 handleChange("container", val)
                             }
                         />
+                        {dataCargo?.id && (
+                            <FormInput
+                                methods={form}
+                                name={`container_number`}
+                                label="Konteyner raqami"
+                            />
+                        )}
                         <FormSelect
                             options={options}
                             control={form.control}
@@ -273,6 +288,13 @@ function BulkCargo() {
                                 handleChange("transport", val)
                             }
                         />
+                        {dataCargo?.id && (
+                            <FormInput
+                                methods={form}
+                                name={`transport_number`}
+                                label="Transport raqami"
+                            />
+                        )}
                         <FormDatePicker
                             control={form.control}
                             name="load_date"
@@ -450,7 +472,14 @@ function BulkCargo() {
                                 </span>
                                 <span className="whitespace-nowrap">
                                     Narxi :{" "}
-                                    {formatMoney(dataCargo.accepted_offer?.price)} {currencyName[dataCargo?.accepted_offer?.currency]}
+                                    {formatMoney(
+                                        dataCargo.accepted_offer?.price,
+                                    )}{" "}
+                                    {
+                                        currencyName[
+                                            dataCargo?.accepted_offer?.currency
+                                        ]
+                                    }
                                 </span>
                             </div>
                         ) : (
