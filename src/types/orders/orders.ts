@@ -51,7 +51,7 @@ type Offers = {
   id: number;
   agent_name: string;
   station_name: string
-  completed_orders?: number
+  completion_percentage?: number
   load_date: string | null;
   start_date: string | null;
   price: number | null;

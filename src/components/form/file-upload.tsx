@@ -185,7 +185,7 @@ export default function FileUpload<TForm extends FieldValues>({
                                 className="flex items-center justify-between gap-4"
                             >
                                 <a
-                                    className="text-blue-500 inline-block truncate"
+                                    className="text-blue-500 line-clamp-1 break-all"
                                     target="_blank"
                                     href={url}
                                     rel="noreferrer noopener"

@@ -5,7 +5,7 @@ export function onError(err: any) {
     const arrayErrors = Object.entries(err?.response?.data || {})
     if (arrayErrors.length > 0) {
         toast.error(
-            arrayErrors.map(([key, value]) => key + ": " + value + "; "),
+            arrayErrors.map(([_, value]) => value + ""),
             { duration: 5000 },
         )
     } else {

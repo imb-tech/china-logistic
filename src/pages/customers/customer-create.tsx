@@ -1,6 +1,6 @@
 import { FormCombobox } from "@/components/form/combobox"
-import { FormFormatNumberInput } from "@/components/form/format-number-input"
 import FormInput from "@/components/form/input"
+import PhoneField from "@/components/form/phone-field"
 import { Button } from "@/components/ui/button"
 import { COUNTRY, USERS } from "@/constants/api-endpoints"
 import { useGet } from "@/hooks/useGet"
@@ -72,12 +72,11 @@ const CustomerCreate = () => {
                 label="F.I.O"
                 wrapperClassName={"md:col-span-2"}
             />
-            <FormFormatNumberInput
+            <PhoneField
                 required
-                control={form.control}
+                methods={form}
                 name="phone_number"
                 wrapperClassName="md:col-span-2"
-                format="+998 ## ### ## ##"
             />
             <FormCombobox
                 options={data?.results}

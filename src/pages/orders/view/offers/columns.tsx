@@ -65,8 +65,8 @@ export const useOffersColumns = ({
         },
         {
             header: "Yukni yopish darajasi",
-            accessorKey: "completed_orders",
-            cell: ({ row }) => row.original?.completed_orders || 0,
+            accessorKey: "completion_percentage",
+            cell: ({ row }) => row.original?.completion_percentage || 0,
         },
         {
             header: " ",
