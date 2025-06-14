@@ -27,7 +27,7 @@ export const useLogisticsColumns = (): ColumnDef<LogisticsType>[] => {
                 return (
                     <span
                         className={
-                            row.original.completed_orders === 0
+                            row.original.completed_orders == 0
                                 ? "text-destructive"
                                 : ""
                         }
@@ -40,17 +40,17 @@ export const useLogisticsColumns = (): ColumnDef<LogisticsType>[] => {
         },
         {
             header: "Tugatmagan yuklari",
-            accessorKey: "in_completed_orders",
+            accessorKey: "not_completed_orders",
             cell: ({ row }) => {
                 return (
                     <span
                         className={
-                            row.original.in_completed_orders === 0
+                            row.original.not_completed_orders == 0
                                 ? "text-destructive"
                                 : ""
                         }
                     >
-                        {row.original.in_completed_orders}
+                        {row.original.not_completed_orders}
                     </span>
                 )
             },

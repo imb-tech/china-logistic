@@ -8,6 +8,7 @@ export const useTotalCostColumns = (): ColumnDef<Expanse>[] => {
         {
             header: "Logist",
             accessorKey: "agent_name",
+            enableSorting: true,
         },
         {
             header: "O'zgartirilgan narx",
@@ -24,10 +25,10 @@ export const useTotalCostColumns = (): ColumnDef<Expanse>[] => {
             header: "O'zgarish vaqti",
             accessorKey: "changed_at",
             cell: ({ row }) =>
-                row.original.update_at || row.original.created_at
+                row.original.updated_at || row.original.created_at
                     ? format(
-                          row.original.update_at
-                              ? row.original.update_at
+                          row.original.updated_at
+                              ? row.original.updated_at
                               : row.original.created_at,
                           "yyyy-MM-dd HH:mm",
                       )
@@ -36,6 +37,7 @@ export const useTotalCostColumns = (): ColumnDef<Expanse>[] => {
         {
             header: "O'zgarish sababi",
             accessorKey: "agent",
+            enableSorting: true,
             cell: ({ row }) => row.original?.reason || "--",
         },
     ]

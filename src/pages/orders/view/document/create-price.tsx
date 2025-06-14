@@ -80,6 +80,7 @@ const DocumentCreate = ({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <div className="w-full">
                 <FileUpload
+                required
                     control={form.control}
                     name="file"
                     label="Hujjat tanlang"

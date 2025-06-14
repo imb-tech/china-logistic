@@ -5,27 +5,27 @@ export const useWarehouseColumns = (): ColumnDef<WarehouseType>[] => {
     return [
         {
             header: "Mahsulot nomi",
-            accessorKey: "id",
+            accessorKey: "product",
             enableSorting: true,
             cell: ({ row }) => row.original.product,
         },
         {
             header: "Umumiy miqdori",
-            accessorKey: "id",
+            accessorKey: "volume",
             enableSorting: true,
             cell: ({ row }) =>
                 formatMoney(row.original.volume) || "--",
         },
         {
             header: "Umumiy og'irligi",
-            accessorKey: "id",
+            accessorKey: "weight",
             enableSorting: true,
             cell: ({ row }) =>
                 formatMoney(row.original.weight) || "--",
         },
         {
             header: "Mijoz ismi",
-            accessorKey: "id",
+            accessorKey: "customer",
             enableSorting: true,
             cell: ({ row }) => row.original.customer || "--",
         },

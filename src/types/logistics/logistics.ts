@@ -7,7 +7,7 @@ type LogisticsType = {
   phone_number: number | string;
   address: string;
   completed_orders?: number
-  in_completed_orders: number
+  not_completed_orders: number
 }
 
 type LogisticsTypeResults = {

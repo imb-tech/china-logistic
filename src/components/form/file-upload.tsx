@@ -139,7 +139,7 @@ export default function FileUpload<TForm extends FieldValues>({
 
             <FileUploader
                 classes={cn(
-                    "!h-20 !w-full !border-primary mt-0 flex justify-center items-center gap-3 [&_path]:!fill-primary [&_div]:flex-col [&_div]:!justify-center [&_div]:items-center [&_div]:!grow-0",
+                    "!h-20 !w-full !outline-none !border-primary mt-0 flex justify-center items-center gap-3 [&_path]:!fill-primary [&_div]:flex-col [&_div]:!justify-center [&_div]:items-center [&_div]:!grow-0",
                     !!fieldState.error &&
                         "!border-destructive [&_path]:!fill-destructive",
                     field.disabled &&
