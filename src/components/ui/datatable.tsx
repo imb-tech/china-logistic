@@ -39,9 +39,7 @@ interface DataTableProps<TData> {
     columns: ColumnDef<TData>[]
     loading?: boolean
     className?: string
-    deleteSelecteds?: (val: number[]) => void
     onRightClick?: (val: TData) => void
-    selecteds_count?: boolean
     selecteds_row?: boolean
     onRowClick?: (data: TData) => void
     disabled?: boolean
@@ -85,9 +83,7 @@ export function DataTable<TData>({
     columns,
     loading,
     className = "min-w-[1100px]",
-    deleteSelecteds,
     onRightClick,
-    selecteds_count,
     selecteds_row,
     onRowClick,
     disabled,
@@ -96,7 +92,7 @@ export function DataTable<TData>({
     cursorPagination,
     limitOffsetPagination,
     viewAll,
-    height="h-[65vh]",
+    height = "h-[65vh]",
     head,
     viewCount,
     numeration = false,
@@ -190,21 +186,6 @@ export function DataTable<TData>({
     return (
         <main className={cn("w-full   pb-4 overflow-x-auto", wrapperClassName)}>
             {!!head && <div>{head}</div>}
-            {selecteds_count && (
-                <div className="flex flex-col gap-2 sm:flex-row items-end sm:items-center sm:justify-between pb-2">
-                    <p
-                        className={cn(
-                            "flex-1 text-sm text-muted-foreground",
-                            !deleteSelecteds && "text-end",
-                        )}
-                    >
-                        {table.getFilteredRowModel().rows?.length} dan{" "}
-                        {table.getFilteredSelectedRowModel().rows?.length} ta
-                        qator tanlandi.
-                    </p>
-                    <div></div>
-                </div>
-            )}
 
             <div className={cn("relative  rounded-md ", tableWrapperClassName)}>
                 {loading && (
@@ -295,7 +276,8 @@ export function DataTable<TData>({
                                                     <TableHead
                                                         key={index}
                                                         className={cn(
-                                                            "px-2 cursor-pointer")}
+                                                            "px-2 cursor-pointer",
+                                                        )}
                                                         onClick={
                                                             header.column
                                                                 .columnDef
@@ -441,7 +423,7 @@ export function DataTable<TData>({
                         <TableFooter></TableFooter>
                     </Table>
                 ) : null}
-                {data?.length === 0 ? <EmptyBox  height={height}/> : null}
+                {data?.length === 0 ? <EmptyBox height={height} /> : null}
             </div>
             {!viewAll && data?.length ? (
                 <div className="pt-4 mx-auto w-full relative flex justify-center">

@@ -26,7 +26,9 @@ export const WarehousePages = () => {
         openCustomerAdd()
     }
 
-    const columns = useWarehouseColumns()
+    const columns = useWarehouseColumns();
+
+
 
     return (
         <div className="w-full">
@@ -54,7 +56,6 @@ export const WarehousePages = () => {
                         columns={columns}
                         data={data?.results}
                         loading={isLoading}
-                        selecteds_count
                         selecteds_row
                         paginationProps={{totalPages:data?.pages}}
                         onSelectedRowsChange={(val) => setStoreData(val)}
