@@ -104,7 +104,7 @@ const CustomerCreate = () => {
                 placeholder="username11"
             />
             <FormInput
-                required
+                required={storeData?.id ? false : true}
                 methods={form}
                 type="password"
                 name="password"
