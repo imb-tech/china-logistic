@@ -67,6 +67,7 @@ interface DataTableProps<TData> {
     head?: React.ReactNode
     viewCount?: number | boolean | undefined
     sortable?: boolean
+    height?: string
     numeration?: boolean
     wrapperClassName?: string
     actionMenuMode?: boolean
@@ -95,6 +96,7 @@ export function DataTable<TData>({
     cursorPagination,
     limitOffsetPagination,
     viewAll,
+    height="h-[65vh]",
     head,
     viewCount,
     numeration = false,
@@ -439,7 +441,7 @@ export function DataTable<TData>({
                         <TableFooter></TableFooter>
                     </Table>
                 ) : null}
-                {data?.length === 0 ? <EmptyBox /> : null}
+                {data?.length === 0 ? <EmptyBox  height={height}/> : null}
             </div>
             {!viewAll && data?.length ? (
                 <div className="pt-4 mx-auto w-full relative flex justify-center">

@@ -61,6 +61,7 @@ export const ToatalCostPages = () => {
                         paginationProps={{ totalPages: data?.pages }}
                         numeration
                         skeletonRowCount={5}
+                        height="h-[30vh]"
                     />
                 </CardContent>
             </Card>

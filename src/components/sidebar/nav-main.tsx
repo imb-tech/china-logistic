@@ -17,9 +17,9 @@ export function NavMain() {
                     <SidebarMenuItem className="mb-3 lg:hidden">
                         <div className="flex gap-3 items-center min-w-[180px]">
                             <SidebarTrigger className="text-gray-500 dark:text-white" />
-                            <span className="text-2xl text-primary font-bold">
+                            <Link to="/" className="text-2xl text-primary font-bold">
                                 Yamin Group
-                            </span>
+                            </Link>
                         </div>
                     </SidebarMenuItem>
                     {items.map((item,index) => (

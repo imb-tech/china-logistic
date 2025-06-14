@@ -31,9 +31,9 @@ const Header = ({ rigthChildren, leftChildren, title }: Props) => {
             <div className="flex gap-6 items-center  max-w-full  custom-scrollbar">
                 <div className="flex gap-3 items-center sm:min-w-[180px]">
                     <SidebarTrigger className="text-gray-500 dark:text-white" />
-                    <span className="text-2xl text-primary font-bold sm:block hidden">
+                    <Link to="/" className="text-2xl text-primary  font-bold sm:block hidden">
                         Yamin Group
-                    </span>
+                    </Link>
                 </div>
                 {title ?? (
                     <p className="text-gray-500 dark:text-white">{title}</p>
