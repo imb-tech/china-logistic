@@ -103,9 +103,9 @@ export const OrdersPages = () => {
     const columns = useOrderColumns()
     return (
         <div className="w-full ">
-            <div className="mb-5 flex justify-between items-center gap-4">
+            <div className="flex flex-col sm:flex-row  justify-between sm:items-center gap-3 mb-4">
                 <ParamTabs options={statusOptions} paramName="status" />
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-end gap-3">
                     <Button
                         onClick={() => navigate({ to: "/order-create" })}
                         icon={<Plus size={18} />}
@@ -118,7 +118,7 @@ export const OrdersPages = () => {
 
             {search.page_tabs === "card" ? (
                 <div>
-                    <div className="grid grid-cols-4 gap-4">
+                    <div className="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
                         {isLoading
                             ? Array.from({ length: 20 }).map((_, index) => (
                                   <OrderCardSkeletion key={index} />

@@ -289,7 +289,14 @@ function WholeLoad() {
                             <h1 className="text-lg font-semibold">
                                 Konteyner #{index + 1}
                             </h1>
-                            <div className="grid lg:grid-cols-4  sm:grid-cols-2 grid-cols-1  gap-4 rounded-lg p-3 dark:bg-card dark:border bg-slate-100">
+                            <div
+                                className={cn(
+                                    "grid   sm:grid-cols-2 grid-cols-1  gap-4 rounded-lg p-3 dark:bg-card dark:border bg-slate-100",
+                                    dataCargo?.id
+                                        ? "lg:grid-cols-6"
+                                        : "lg:grid-cols-4",
+                                )}
+                            >
                                 <FormCombobox
                                     options={dataContainer?.results}
                                     valueKey="id"
@@ -360,26 +367,35 @@ function WholeLoad() {
                                     dataCargo={dataCargo}
                                 />
 
-                                <FormCombobox
-                                    label="Yetkazib berish shahri"
-                                    control={form.control}
-                                    name={`containers.${index}.region`}
-                                    placeholder="Shahar"
-                                    required
-                                    onAdd={openModalCitiesAdd}
-                                    options={dataCities?.results}
-                                    isLoading={isLoadingCities}
-                                    valueKey="id"
-                                    labelKey="name"
-                                    onSearchChange={(val) =>
-                                        handleChange("cities", val)
+                                <div
+                                    className={
+                                        dataCargo?.id ? "md:col-span-2" : ""
                                     }
-                                />
+                                >
+                                    <FormCombobox
+                                        label="Yetkazib berish shahri"
+                                        control={form.control}
+                                        name={`containers.${index}.region`}
+                                        placeholder="Shahar"
+                                        required
+                                        onAdd={openModalCitiesAdd}
+                                        options={dataCities?.results}
+                                        isLoading={isLoadingCities}
+                                        valueKey="id"
+                                        labelKey="name"
+                                        onSearchChange={(val) =>
+                                            handleChange("cities", val)
+                                        }
+                                    />
+                                </div>
                                 <FormInput
                                     methods={form}
                                     name={`containers.${index}.address_text`}
                                     label="Yetkazib berish manzili"
                                     required
+                                    wrapperClassName={
+                                        dataCargo?.id ? "md:col-span-2" : ""
+                                    }
                                 />
                                 <FormTextarea
                                     methods={form}
@@ -387,7 +403,12 @@ function WholeLoad() {
                                     label="Izoh"
                                     required
                                     placeholder="Izoh..."
-                                    wrapperClassName="lg:col-span-4 sm:col-span-2"
+                                    wrapperClassName={cn(
+                                        " sm:col-span-2",
+                                        dataCargo?.id
+                                            ? "lg:col-span-6"
+                                            : "lg:col-span-4",
+                                    )}
                                     rows={4}
                                 />
                                 {dataCargo?.id && (
@@ -545,7 +566,10 @@ const ContainerFields: FC<Props> = ({
             {fields.map((field, loadIndex) => (
                 <div
                     key={field.id}
-                    className="relative  rounded-lg p-3 dark:bg-card dark:border bg-slate-200 lg:col-span-4 sm:col-span-2  "
+                    className={cn(
+                        "relative  rounded-lg p-3 dark:bg-card dark:border bg-slate-200 sm:col-span-2 ",
+                        dataCargo?.id ? "lg:col-span-6" : "lg:col-span-4 ",
+                    )}
                 >
                     <div
                         className={cn(

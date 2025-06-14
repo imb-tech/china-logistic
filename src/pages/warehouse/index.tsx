@@ -21,21 +21,29 @@ export const WarehousePages = () => {
     const { data, isLoading } = useGet<WarehouseTypeResults>(INVENTORY, {
         params: search,
     })
- 
+
     const handleAdd = () => {
         openCustomerAdd()
     }
 
-    const columns = useWarehouseColumns();
-
-
+    const columns = useWarehouseColumns()
 
     return (
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
                 <CardContent>
-                    <div className="flex  justify-between items-center gap-3 mb-4">
-                        <h1 className="text-xl">Ombordagi yuklar</h1>
+                    <div className="flex flex-col sm:flex-row  justify-between sm:items-center gap-3 mb-4">
+                        <div className="flex items-center gap-3">
+                            <h1 className="text-xl whitespace-nowrap">Ombordagi yuklar</h1>
+                            <Button
+                                onClick={handleAdd}
+                                disabled={!storeDataCustomerRow?.length}
+                                className="whitespace-nowrap sm:hidden"
+                            >
+                                <Plus className="h-4 w-4" />
+                                Transport Qo'shish
+                            </Button>
+                        </div>
                         <div className="flex items-center gap-3">
                             <ParamInput
                                 fullWidth
@@ -45,7 +53,7 @@ export const WarehousePages = () => {
                             <Button
                                 onClick={handleAdd}
                                 disabled={!storeDataCustomerRow?.length}
-                                className="whitespace-nowrap"
+                                className="whitespace-nowrap sm:block hidden"
                             >
                                 <Plus className="h-4 w-4" />
                                 Transport Qo'shish
@@ -57,7 +65,7 @@ export const WarehousePages = () => {
                         data={data?.results}
                         loading={isLoading}
                         selecteds_row
-                        paginationProps={{totalPages:data?.pages}}
+                        paginationProps={{ totalPages: data?.pages }}
                         onSelectedRowsChange={(val) => setStoreData(val)}
                         numeration
                     />

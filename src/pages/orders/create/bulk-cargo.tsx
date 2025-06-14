@@ -243,7 +243,12 @@ function BulkCargo() {
                     <h1 className="text-lg font-semibold">
                         Konteyner ma'lumotlari
                     </h1>
-                    <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4 border border-input rounded-lg px-3 py-4">
+                    <div
+                        className={cn(
+                            "grid  sm:grid-cols-2 grid-cols-1 gap-4 border border-input rounded-lg px-3 py-4",
+                            dataCargo?.id ? "lg:grid-cols-6" : "lg:grid-cols-4",
+                        )}
+                    >
                         <FormCombobox
                             isLoading={isLoadingContainer}
                             options={dataContainer?.results}

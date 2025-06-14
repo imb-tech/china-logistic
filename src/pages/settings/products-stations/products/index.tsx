@@ -47,7 +47,7 @@ export const ProductsPages = () => {
         <div className="w-full">
             <Card className="mb-5 rounded-lg ">
                 <CardContent>
-                    <div className="flex  justify-between items-center gap-3 mb-4">
+                    <div className="flex flex-col sm:flex-row  justify-between sm:items-center gap-3 mb-4">
                         <h1 className="text-xl">Mahsulotlar</h1>
                         <div className="flex items-center gap-3">
                             <ParamInput
